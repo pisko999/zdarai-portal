@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary: #4ade80;
+    --color-primary-dark: #22c55e;
+    --font-mono: "JetBrains Mono", monospace;
+}
