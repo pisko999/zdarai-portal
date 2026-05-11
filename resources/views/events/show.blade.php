@@ -6,6 +6,19 @@
         {{-- Back link --}}
         <a href="/" class="text-green-700 hover:text-green-500 text-sm mb-6 inline-block transition">← zpět na seznam</a>
 
+        {{-- Admin bar --}}
+        @if(auth()->check() && auth()->user()->is_admin)
+            <div class="mb-6 p-3 border border-green-900/20 rounded bg-green-950/20 text-xs">
+                <span class="text-green-700">Admin:</span>
+                <a href="/admin/registrations?event={{ $event->id }}" class="text-green-600 hover:text-green-400 ml-2 transition">
+                    Správa registrací ({{ $event->registrationCount() }}) →
+                </a>
+                <a href="/admin/events" class="text-green-600 hover:text-green-400 ml-4 transition">
+                    Upravit událost →
+                </a>
+            </div>
+        @endif
+
         {{-- Event hero --}}
         <div class="border border-green-900/40 rounded-xl p-8 mb-8 bg-gray-900/30">
             <div class="flex flex-wrap items-center gap-3 mb-4 text-sm">
