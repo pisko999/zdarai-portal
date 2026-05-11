@@ -1,4 +1,7 @@
-<x-layouts.app :title="$event->title . ' — ŽďárAI'">
+<x-layouts.app
+    :title="$event->title . ' — ŽďárAI'"
+    :description="\Illuminate\Support\Str::limit(strip_tags($event->description ?? ''), 155)"
+    ogType="event">
     <div class="max-w-4xl mx-auto px-4 py-12">
         {{-- Back link --}}
         <a href="/" class="text-green-700 hover:text-green-500 text-sm mb-6 inline-block transition">← zpět na seznam</a>

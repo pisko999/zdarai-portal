@@ -1,9 +1,33 @@
+@props(['title' => null, 'description' => null, 'ogType' => 'website', 'ogImage' => null])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'ŽďárAI — AI události pro vývojáře' }}</title>
+    {{-- SEO Meta --}}
+    <meta name="description" content="{{ $description ?? 'Měsíční AI přednášky pro vývojáře v MtgForFun ve Žďáru nad Sázavou. Každý první čtvrtek v měsíci.' }}">
+    <meta name="keywords" content="AI, umělá inteligence, přednášky, vývojáři, Žďár nad Sázavou, programování">
+    <meta name="author" content="ŽďárAI">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    {{-- Open Graph --}}
+    <meta property="og:type" content="{{ $ogType ?? 'website' }}">
+    <meta property="og:title" content="{{ $title ?? 'ŽďárAI — AI události pro vývojáře' }}">
+    <meta property="og:description" content="{{ $description ?? 'Měsíční AI přednášky pro vývojáře v MtgForFun ve Žďáru nad Sázavou.' }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:site_name" content="ŽďárAI">
+    <meta property="og:locale" content="{{ app()->getLocale() === 'cs' ? 'cs_CZ' : 'en_US' }}">
+    @isset($ogImage)
+    <meta property="og:image" content="{{ $ogImage }}">
+    @endisset
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ $title ?? 'ŽďárAI' }}">
+    <meta name="twitter:description" content="{{ $description ?? 'Měsíční AI přednášky pro vývojáře ve Žďáru nad Sázavou.' }}">
+
     <link rel="alternate" hreflang="cs" href="{{ url('/lang/cs') }}">
     <link rel="alternate" hreflang="en" href="{{ url('/lang/en') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">

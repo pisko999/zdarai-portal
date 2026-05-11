@@ -31,6 +31,16 @@ Route::get('/lang/{locale}', function (string $locale) {
     return redirect()->back();
 })->name('lang.switch');
 
+Route::get('/sitemap.xml', function () {
+    $events = \App\Models\Event::where('status', 'published')
+        ->orderByDesc('date')
+        ->get(['slug', 'updated_at']);
+
+    $content = view('sitemap', compact('events'))->render();
+    return response($content, 200)
+        ->header('Content-Type', 'application/xml; charset=UTF-8');
+})->name('sitemap');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
