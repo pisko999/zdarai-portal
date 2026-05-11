@@ -7,6 +7,14 @@ Route::get('/', function () {
     return view('home');
 });
 
+Route::get('/udalosti/{slug}', function (string $slug) {
+    $event = \App\Models\Event::where('slug', $slug)
+        ->where('status', 'published')
+        ->with(['talks.speaker', 'registrations'])
+        ->firstOrFail();
+    return view('events.show', compact('event'));
+})->name('events.show');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
