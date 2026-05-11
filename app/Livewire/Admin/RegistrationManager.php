@@ -1,0 +1,103 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Livewire\Admin;
+
+use Livewire\Component;
+use App\Models\Registration;
+use App\Models\Event;
+use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
+class RegistrationManager extends Component
+{
+    public string $filterEvent = '';
+    public string $filterStatus = '';
+    public string $search = '';
+
+    public ?int $confirmDelete = null;
+
+    public function updatedFilterEvent(): void
+    {
+        // Reset search when event filter changes
+        $this->search = '';
+    }
+
+    public function updatePaymentStatus(int $id, string $status): void
+    {
+        $allowed = ['free', 'pending', 'paid', 'cancelled'];
+        if (!in_array($status, $allowed, true)) {
+            return;
+        }
+        Registration::findOrFail($id)->update(['payment_status' => $status]);
+        session()->flash('success', 'Platební status aktualizován.');
+    }
+
+    public function confirmDeleteRegistration(int $id): void
+    {
+        $this->confirmDelete = $id;
+    }
+
+    public function deleteRegistration(): void
+    {
+        if ($this->confirmDelete) {
+            Registration::findOrFail($this->confirmDelete)->delete();
+            $this->confirmDelete = null;
+            session()->flash('success', 'Registrace smazána.');
+        }
+    }
+
+    public function exportCsv(): StreamedResponse
+    {
+        $registrations = $this->getQuery()->get();
+
+        $filename = 'registrace_' . ($this->filterEvent ? 'udalost-' . $this->filterEvent . '_' : '') . date('Y-m-d') . '.csv';
+
+        return response()->streamDownload(function () use ($registrations) {
+            $handle = fopen('php://output', 'w');
+            // BOM pro Excel UTF-8
+            fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+
+            fputcsv($handle, [
+                'ID', 'Jméno', 'E-mail', 'Událost', 'Platební status',
+                'Dietní omezení', 'Email opt-out', 'Datum registrace'
+            ], ';');
+
+            foreach ($registrations as $reg) {
+                fputcsv($handle, [
+                    $reg->id,
+                    $reg->name,
+                    $reg->email,
+                    $reg->event?->title ?? '',
+                    $reg->payment_status,
+                    $reg->dietary_notes ?? '',
+                    $reg->email_opt_out ? 'Ano' : 'Ne',
+                    $reg->created_at->format('j. n. Y H:i'),
+                ], ';');
+            }
+            fclose($handle);
+        }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
+    private function getQuery()
+    {
+        return Registration::query()
+            ->when($this->filterEvent, fn($q) => $q->where('event_id', $this->filterEvent))
+            ->when($this->filterStatus, fn($q) => $q->where('payment_status', $this->filterStatus))
+            ->when($this->search, fn($q) => $q->where(function ($q) {
+                $q->where('name', 'like', "%{$this->search}%")
+                  ->orWhere('email', 'like', "%{$this->search}%");
+            }))
+            ->with('event')
+            ->orderByDesc('created_at');
+    }
+
+    public function render(): View
+    {
+        $registrations = $this->getQuery()->get();
+        $events = Event::orderByDesc('date')->get(['id', 'title']);
+
+        return view('livewire.admin.registration-manager', compact('registrations', 'events'));
+    }
+}

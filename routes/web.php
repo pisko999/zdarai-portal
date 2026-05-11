@@ -42,4 +42,5 @@ Route::prefix('admin')
         Route::get('/events', fn() => view('admin.events.index'))->name('admin.events.index');
         Route::get('/talks', fn() => view('admin.talks.index'))->name('admin.talks.index');
         Route::get('/speakers', fn() => view('admin.speakers.index'))->name('admin.speakers.index');
+        Route::get('/registrations', fn() => view('admin.registrations.index'))->name('admin.registrations.index');
     });
