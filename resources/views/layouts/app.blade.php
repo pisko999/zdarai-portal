@@ -21,6 +21,16 @@
                 <a href="/" class="text-green-600 hover:text-green-400 transition">Události</a>
                 <a href="/o-nas" class="text-green-600 hover:text-green-400 transition">O nás</a>
                 <a href="/archiv" class="text-green-600 hover:text-green-400 transition">Archiv</a>
+                @auth
+                    <a href="{{ route('my-registrations') }}" class="text-green-700 hover:text-green-500 text-xs transition">{{ auth()->user()->name }}</a>
+                    <a href="{{ route('profile.edit') }}" class="text-green-800 hover:text-green-600 text-xs transition">profil</a>
+                    <form method="POST" action="/logout" class="inline">
+                        @csrf
+                        <button type="submit" class="text-green-900 hover:text-green-700 text-xs transition">odhlásit</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="text-green-800 hover:text-green-600 text-xs border border-green-900/40 px-2 py-1 rounded transition">přihlásit</a>
+                @endauth
             </div>
         </div>
     </nav>
