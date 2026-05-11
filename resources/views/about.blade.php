@@ -1,5 +1,5 @@
 <x-layouts.app 
-    title="{{ __('nav.about') }} — ŽďárAI"
+    title="{{ __('messages.nav.about') }} — ŽďárAI"
     description="Měsíční AI přednášky pro vývojáře v Žďáru nad Sázavou. Každý první čtvrtek v MtgForFun.">
     <div class="max-w-3xl mx-auto px-4 py-16">
         <h1 class="text-3xl font-bold text-white mb-8">&gt;_ O nás</h1>

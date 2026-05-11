@@ -1,5 +1,5 @@
 <x-layouts.app 
-    title="{{ __('nav.archive') }} — ŽďárAI"
+    title="{{ __('messages.nav.archive') }} — ŽďárAI"
     description="Archiv minulých AI přednášek ve Žďáru nad Sázavou.">
     <div class="max-w-5xl mx-auto px-4 py-16">
         <h1 class="text-3xl font-bold text-white mb-2">&gt;_ Archiv</h1>
