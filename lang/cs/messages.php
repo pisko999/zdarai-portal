@@ -9,6 +9,7 @@ return [
     'hero.badge' => 'Každý první čtvrtek v měsíci',
     'hero.title' => 'Umělá inteligence pro vývojáře',
     'hero.subtitle' => 'Měsíční přednášky a networking v útulném prostředí MtgForFun ve Žďáru nad Sázavou.',
+    'hero.cta' => 'Nadcházející události',
     'events.upcoming' => 'Nadcházející',
     'events.archive' => 'Archiv',
     'events.empty.upcoming' => 'Žádné nadcházející události',

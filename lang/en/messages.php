@@ -9,6 +9,7 @@ return [
     'hero.badge' => 'Every first Thursday of the month',
     'hero.title' => 'Artificial Intelligence for Developers',
     'hero.subtitle' => 'Monthly talks and networking at MtgForFun in Žďár nad Sázavou.',
+    'hero.cta' => 'Upcoming events',
     'events.upcoming' => 'Upcoming',
     'events.archive' => 'Archive',
     'events.empty.upcoming' => 'No upcoming events',

@@ -30,35 +30,44 @@
 
     <link rel="alternate" hreflang="cs" href="{{ url('/lang/cs') }}">
     <link rel="alternate" hreflang="en" href="{{ url('/lang/en') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="bg-gray-950 text-green-300 font-mono antialiased min-h-screen">
+<body class="bg-gray-950 text-gray-100 min-h-screen antialiased">
     <!-- Navigation -->
-    <nav class="border-b border-green-900/30 bg-gray-950/80 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="/" class="text-green-400 font-bold text-xl tracking-widest hover:text-green-300 transition">
-                &gt;_ <span class="text-white">ŽďárAI</span>
+    <nav class="border-b border-gray-800 bg-gray-950/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-green-400 rounded flex items-center justify-center flex-shrink-0">
+                    <span class="text-gray-950 font-black text-xs mono">AI</span>
+                </div>
+                <span class="text-xl font-black tracking-tight">
+                    <span class="text-green-400 glow-text">Žďár</span><span class="text-white">AI</span>
+                </span>
+                <span class="mono text-xs text-green-400/50 ml-1">v2026</span>
             </a>
             <div class="flex items-center gap-6 text-sm">
-                <a href="/" class="text-green-600 hover:text-green-400 transition">{{ __("messages.nav.events") }}</a>
-                <a href="/o-nas" class="text-green-600 hover:text-green-400 transition">{{ __("messages.nav.about") }}</a>
-                <a href="/archiv" class="text-green-600 hover:text-green-400 transition">{{ __("messages.nav.archive") }}</a>
-                <a href="{{ route('lang.switch', app()->getLocale() === 'cs' ? 'en' : 'cs') }}"
-                   class="text-green-800 hover:text-green-600 text-xs border border-green-900 px-2 py-1 rounded transition">
-                    {{ app()->getLocale() === 'cs' ? 'EN' : 'CS' }}
-                </a>
+                <a href="/" class="text-sm text-gray-400 hover:text-green-400 transition mono">./udalosti</a>
+                <a href="/o-nas" class="text-sm text-gray-400 hover:text-green-400 transition mono">./o-nas</a>
+                <a href="/archiv" class="text-sm text-gray-400 hover:text-green-400 transition mono">./archiv</a>
+                <div class="flex gap-1">
+                    @if(app()->getLocale() === 'cs')
+                        <span class="mono text-xs px-2 py-1 bg-green-400 text-gray-950 font-bold rounded">CZ</span>
+                        <a href="{{ route('lang.switch', 'en') }}" class="mono text-xs px-2 py-1 text-gray-500 hover:text-gray-300 transition">EN</a>
+                    @else
+                        <a href="{{ route('lang.switch', 'cs') }}" class="mono text-xs px-2 py-1 text-gray-500 hover:text-gray-300 transition">CZ</a>
+                        <span class="mono text-xs px-2 py-1 bg-green-400 text-gray-950 font-bold rounded">EN</span>
+                    @endif
+                </div>
                 @auth
-                    <a href="{{ route('my-registrations') }}" class="text-green-700 hover:text-green-500 text-xs transition">{{ auth()->user()->name }}</a>
-                    <a href="{{ route('profile.edit') }}" class="text-green-800 hover:text-green-600 text-xs transition">profil</a>
+                    <a href="{{ route('my-registrations') }}" class="text-gray-400 hover:text-green-400 text-xs transition mono">{{ auth()->user()->name }}</a>
+                    <a href="{{ route('profile.edit') }}" class="text-gray-400 hover:text-green-400 text-xs transition mono">profil</a>
                     <form method="POST" action="/logout" class="inline">
                         @csrf
-                        <button type="submit" class="text-green-900 hover:text-green-700 text-xs transition">odhlásit</button>
+                        <button type="submit" class="text-gray-500 hover:text-gray-300 text-xs transition mono">odhlásit</button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="text-green-800 hover:text-green-600 text-xs border border-green-900/40 px-2 py-1 rounded transition">přihlásit</a>
+                    <a href="{{ route('login') }}" class="text-gray-400 hover:text-green-400 text-xs border border-gray-700 hover:border-green-500/50 px-2 py-1 rounded transition mono">přihlásit</a>
                 @endauth
             </div>
         </div>
@@ -68,8 +77,18 @@
         {{ $slot }}
     </main>
 
-    <footer class="border-t border-green-900/30 mt-20 py-8 text-center text-green-800 text-xs">
-        {{ __("messages.footer.text") }}
+    <footer class="border-t border-gray-800 mt-20">
+        <div class="max-w-6xl mx-auto px-6 py-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="font-black text-lg"><span class="text-green-400">Žďár</span>AI</div>
+                    <div class="mono text-xs text-gray-600 mt-1">MtgForFun · Žďár nad Sázavou</div>
+                </div>
+                <div class="mono text-xs text-gray-700">
+                    © {{ date('Y') }} MtgForFun · Built with 🤖 AI + TaskForge
+                </div>
+            </div>
+        </div>
     </footer>
 
     @livewireScripts

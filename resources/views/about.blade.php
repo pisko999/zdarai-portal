@@ -5,18 +5,18 @@
         <h1 class="text-3xl font-bold text-white mb-8">&gt;_ O nás</h1>
         
         <div class="space-y-8">
-            <div class="border border-green-900/40 rounded-xl p-6 bg-gray-900/30">
+            <div class="border border-gray-800 rounded-xl p-6 bg-gray-900/50">
                 <h2 class="text-green-400 font-bold text-lg mb-4">Co je ŽďárAI?</h2>
-                <p class="text-green-600 leading-relaxed">
+                <p class="text-gray-400 leading-relaxed">
                     ŽďárAI je měsíční setkání vývojářů a technicky zdatné veřejnosti, kteří mají zájem
                     o umělou inteligenci. Každý <strong class="text-green-400">první čtvrtek v měsíci</strong> se
                     setkáváme v prostředí MtgForFun ve Žďáru nad Sázavou.
                 </p>
             </div>
 
-            <div class="border border-green-900/40 rounded-xl p-6 bg-gray-900/30">
+            <div class="border border-gray-800 rounded-xl p-6 bg-gray-900/50">
                 <h2 class="text-green-400 font-bold text-lg mb-4">Formát akcí</h2>
-                <ul class="text-green-600 space-y-3">
+                <ul class="text-gray-400 space-y-3">
                     <li class="flex items-start gap-2">
                         <span class="text-green-500 mt-0.5">→</span>
                         <span><strong class="text-green-400">2+ přednášky</strong> na téma AI od místních i pozvaných řečníků</span>
@@ -36,22 +36,22 @@
                 </ul>
             </div>
 
-            <div class="border border-green-900/40 rounded-xl p-6 bg-gray-900/30">
+            <div class="border border-gray-800 rounded-xl p-6 bg-gray-900/50">
                 <h2 class="text-green-400 font-bold text-lg mb-4">Místo konání</h2>
-                <p class="text-green-600 leading-relaxed">
+                <p class="text-gray-400 leading-relaxed">
                     <strong class="text-green-400">MtgForFun</strong><br>
                     Žďár nad Sázavou<br>
-                    <span class="text-green-800 text-sm">Útulný obchod s deskovými hrami a karetními hrami — ideální prostředí pro technické setkání</span>
+                    <span class="text-gray-600 text-sm">Útulný obchod s deskovými hrami a karetními hrami — ideální prostředí pro technické setkání</span>
                 </p>
             </div>
 
-            <div class="border border-green-900/40 rounded-xl p-6 bg-gray-900/30">
+            <div class="border border-gray-800 rounded-xl p-6 bg-gray-900/50">
                 <h2 class="text-green-400 font-bold text-lg mb-4">Chcete přednášet?</h2>
-                <p class="text-green-600 leading-relaxed mb-4">
+                <p class="text-gray-400 leading-relaxed mb-4">
                     Máte zajímavé zkušenosti s AI, které byste chtěli sdílet? Rádi vás uvítáme jako přednášejícího!
                 </p>
                 <a href="mailto:info@mtgforfun.cz" 
-                   class="inline-flex items-center gap-2 border border-green-800 text-green-600 hover:text-green-400 hover:border-green-700 px-4 py-2 rounded text-sm transition">
+                   class="inline-flex items-center gap-2 border border-gray-700 text-gray-400 hover:text-green-400 hover:border-green-500/50 px-4 py-2 rounded text-sm transition">
                     Kontaktujte nás →
                 </a>
             </div>
