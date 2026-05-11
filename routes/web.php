@@ -39,5 +39,5 @@ Route::prefix('admin')
     ->middleware(['auth', 'is_admin'])
     ->group(function () {
         Route::get('/', fn() => view('admin.index'))->name('admin.dashboard');
-        // Další routes přibydou v dalších taskách
+        Route::get('/events', fn() => view('admin.events.index'))->name('admin.events.index');
     });
