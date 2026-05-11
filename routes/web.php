@@ -40,4 +40,5 @@ Route::prefix('admin')
     ->group(function () {
         Route::get('/', fn() => view('admin.index'))->name('admin.dashboard');
         Route::get('/events', fn() => view('admin.events.index'))->name('admin.events.index');
+        Route::get('/talks', fn() => view('admin.talks.index'))->name('admin.talks.index');
     });
