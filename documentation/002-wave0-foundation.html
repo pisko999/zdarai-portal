@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>002 — Wave 0: Foundation</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #030712; color: #86efac; font-family: 'JetBrains Mono', monospace; padding: 40px 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { border-bottom: 1px solid #14532d; padding-bottom: 24px; margin-bottom: 32px; }
+        h1 { color: #4ade80; font-size: 28px; margin-bottom: 8px; }
+        .meta { color: #166534; font-size: 13px; }
+        h2 { color: #4ade80; font-size: 16px; margin: 28px 0 12px; text-transform: uppercase; letter-spacing: 0.1em; }
+        .card { border: 1px solid #14532d; border-radius: 8px; padding: 20px; margin-bottom: 16px; background: #0a0a0f; }
+        .card h3 { color: #fff; font-size: 14px; margin-bottom: 8px; }
+        .card p { color: #4ade80; font-size: 13px; line-height: 1.6; }
+        .badge { display: inline-block; background: #14532d; color: #4ade80; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-right: 4px; }
+        .badge.done { background: #166534; }
+        .stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+        .tech { border: 1px solid #14532d; padding: 12px; border-radius: 6px; font-size: 12px; }
+        .tech .name { color: #fff; font-weight: bold; margin-bottom: 4px; }
+        .tech .version { color: #166534; }
+        a { color: #4ade80; }
+        .back { color: #166534; text-decoration: none; font-size: 13px; margin-bottom: 24px; display: inline-block; }
+        .back:hover { color: #4ade80; }
+        .timeline { border-left: 2px solid #14532d; padding-left: 20px; margin: 16px 0; }
+        .timeline-item { margin-bottom: 16px; }
+        .timeline-item .dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; margin-left: -25px; float: left; margin-top: 5px; }
+        .timeline-item .content { margin-left: 12px; }
+        .timeline-item .label { color: #fff; font-size: 13px; font-weight: bold; }
+        .timeline-item .desc { color: #166534; font-size: 12px; margin-top: 2px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="index.html" class="back">← zpět na index</a>
+    
+    <div class="header">
+        <h1>&gt;_ Wave 0: Foundation</h1>
+        <p class="meta">Infrastruktura a základní setup · Dokončeno: Květen 2026</p>
+    </div>
+
+    <h2>Tech Stack</h2>
+    <div class="stack">
+        <div class="tech">
+            <div class="name">Laravel 13.8.0</div>
+            <div class="version">PHP 8.3 · strict_types</div>
+        </div>
+        <div class="tech">
+            <div class="name">Livewire 4.3.0</div>
+            <div class="version">Real-time UI komponenty</div>
+        </div>
+        <div class="tech">
+            <div class="name">Tailwind CSS v4.3</div>
+            <div class="version">via @tailwindcss/vite</div>
+        </div>
+        <div class="tech">
+            <div class="name">MySQL 8.0.45</div>
+            <div class="version">DB: zdarai, 15 tabulek</div>
+        </div>
+        <div class="tech">
+            <div class="name">Apache 2.4 + mod_php</div>
+            <div class="version">zdarai.mtgforfun.cz</div>
+        </div>
+        <div class="tech">
+            <div class="name">Redis + Supervisor</div>
+            <div class="version">Queue worker: RUNNING</div>
+        </div>
+        <div class="tech">
+            <div class="name">Let's Encrypt SSL</div>
+            <div class="version">platný do 2026-08-09</div>
+        </div>
+        <div class="tech">
+            <div class="name">Laravel Breeze</div>
+            <div class="version">Blade stack · auth</div>
+        </div>
+    </div>
+
+    <h2>DB Schema</h2>
+    <div class="card">
+        <h3>7 nových entit · 15 tabulek celkem</h3>
+        <p>events, speakers, talks, registrations, users (rozšíření), event_translations, talk_translations + Breeze default tabulky</p>
+    </div>
+
+    <h2>Klíčová architektonická rozhodnutí</h2>
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="dot"></div>
+            <div class="content">
+                <div class="label">Apache místo Nginx</div>
+                <div class="desc">VPS používá Apache 2.4 + mod_php — žádný FPM, žádný Nginx</div>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="dot"></div>
+            <div class="content">
+                <div class="label">Tailwind CSS v4</div>
+                <div class="desc">Vite plugin bez tailwind.config.js — @import "tailwindcss" v app.css</div>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="dot"></div>
+            <div class="content">
+                <div class="label">DB uživatel zdarai</div>
+                <div class="desc">Dedikovaný MySQL uživatel — ne root/socket auth</div>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="dot"></div>
+            <div class="content">
+                <div class="label">Redis + Supervisor</div>
+                <div class="desc">Queue worker běží jako daemon — email notifikace asynchronně</div>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="dot"></div>
+            <div class="content">
+                <div class="label">Dark Tech design</div>
+                <div class="desc">bg-gray-950, green-400, JetBrains Mono — konzistentní identita</div>
+            </div>
+        </div>
+    </div>
+
+    <h2>Dokončené úkoly</h2>
+    <div class="card">
+        <span class="badge done">#916</span> Laravel 13 + Livewire + Tailwind v4 install<br>
+        <span class="badge done">#917</span> DB schema design + ERD diagram<br>
+        <span class="badge done">#918</span> DB migrace + modely + factories + seeder<br>
+        <span class="badge done">#919</span> Apache 2.4 + mod_php konfigurace<br>
+        <span class="badge done">#920</span> SSL + produkční deploy
+    </div>
+</div>
+</body>
+</html>
