@@ -4,13 +4,94 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use App\Mail\RegistrationConfirmed;
 use App\Models\Event;
+use App\Models\Registration;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Livewire\Component;
 
 class RegistrationForm extends Component
 {
     public Event $event;
+
+    public string $name = '';
+    public string $email = '';
+    public string $dietary_notes = '';
+    public bool $email_opt_in = true;
+
+    public bool $success = false;
+    public string $errorMessage = '';
+
+    protected function rules(): array
+    {
+        return [
+            'name'          => ['required', 'string', 'min:2', 'max:100'],
+            'email'         => ['required', 'email:rfc', 'max:200'],
+            'dietary_notes' => ['nullable', 'string', 'max:255'],
+        ];
+    }
+
+    protected function messages(): array
+    {
+        return [
+            'name.required'  => 'Jméno je povinné.',
+            'name.min'       => 'Jméno musí mít alespoň 2 znaky.',
+            'email.required' => 'E-mail je povinný.',
+            'email.email'    => 'Zadejte platný e-mail.',
+        ];
+    }
+
+    public function register(): void
+    {
+        $this->errorMessage = '';
+        $this->validate();
+
+        try {
+            DB::transaction(function (): void {
+                $event = Event::lockForUpdate()->find($this->event->id);
+
+                if ($event->isFull()) {
+                    $this->errorMessage = 'Omlouváme se, kapacita byla právě naplněna.';
+                    return;
+                }
+
+                $exists = Registration::where('event_id', $event->id)
+                    ->where('email', $this->email)
+                    ->whereNotIn('payment_status', ['cancelled'])
+                    ->exists();
+
+                if ($exists) {
+                    $this->errorMessage = 'Na tuto akci jste již zaregistrován/a.';
+                    return;
+                }
+
+                $registration = Registration::create([
+                    'event_id'       => $event->id,
+                    'user_id'        => auth()->id(),
+                    'name'           => $this->name,
+                    'email'          => $this->email,
+                    'token'          => (string) Str::uuid(),
+                    'payment_status' => $event->price === null ? 'free' : 'pending',
+                    'email_opt_out'  => ! $this->email_opt_in,
+                    'dietary_notes'  => $this->dietary_notes ?: null,
+                ]);
+
+                Mail::to($this->email)
+                    ->queue(new RegistrationConfirmed($registration));
+            });
+
+            if (empty($this->errorMessage)) {
+                $this->success = true;
+                $this->reset(['name', 'email', 'dietary_notes', 'email_opt_in']);
+            }
+        } catch (\Throwable $e) {
+            report($e);
+            $this->errorMessage = 'Nastala neočekávaná chyba. Zkuste to prosím znovu.';
+        }
+    }
 
     public function render(): View
     {

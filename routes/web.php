@@ -15,6 +15,13 @@ Route::get('/udalosti/{slug}', function (string $slug) {
     return view('events.show', compact('event'));
 })->name('events.show');
 
+// Opt-out route pro emailové odhlášení připomínek
+Route::get('/opt-out/{token}', function (string $token) {
+    $registration = \App\Models\Registration::where('token', $token)->firstOrFail();
+    $registration->update(['email_opt_out' => true]);
+    return view('opt-out');
+})->name('opt-out');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
