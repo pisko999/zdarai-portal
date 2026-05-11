@@ -31,6 +31,17 @@ Route::get('/lang/{locale}', function (string $locale) {
     return redirect()->back();
 })->name('lang.switch');
 
+Route::get('/o-nas', fn() => view('about'))->name('about');
+
+Route::get('/archiv', function () {
+    $events = \App\Models\Event::where('status', 'published')
+        ->where('date', '<', now())
+        ->with(['talks', 'registrations'])
+        ->orderByDesc('date')
+        ->get();
+    return view('archive', compact('events'));
+})->name('archive');
+
 Route::get('/sitemap.xml', function () {
     $events = \App\Models\Event::where('status', 'published')
         ->orderByDesc('date')
