@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ŽďárAI — Entity Diagram</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: #030a03;
+      color: #86efac;
+      padding: 28px;
+      min-height: 100vh;
+    }
+
+    h1 { color: #4ade80; font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; }
+    .subtitle { color: #166534; font-size: 0.75rem; margin-top: 4px; margin-bottom: 28px; }
+
+    /* ── diagram container ── */
+    .diagram-wrapper { overflow-x: auto; overflow-y: visible; }
+
+    .diagram {
+      position: relative;
+      width: 1200px;
+      height: 660px;
+    }
+
+    .diagram > svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    /* ── entity card ── */
+    .entity {
+      position: absolute;
+      background: #0d1a0d;
+      border: 1px solid #166534;
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 0.72rem;
+      box-shadow: 0 0 20px rgba(34,197,94,0.05);
+    }
+
+    .entity-header {
+      background: #14532d;
+      padding: 7px 11px;
+      color: #4ade80;
+      font-weight: 700;
+      font-size: 0.78rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.03em;
+      border-bottom: 1px solid #166534;
+    }
+
+    .field {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 3px 11px;
+      border-bottom: 1px solid rgba(22,101,52,0.25);
+    }
+    .field:last-child { border-bottom: none; }
+
+    .badge {
+      font-size: 0.58rem;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 3px;
+      min-width: 22px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .pk  { background: #78350f; color: #fbbf24; }
+    .fk  { background: #1e3a5f; color: #60a5fa; }
+    .fkn { background: #431407; color: #f97316; } /* nullable FK */
+    .uk  { background: #2d1b69; color: #a78bfa; }
+    .sp  { min-width: 22px; }  /* spacer */
+
+    .fname { color: #86efac; flex: 1; }
+    .ftype { color: #166534; font-size: 0.62rem; white-space: nowrap; }
+
+    /* ── legend ── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+      margin-top: 22px;
+      padding: 12px 16px;
+      background: #0d1a0d;
+      border: 1px solid #166534;
+      border-radius: 8px;
+      max-width: 1200px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.72rem;
+      color: #86efac;
+    }
+
+    .line-sample {
+      width: 32px;
+      height: 2px;
+      border-radius: 1px;
+    }
+
+    /* ── relations table ── */
+    .relations {
+      margin-top: 22px;
+      max-width: 1000px;
+      border: 1px solid #166534;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .rel-head {
+      background: #14532d;
+      padding: 8px 16px;
+      color: #4ade80;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    td, th {
+      padding: 5px 14px;
+      font-size: 0.7rem;
+      border-bottom: 1px solid rgba(22,101,52,0.3);
+      text-align: left;
+    }
+    th { color: #166534; font-weight: 600; }
+    td { color: #86efac; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #0d1a0d; }
+
+    .green { color: #4ade80; }
+    .blue  { color: #60a5fa; }
+    .orange { color: #f97316; }
+    .purple { color: #a78bfa; }
+    .note  { color: #4b6f4b; font-size: 0.65rem; }
+  </style>
+</head>
+<body>
+
+<div style="margin-bottom:16px;">
+  <a href="index.html" style="color:#166534;font-size:0.72rem;text-decoration:none;font-family:'JetBrains Mono',monospace;">
+    &larr; zpět na index dokumentace
+  </a>
+</div>
+
+<h1>&gt;_ entity_diagram — ŽďárAI portál</h1>
+<p class="subtitle">// 001 · Wave 0 — Setup &amp; Infrastructure · 7 entit · 6 relací · Laravel 13 · Eloquent ORM · MySQL 8.0</p>
+
+<div class="diagram-wrapper">
+  <div class="diagram">
+
+    <!-- ═══════════ SVG LINES ═══════════ -->
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr-green" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="#22c55e" opacity="0.8"/>
+        </marker>
+        <marker id="arr-blue" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="#60a5fa" opacity="0.8"/>
+        </marker>
+        <marker id="arr-orange" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="#f97316" opacity="0.8"/>
+        </marker>
+      </defs>
+
+      <!-- 1. Speaker → Talks (Speaker.hasMany Talks via talks.speaker_id) -->
+      <!-- Speaker right-center: (222, 265) → Talks left at y=207 -->
+      <path d="M222,265 C256,265 260,207 290,207"
+            fill="none" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.65"
+            marker-end="url(#arr-green)"/>
+      <text x="237" y="240" fill="#22c55e" font-size="9" font-family="monospace" opacity="0.85">1:N</text>
+
+      <!-- 2. Event → Talks (Event.hasMany Talks via talks.event_id) -->
+      <!-- Event left-center: (590, 172) → Talks right at y=207  -->
+      <path d="M590,172 C556,172 556,207 512,207"
+            fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.65"
+            marker-end="url(#arr-blue)"/>
+      <text x="532" y="188" fill="#60a5fa" font-size="9" font-family="monospace" opacity="0.85">1:N</text>
+
+      <!-- 3. Event → Registrations (Event.hasMany Registrations) -->
+      <!-- Event right-center: (850, 172) → Registrations left at (940, 185) -->
+      <path d="M850,172 C895,172 895,185 940,185"
+            fill="none" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.65"
+            marker-end="url(#arr-green)"/>
+      <text x="870" y="168" fill="#22c55e" font-size="9" font-family="monospace" opacity="0.85">1:N</text>
+
+      <!-- 4. Talks → TalkTranslations (vertical) -->
+      <!-- Talks bottom-center: (401, 325) → TalkTranslations top: (401, 385) -->
+      <line x1="401" y1="325" x2="401" y2="381"
+            stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.55"
+            marker-end="url(#arr-green)" stroke-dasharray="4,3"/>
+      <text x="408" y="358" fill="#22c55e" font-size="9" font-family="monospace" opacity="0.75">1:N</text>
+
+      <!-- 5. Event → EventTranslations (vertical) -->
+      <!-- Event bottom-center: (720, 315) → EventTranslations top: (720, 375) -->
+      <line x1="720" y1="315" x2="720" y2="371"
+            stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.55"
+            marker-end="url(#arr-green)" stroke-dasharray="4,3"/>
+      <text x="727" y="348" fill="#22c55e" font-size="9" font-family="monospace" opacity="0.75">1:N</text>
+
+      <!-- 6. User → Registrations (nullable, 0:N) -->
+      <!-- User top-center: (1055, 400) → Registrations bottom-center: (1055, 340) -->
+      <line x1="1055" y1="400" x2="1055" y2="344"
+            stroke="#f97316" stroke-width="1.5" stroke-opacity="0.65"
+            marker-end="url(#arr-orange)"/>
+      <text x="1062" y="376" fill="#f97316" font-size="9" font-family="monospace" opacity="0.85">0:N</text>
+
+      <!-- Label "překlady i18n" for dashed lines -->
+      <text x="90" y="630" fill="#166534" font-size="9" font-family="monospace">-- -- --  překlady (i18n CZ/EN)</text>
+      <line x1="20" y1="626" x2="80" y2="626" stroke="#166534" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.7"/>
+      <text x="90" y="646" fill="#166534" font-size="9" font-family="monospace">────────  datová relace</text>
+      <line x1="20" y1="642" x2="80" y2="642" stroke="#22c55e" stroke-width="1.5" opacity="0.6"/>
+      <text x="90" y="658" fill="#f97316" font-size="9" font-family="monospace" opacity="0.8">────────  nullable relace (bez účtu)</text>
+      <line x1="20" y1="654" x2="80" y2="654" stroke="#f97316" stroke-width="1.5" opacity="0.6"/>
+    </svg>
+
+    <!-- ═══════════ ENTITY CARDS ═══════════ -->
+
+    <!-- speakers  left:20 top:160 w:202 -->
+    <!-- height: 35 + 7×25 = 210px  → bottom:370  center_Y:265  right:(222,265) -->
+    <div class="entity" style="left:20px; top:160px; width:202px;">
+      <div class="entity-header">👤 &nbsp;speakers</div>
+      <div class="field"><span class="badge pk">PK</span><span class="fname">id</span><span class="ftype">bigint</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">name</span><span class="ftype">varchar</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">bio</span><span class="ftype">text?</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">avatar</span><span class="ftype">varchar?</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">github_url</span><span class="ftype">varchar?</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">linkedin_url</span><span class="ftype">varchar?</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">timestamps</span><span class="ftype">ts</span></div>
+    </div>
+
+    <!-- talks  left:290 top:90 w:222 -->
+    <!-- height: 35 + 8×25 = 235px  → bottom:325  center_Y:207  left:(290,207) right:(512,207) -->
+    <div class="entity" style="left:290px; top:90px; width:222px;">
+      <div class="entity-header">🎙️ &nbsp;talks</div>
+      <div class="field"><span class="badge pk">PK</span><span class="fname">id</span><span class="ftype">bigint</span></div>
+      <div class="field"><span class="badge fk">FK</span><span class="fname">event_id</span><span class="ftype">bigint</span></div>
+      <div class="field"><span class="badge fk">FK</span><span class="fname">speaker_id</span><span class="ftype">bigint</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">title</span><span class="ftype">varchar</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">description</span><span class="ftype">text?</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">duration_minutes</span><span class="ftype">int</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">sort_order</span><span class="ftype">int</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">timestamps</span><span class="ftype">ts</span></div>
+    </div>
+
+    <!-- talk_translations  left:290 top:385 w:222 -->
+    <!-- height: 35 + 5×25 = 160px  top:(401,385) -->
+    <div class="entity" style="left:290px; top:385px; width:222px; opacity:0.85;">
+      <div class="entity-header">🌐 &nbsp;talk_translations</div>
+      <div class="field"><span class="badge pk">PK</span><span class="fname">id</span><span class="ftype">bigint</span></div>
+      <div class="field"><span class="badge fk">FK</span><span class="fname">talk_id</span><span class="ftype">bigint</span></div>
+      <div class="field"><span class="badge uk">UK</span><span class="fname">locale</span><span class="ftype">cs | en</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">title</span><span class="ftype">varchar</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">description</span><span class="ftype">text?</span></div>
+    </div>
+
+    <!-- events  left:590 top:30 w:260 -->
+    <!-- height: 35 + 10×25 = 285px  → bottom:315  center_Y:172  left:(590,172) right:(850,172) -->
+    <div class="entity" style="left:590px; top:30px; width:260px; border-color:#22c55e; box-shadow:0 0 24px rgba(34,197,94,0.12);">
+      <div class="entity-header" style="background:#166534; color:#d1fae5;">📅 &nbsp;events &nbsp;<span style="color:#4ade80;font-size:0.65rem;font-weight:400;">[hlavní entita]</span></div>
+      <div class="field"><span class="badge pk">PK</span><span class="fname">id</span><span class="ftype">bigint</span></div>
+      <div class="field"><span class="badge uk">UK</span><span class="fname">slug</span><span class="ftype">varchar</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">title</span><span class="ftype">varchar</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">description</span><span class="ftype">text?</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">date</span><span class="ftype">datetime</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">location</span><span class="ftype">varchar</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">capacity</span><span class="ftype">int</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">price</span><span class="ftype">decimal?</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">status</span><span class="ftype">draft|pub|cancel</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">timestamps</span><span class="ftype">ts</span></div>
+    </div>
+
+    <!-- event_translations  left:590 top:375 w:260 -->
+    <!-- height: 35 + 5×25 = 160px  top:(720,375) -->
+    <div class="entity" style="left:590px; top:375px; width:260px; opacity:0.85;">
+      <div class="entity-header">🌐 &nbsp;event_translations</div>
+      <div class="field"><span class="badge pk">PK</span><span class="fname">id</span><span class="ftype">bigint</span></div>
+      <div class="field"><span class="badge fk">FK</span><span class="fname">event_id</span><span class="ftype">bigint</span></div>
+      <div class="field"><span class="badge uk">UK</span><span class="fname">locale</span><span class="ftype">cs | en</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">title</span><span class="ftype">varchar</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">description</span><span class="ftype">text?</span></div>
+    </div>
+
+    <!-- registrations  left:940 top:30 w:230 -->
+    <!-- height: 35 + 11×25 = 310px  → bottom:340  center_Y:185  left:(940,185) bottom-center:(1055,340) -->
+    <div class="entity" style="left:940px; top:30px; width:230px;">
+      <div class="entity-header">📝 &nbsp;registrations</div>
+      <div class="field"><span class="badge pk">PK</span><span class="fname">id</span><span class="ftype">bigint</span></div>
+      <div class="field"><span class="badge fk">FK</span><span class="fname">event_id</span><span class="ftype">bigint</span></div>
+      <div class="field"><span class="badge fkn">FK?</span><span class="fname">user_id</span><span class="ftype">bigint?</span></div>
+      <div class="field"><span class="badge uk">UK</span><span class="fname">token</span><span class="ftype">uuid</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">name</span><span class="ftype">varchar</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">email</span><span class="ftype">varchar</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">payment_status</span><span class="ftype">enum</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">reminder_sent_at</span><span class="ftype">ts?</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">email_opt_out</span><span class="ftype">bool</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">dietary_notes</span><span class="ftype">varchar?</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">timestamps</span><span class="ftype">ts</span></div>
+    </div>
+
+    <!-- users  left:940 top:400 w:230 -->
+    <!-- height: 35 + 8×25 = 235px  top-center:(1055,400) -->
+    <div class="entity" style="left:940px; top:400px; width:230px;">
+      <div class="entity-header">🧑‍💻 &nbsp;users</div>
+      <div class="field"><span class="badge pk">PK</span><span class="fname">id</span><span class="ftype">bigint</span></div>
+      <div class="field"><span class="badge uk">UK</span><span class="fname">email</span><span class="ftype">varchar</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">name</span><span class="ftype">varchar</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">password</span><span class="ftype">hashed</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">phone</span><span class="ftype">varchar?</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">bio</span><span class="ftype">text?</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">is_admin</span><span class="ftype">bool</span></div>
+      <div class="field"><span class="badge sp"></span><span class="fname">timestamps</span><span class="ftype">ts</span></div>
+    </div>
+
+  </div><!-- /.diagram -->
+</div><!-- /.diagram-wrapper -->
+
+<!-- ── LEGEND ── -->
+<div class="legend">
+  <div class="legend-item"><span class="badge pk" style="font-size:0.6rem;padding:2px 5px">PK</span> Primary Key</div>
+  <div class="legend-item"><span class="badge fk" style="font-size:0.6rem;padding:2px 5px">FK</span> Foreign Key</div>
+  <div class="legend-item"><span class="badge fkn" style="font-size:0.6rem;padding:2px 5px">FK?</span> Nullable FK (guest)</div>
+  <div class="legend-item"><span class="badge uk" style="font-size:0.6rem;padding:2px 5px">UK</span> Unique Key</div>
+  <div class="legend-item"><span style="color:#166534">typ?</span> &nbsp;nullable pole</div>
+  <div class="legend-item">
+    <span style="border-bottom:1.5px dashed #22c55e;width:28px;display:inline-block"></span>
+    &nbsp;překladová relace (i18n)
+  </div>
+  <div class="legend-item">
+    <span style="border-bottom:1.5px solid #f97316;width:28px;display:inline-block"></span>
+    &nbsp;nullable relace
+  </div>
+  <div style="margin-left:auto;color:#166534;font-size:0.68rem;">
+    payment_status: free | pending | paid | cancelled
+  </div>
+</div>
+
+<!-- ── RELATIONSHIPS TABLE ── -->
+<div class="relations">
+  <div class="rel-head">// Eloquent relace v modelech</div>
+  <table>
+    <tr>
+      <th>Model (od)</th><th>Metoda</th><th>Cílový model</th><th>FK sloupec</th><th>Poznámka</th>
+    </tr>
+    <tr>
+      <td class="green">Event</td>
+      <td class="blue">hasMany</td>
+      <td>Talk</td>
+      <td class="note">talks.event_id</td>
+      <td class="note">Jedna událost → více přednášek</td>
+    </tr>
+    <tr>
+      <td class="green">Event</td>
+      <td class="blue">hasMany</td>
+      <td>Registration</td>
+      <td class="note">registrations.event_id</td>
+      <td class="note">Jedna událost → více registrací</td>
+    </tr>
+    <tr>
+      <td class="green">Event</td>
+      <td class="blue">hasMany</td>
+      <td>EventTranslation</td>
+      <td class="note">event_translations.event_id</td>
+      <td class="note">Překlady CZ/EN; fallback na CZ</td>
+    </tr>
+    <tr>
+      <td class="green">Speaker</td>
+      <td class="blue">hasMany</td>
+      <td>Talk</td>
+      <td class="note">talks.speaker_id</td>
+      <td class="note">Přednášející vystupuje na N akcích</td>
+    </tr>
+    <tr>
+      <td class="green">Talk</td>
+      <td class="blue">hasMany</td>
+      <td>TalkTranslation</td>
+      <td class="note">talk_translations.talk_id</td>
+      <td class="note">Překlady CZ/EN</td>
+    </tr>
+    <tr>
+      <td class="green">User</td>
+      <td class="blue">hasMany</td>
+      <td>Registration</td>
+      <td class="note">registrations.user_id</td>
+      <td class="orange">nullable — registrace i bez účtu (guest)</td>
+    </tr>
+    <tr>
+      <td class="green">Registration</td>
+      <td class="blue">belongsTo</td>
+      <td>Event</td>
+      <td class="note">registrations.event_id</td>
+      <td class="note">UNIQUE(event_id, email) — 1 email / akce</td>
+    </tr>
+    <tr>
+      <td class="green">Registration</td>
+      <td class="blue">belongsTo</td>
+      <td>User</td>
+      <td class="note">registrations.user_id</td>
+      <td class="orange">nullable; spravováno přes token (UUID)</td>
+    </tr>
+  </table>
+</div>
+
+<p style="margin-top:16px; font-size:0.68rem; color:#166534;">
+  ŽďárAI portál &nbsp;·&nbsp; Laravel 13 / Eloquent ORM &nbsp;·&nbsp; MySQL 8.0 &nbsp;·&nbsp; generováno: 2026-05-11
+</p>
+
+</body>
+</html>

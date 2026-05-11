@@ -1,0 +1,11 @@
+{
+  "servers": {
+    "taskforge": {
+      "type": "http",
+      "url": "https://taskforge.mtgforfun.cz/mcp",
+      "headers": {
+        "Authorization": "Bearer auRoYJv9ZzPhQYczWyutm8YOcIqFqs0VoqzwC9wNARVbcxBUWKMWbYz6XId9r7C3"
+      }
+    }
+  }
+}

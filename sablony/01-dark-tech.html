@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ŽďárAI — Šablona 1: Dark Tech</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;700;900&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .glow { box-shadow: 0 0 20px rgba(99, 245, 177, 0.3); }
+    .glow-text { text-shadow: 0 0 20px rgba(99, 245, 177, 0.5); }
+    .scanline {
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+      pointer-events: none;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .cursor::after { content: '|'; animation: blink 1s infinite; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    .fade-in { animation: fadeIn 0.6s ease forwards; }
+  </style>
+</head>
+<body class="bg-gray-950 text-gray-100 min-h-screen">
+
+  <!-- Nav -->
+  <nav class="border-b border-green-500/20 bg-gray-950/90 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-green-400 rounded flex items-center justify-center">
+          <span class="text-gray-950 font-black text-xs mono">AI</span>
+        </div>
+        <span class="text-xl font-black tracking-tight">
+          <span class="text-green-400 glow-text">Žďár</span><span class="text-white">AI</span>
+        </span>
+        <span class="mono text-xs text-green-400/50 ml-2">v2026</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="#" class="text-sm text-gray-400 hover:text-green-400 transition mono">./udalosti</a>
+        <a href="#" class="text-sm text-gray-400 hover:text-green-400 transition mono">./o-nas</a>
+        <a href="#" class="text-sm text-gray-400 hover:text-green-400 transition mono">./archiv</a>
+        <div class="flex gap-1 ml-4">
+          <button class="mono text-xs px-2 py-1 bg-green-400 text-gray-950 font-bold rounded">CZ</button>
+          <button class="mono text-xs px-2 py-1 text-gray-500 hover:text-gray-300 transition">EN</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="relative max-w-6xl mx-auto px-6 pt-20 pb-16">
+    <div class="scanline absolute inset-0 pointer-events-none"></div>
+    <div class="mono text-green-400/40 text-sm mb-4 fade-in">$ ./zdarai --next-event</div>
+    <h1 class="text-6xl font-black leading-none mb-4 fade-in cursor">
+      AI pro<br>
+      <span class="text-green-400 glow-text">programátory</span>
+    </h1>
+    <p class="text-gray-400 text-lg max-w-xl mb-8 fade-in">
+      Měsíční setkání s přednáškami o umělé inteligenci. Každý první čtvrtek v měsíci v obchodě MtgForFun, Žďár nad Sázavou.
+    </p>
+    <div class="flex gap-4 fade-in">
+      <a href="#events" class="px-6 py-3 bg-green-400 text-gray-950 font-bold rounded hover:bg-green-300 transition glow">
+        Nadcházející události →
+      </a>
+      <a href="#" class="px-6 py-3 border border-green-500/30 text-green-400 font-mono text-sm rounded hover:border-green-400 transition">
+        Co je ŽďárAI?
+      </a>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="border-t border-green-500/10 mono text-xs text-green-400/30 pt-2">
+      // nadcházející události ──────────────────────────────────────────────────────────
+    </div>
+  </div>
+
+  <!-- Events -->
+  <section id="events" class="max-w-6xl mx-auto px-6 py-12">
+    <div class="grid gap-4">
+
+      <!-- Event 1 - highlighted -->
+      <div class="relative border border-green-500/40 rounded-lg p-6 bg-green-500/5 hover:bg-green-500/10 transition glow group cursor-pointer">
+        <div class="absolute top-4 right-4">
+          <span class="mono text-xs px-2 py-1 bg-green-400/10 text-green-400 rounded border border-green-500/30">5 volných míst</span>
+        </div>
+        <div class="mono text-green-400/60 text-xs mb-2">čt 5.6.2026 // 18:00</div>
+        <h2 class="text-2xl font-bold mb-1 group-hover:text-green-400 transition">TaskForge — jak AI agent spravuje projekt</h2>
+        <p class="text-gray-400 text-sm mb-4">Živá ukázka: jak jsme postavili tento web pomocí AI agentů koordinovaných přes TaskForge MCP server.</p>
+        <div class="flex gap-6 items-center">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 bg-gray-700 rounded-full overflow-hidden flex items-center justify-center text-xs">M</div>
+            <span class="text-sm text-gray-400">Martin Novák</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 bg-gray-700 rounded-full overflow-hidden flex items-center justify-center text-xs">J</div>
+            <span class="text-sm text-gray-400">Jana Dvořák</span>
+          </div>
+          <div class="ml-auto flex items-center gap-4">
+            <span class="mono text-xs text-gray-500">📍 MtgForFun</span>
+            <span class="font-bold text-green-400">ZDARMA</span>
+            <a href="#" class="px-4 py-2 bg-green-400 text-gray-950 text-sm font-bold rounded hover:bg-green-300 transition">Registrovat →</a>
+          </div>
+        </div>
+        <!-- Capacity bar -->
+        <div class="mt-4 h-1 bg-gray-800 rounded">
+          <div class="h-1 bg-green-400 rounded" style="width: 75%"></div>
+        </div>
+        <div class="mono text-xs text-gray-600 mt-1">15/20 registrací</div>
+      </div>
+
+      <!-- Event 2 -->
+      <div class="border border-gray-800 rounded-lg p-6 bg-gray-900/50 hover:border-gray-700 transition group cursor-pointer">
+        <div class="absolute top-4 right-4"></div>
+        <div class="mono text-gray-500 text-xs mb-2">čt 3.7.2026 // 18:00</div>
+        <h2 class="text-xl font-bold mb-1 text-gray-300 group-hover:text-white transition">LLM v produkci — zkušenosti z praxe</h2>
+        <p class="text-gray-500 text-sm mb-4">Jak nasadit jazykové modely do reálné aplikace. RAG, fine-tuning, monitoring a výzvy.</p>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 bg-gray-700 rounded-full flex items-center justify-center text-xs">P</div>
+            <span class="text-sm text-gray-500">Petr Kratochvíl</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="mono text-xs text-gray-600">📍 MtgForFun</span>
+            <span class="text-gray-400 font-bold">ZDARMA</span>
+            <a href="#" class="px-4 py-2 border border-gray-700 text-gray-400 text-sm rounded hover:border-gray-500 transition">Registrovat</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event 3 -->
+      <div class="border border-gray-800 rounded-lg p-6 bg-gray-900/50 hover:border-gray-700 transition group cursor-pointer">
+        <div class="mono text-gray-500 text-xs mb-2">čt 7.8.2026 // 18:00</div>
+        <h2 class="text-xl font-bold mb-1 text-gray-300 group-hover:text-white transition">Automatizace s AI — od skriptu k agentovi</h2>
+        <p class="text-gray-500 text-sm mb-4">Praktická ukázka automatizace rutinních úkolů pomocí AI agentů. n8n, Make, vlastní řešení.</p>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 bg-gray-700 rounded-full flex items-center justify-center text-xs">L</div>
+            <span class="text-sm text-gray-500">Lukáš Šimánek</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="mono text-xs text-gray-600">📍 MtgForFun</span>
+            <span class="text-gray-400 font-bold">ZDARMA</span>
+            <a href="#" class="px-4 py-2 border border-gray-700 text-gray-400 text-sm rounded hover:border-gray-500 transition">Registrovat</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Info strip -->
+  <div class="border-y border-green-500/10 bg-green-500/3 py-8 my-8">
+    <div class="max-w-6xl mx-auto px-6 grid grid-cols-3 gap-8 text-center">
+      <div>
+        <div class="mono text-green-400 text-3xl font-bold">1×</div>
+        <div class="text-gray-500 text-sm mono mt-1">měsíčně / první čtvrtek</div>
+      </div>
+      <div>
+        <div class="mono text-green-400 text-3xl font-bold">2+</div>
+        <div class="text-gray-500 text-sm mono mt-1">přednášky + networking</div>
+      </div>
+      <div>
+        <div class="mono text-green-400 text-3xl font-bold">∞</div>
+        <div class="text-gray-500 text-sm mono mt-1">káva, čaj, deskohry</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="max-w-6xl mx-auto px-6 py-8 border-t border-gray-800">
+    <div class="flex items-center justify-between">
+      <div>
+        <div class="font-black text-lg"><span class="text-green-400">Žďár</span>AI</div>
+        <div class="mono text-xs text-gray-600 mt-1">MtgForFun · Žďár nad Sázavou</div>
+      </div>
+      <div class="mono text-xs text-gray-700">
+        © 2026 MtgForFun · Built with 🤖 AI + TaskForge
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

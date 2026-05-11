@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ŽďárAI — Šablona 4: Bold Magazine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .syne { font-family: 'Syne', sans-serif; }
+    .clip-diagonal {
+      clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900 min-h-screen">
+
+  <!-- Nav -->
+  <nav class="border-b-4 border-gray-900 sticky top-0 bg-white z-50">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+      <div class="syne text-2xl font-black tracking-tight">
+        ŽĎÁR<span class="text-rose-500">AI</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="#" class="text-sm font-semibold uppercase tracking-wider text-gray-600 hover:text-gray-900 transition">Události</a>
+        <a href="#" class="text-sm font-semibold uppercase tracking-wider text-gray-600 hover:text-gray-900 transition">O nás</a>
+        <a href="#" class="text-sm font-semibold uppercase tracking-wider text-gray-600 hover:text-gray-900 transition">Archiv</a>
+        <div class="flex items-center gap-2 ml-2">
+          <button class="text-sm font-black border-b-2 border-rose-500 px-1">CZ</button>
+          <span class="text-gray-300">/</span>
+          <button class="text-sm font-semibold text-gray-400 hover:text-gray-700 transition px-1">EN</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero — bold editorial -->
+  <section class="bg-gray-900 text-white clip-diagonal pb-24 pt-16">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="inline-block border border-rose-500 text-rose-400 text-xs font-semibold tracking-widest uppercase px-3 py-1 mb-6">
+            Příští akce — 5. června 2026
+          </div>
+          <h1 class="syne text-7xl font-black leading-none mb-6">
+            AI<br>
+            <span class="text-rose-500">EVENTS</span><br>
+            VE ŽĎÁRU
+          </h1>
+          <p class="text-gray-400 text-lg leading-relaxed mb-8">
+            Měsíční setkání vývojářů a AI nadšenců. Přednášky, debaty, networking. Každý první čtvrtek.
+          </p>
+          <div class="flex gap-3">
+            <a href="#events" class="px-6 py-3 bg-rose-500 text-white font-bold rounded hover:bg-rose-600 transition">
+              Nadcházející události
+            </a>
+            <a href="#" class="px-6 py-3 border border-gray-600 text-gray-300 font-semibold rounded hover:border-gray-400 transition">
+              O projektu
+            </a>
+          </div>
+        </div>
+        <!-- Featured event card -->
+        <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+          <div class="text-rose-400 text-xs font-bold uppercase tracking-widest mb-3">📅 Nejbližší akce</div>
+          <h2 class="syne text-2xl font-black mb-3 leading-tight">
+            TaskForge — jak AI agent spravuje projekt
+          </h2>
+          <p class="text-gray-400 text-sm mb-4 leading-relaxed">
+            Živá ukázka toho, jak AI agenti koordinují vývoj webu přes MCP server TaskForge.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">#ai-agents</span>
+            <span class="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">#mcp</span>
+            <span class="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">#live-demo</span>
+          </div>
+          <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+            <div class="text-sm text-gray-400">
+              <div>čt 5.6.2026 · 18:00</div>
+              <div class="text-emerald-400 font-bold mt-0.5">ZDARMA · 5 míst zbývá</div>
+            </div>
+            <a href="#" class="px-4 py-2 bg-rose-500 text-white text-sm font-bold rounded hover:bg-rose-600 transition">
+              Registrovat →
+            </a>
+          </div>
+          <!-- Capacity -->
+          <div class="mt-3 h-1.5 bg-gray-700 rounded">
+            <div class="h-1.5 bg-rose-500 rounded" style="width: 75%"></div>
+          </div>
+          <div class="text-xs text-gray-600 mt-1">15 z 20 míst obsazeno</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Events list -->
+  <section id="events" class="max-w-6xl mx-auto px-6 py-16">
+    <div class="flex items-end justify-between mb-10">
+      <h2 class="syne text-4xl font-black">Nadcházející<br>události</h2>
+      <a href="#" class="text-sm font-semibold text-rose-500 hover:text-rose-600 border-b border-rose-500 pb-0.5">Archiv →</a>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <!-- Card 1 -->
+      <div class="group border-t-4 border-rose-500 pt-5 hover:border-rose-600 transition">
+        <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-2">Čvn 2026</div>
+        <h3 class="syne text-xl font-black mb-3 group-hover:text-rose-500 transition leading-tight">
+          TaskForge — jak AI agent spravuje projekt
+        </h3>
+        <p class="text-sm text-gray-600 leading-relaxed mb-4">
+          Živá ukázka: GitHub Copilot + MCP server + TaskForge. Jak jsme postavili tento web.
+        </p>
+        <div class="flex flex-wrap gap-1 mb-4">
+          <span class="bg-rose-50 text-rose-600 text-xs font-semibold px-2 py-0.5 rounded">#ai</span>
+          <span class="bg-rose-50 text-rose-600 text-xs font-semibold px-2 py-0.5 rounded">#live</span>
+        </div>
+        <div class="flex items-center justify-between text-sm">
+          <div>
+            <div class="font-semibold">18:00 · MtgForFun</div>
+            <div class="text-emerald-600 font-bold text-xs">ZDARMA · 5 míst</div>
+          </div>
+          <a href="#" class="px-3 py-1.5 bg-gray-900 text-white text-xs font-bold rounded hover:bg-rose-500 transition">
+            Registrovat
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="group border-t-4 border-gray-200 pt-5 hover:border-rose-500 transition">
+        <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-2">Čvc 2026</div>
+        <h3 class="syne text-xl font-black mb-3 group-hover:text-rose-500 transition leading-tight">
+          LLM v produkci — zkušenosti z praxe
+        </h3>
+        <p class="text-sm text-gray-600 leading-relaxed mb-4">
+          Nasazení jazykových modelů: RAG, fine-tuning, monitoring a výzvy.
+        </p>
+        <div class="flex flex-wrap gap-1 mb-4">
+          <span class="bg-gray-100 text-gray-600 text-xs font-semibold px-2 py-0.5 rounded">#llm</span>
+          <span class="bg-gray-100 text-gray-600 text-xs font-semibold px-2 py-0.5 rounded">#ml</span>
+        </div>
+        <div class="flex items-center justify-between text-sm">
+          <div>
+            <div class="font-semibold">18:00 · MtgForFun</div>
+            <div class="text-emerald-600 font-bold text-xs">ZDARMA</div>
+          </div>
+          <a href="#" class="px-3 py-1.5 border border-gray-300 text-gray-600 text-xs font-bold rounded hover:bg-rose-500 hover:text-white hover:border-rose-500 transition">
+            Registrovat
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="group border-t-4 border-gray-200 pt-5 hover:border-rose-500 transition">
+        <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-2">Srp 2026</div>
+        <h3 class="syne text-xl font-black mb-3 group-hover:text-rose-500 transition leading-tight">
+          Automatizace s AI — od skriptu k agentovi
+        </h3>
+        <p class="text-sm text-gray-600 leading-relaxed mb-4">
+          n8n, Make a vlastní AI agenti. Praktická automatizace firemních procesů.
+        </p>
+        <div class="flex flex-wrap gap-1 mb-4">
+          <span class="bg-gray-100 text-gray-600 text-xs font-semibold px-2 py-0.5 rounded">#automation</span>
+          <span class="bg-gray-100 text-gray-600 text-xs font-semibold px-2 py-0.5 rounded">#n8n</span>
+        </div>
+        <div class="flex items-center justify-between text-sm">
+          <div>
+            <div class="font-semibold">18:00 · MtgForFun</div>
+            <div class="text-emerald-600 font-bold text-xs">ZDARMA</div>
+          </div>
+          <a href="#" class="px-3 py-1.5 border border-gray-300 text-gray-600 text-xs font-bold rounded hover:bg-rose-500 hover:text-white hover:border-rose-500 transition">
+            Registrovat
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Location -->
+  <section class="bg-gray-900 text-white py-14">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <div class="text-rose-400 text-xs font-bold uppercase tracking-widest mb-3">📍 Kde nás najdeš</div>
+        <h2 class="syne text-4xl font-black mb-4">MtgForFun<br>Žďár nad Sázavou</h2>
+        <p class="text-gray-400 leading-relaxed mb-6">
+          Herní obchod specializující se na deskové hry a Magic the Gathering. Příjemné prostředí pro setkání technicky smýšlejících lidí.
+        </p>
+        <div class="flex flex-col gap-2 text-sm text-gray-400">
+          <span>🕕 Akce začínají v 18:00</span>
+          <span>☕ Drobné občerstvení k dispozici</span>
+          <span>🎲 Deskohry po přednáškách</span>
+        </div>
+      </div>
+      <div class="bg-gray-800 rounded-2xl h-48 flex items-center justify-center border border-gray-700">
+        <span class="text-gray-600 text-sm">[ mapa / foto místa ]</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t-4 border-gray-900">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      <span class="syne text-xl font-black">ŽĎÁR<span class="text-rose-500">AI</span></span>
+      <span class="text-sm text-gray-400">© 2026 MtgForFun, Žďár nad Sázavou</span>
+    </div>
+  </footer>
+
+</body>
+</html>

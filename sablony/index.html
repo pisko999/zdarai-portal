@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ŽďárAI — Přehled šablon</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen py-12 px-6">
+
+  <div class="max-w-5xl mx-auto">
+
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 rounded-full px-4 py-1.5 text-sm font-medium mb-4">
+        🎨 Návrhy designu portálu
+      </div>
+      <h1 class="text-4xl font-bold text-gray-900 mb-3">ŽďárAI — HTML šablony</h1>
+      <p class="text-gray-500 text-lg">5 různých vizuálních konceptů pro portál. Klikni na náhled pro otevření v plném rozlišení.</p>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- 01 -->
+      <a href="01-dark-tech.html" target="_blank" class="group bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:border-indigo-300 transition-all duration-200">
+        <!-- Preview thumbnail (faked with CSS) -->
+        <div class="h-44 bg-gray-950 flex flex-col items-center justify-center relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-950"></div>
+          <div class="relative text-center">
+            <div class="text-green-400 font-mono text-xs mb-2 opacity-60">$ ./zdarai --start</div>
+            <div class="text-green-400 font-mono font-bold text-xl tracking-widest">ŽĎÁR<span class="text-white">AI</span></div>
+            <div class="text-green-400/40 font-mono text-xs mt-1">AI events for developers_</div>
+          </div>
+          <!-- scanline effect -->
+          <div class="absolute inset-0 pointer-events-none" style="background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);"></div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">01</span>
+            <h2 class="font-semibold text-gray-900">Dark Tech</h2>
+          </div>
+          <p class="text-gray-500 text-sm">Terminálová estetika, tmavé pozadí, zelené akcenty. Pro technické publikum.</p>
+          <div class="mt-3 flex gap-1.5 flex-wrap">
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">JetBrains Mono</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">dark mode</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">hacker vibe</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 02 -->
+      <a href="02-clean-minimal.html" target="_blank" class="group bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:border-indigo-300 transition-all duration-200">
+        <div class="h-44 bg-white flex flex-col items-center justify-center border-b border-gray-100">
+          <div class="text-indigo-600 font-bold text-2xl tracking-tight mb-1">ŽďárAI</div>
+          <div class="flex gap-2 mt-2">
+            <div class="h-8 w-20 bg-indigo-600 rounded-lg"></div>
+            <div class="h-8 w-16 bg-gray-100 rounded-lg"></div>
+          </div>
+          <div class="mt-3 space-y-1 w-32">
+            <div class="h-2 bg-gray-200 rounded"></div>
+            <div class="h-2 bg-gray-100 rounded w-3/4"></div>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">02</span>
+            <h2 class="font-semibold text-gray-900">Clean Minimal</h2>
+          </div>
+          <p class="text-gray-500 text-sm">Čisté bílé pozadí, indigo akcent, profesionální layout. Klasická volba.</p>
+          <div class="mt-3 flex gap-1.5 flex-wrap">
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">Plus Jakarta Sans</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">light mode</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">professional</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 03 -->
+      <a href="03-warm-community.html" target="_blank" class="group bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:border-indigo-300 transition-all duration-200">
+        <div class="h-44 bg-amber-50 flex flex-col items-center justify-center border-b border-amber-100">
+          <div class="text-3xl mb-2">🤖</div>
+          <div class="text-amber-800 font-bold text-xl">ŽďárAI</div>
+          <div class="text-amber-600 text-xs mt-1">AI for everyone 🌱</div>
+          <div class="mt-3 flex gap-2">
+            <div class="h-6 w-6 bg-amber-200 rounded-full"></div>
+            <div class="h-6 w-6 bg-amber-300 rounded-full -ml-2"></div>
+            <div class="h-6 w-6 bg-amber-400 rounded-full -ml-2"></div>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">03</span>
+            <h2 class="font-semibold text-gray-900">Warm Community</h2>
+          </div>
+          <p class="text-gray-500 text-sm">Teplé tóny, přátelská atmosféra. Vhodné pro komunitní akce a networking.</p>
+          <div class="mt-3 flex gap-1.5 flex-wrap">
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">Nunito</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">amber palette</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">friendly</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 04 -->
+      <a href="04-bold-magazine.html" target="_blank" class="group bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:border-indigo-300 transition-all duration-200">
+        <div class="h-44 bg-gray-900 flex flex-col items-start justify-end p-5 border-b border-gray-200 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-16 h-16 bg-rose-500 flex items-center justify-center">
+            <span class="text-white font-black text-xs">AI</span>
+          </div>
+          <div class="text-rose-400 text-xs font-bold uppercase tracking-widest mb-1">Magazine Style</div>
+          <div class="text-white font-black text-2xl leading-tight">ŽĎÁR<br><span class="text-rose-500">AI</span></div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">04</span>
+            <h2 class="font-semibold text-gray-900">Bold Magazine</h2>
+          </div>
+          <p class="text-gray-500 text-sm">Editoriální styl, velká typografie, výrazné kontrasty. Moderní a odvážný.</p>
+          <div class="mt-3 flex gap-1.5 flex-wrap">
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">Syne</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">rose accent</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">editorial</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 05 -->
+      <a href="05-glass-gradient.html" target="_blank" class="group bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:border-indigo-300 transition-all duration-200">
+        <div class="h-44 flex flex-col items-center justify-center border-b border-gray-200 relative overflow-hidden"
+             style="background: linear-gradient(135deg, #1e1b4b, #4c1d95, #0f172a)">
+          <div class="absolute top-4 left-4 w-16 h-16 bg-violet-600 rounded-full opacity-30 blur-xl"></div>
+          <div class="absolute bottom-4 right-4 w-12 h-12 bg-blue-500 rounded-full opacity-30 blur-xl"></div>
+          <div class="relative">
+            <div class="bg-white/10 backdrop-blur border border-white/20 rounded-xl px-5 py-3 text-center">
+              <div class="text-white font-bold text-xl">
+                <span style="background: linear-gradient(135deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Žďár</span>AI
+              </div>
+              <div class="text-white/50 text-xs mt-1">Glass morphism</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">05</span>
+            <h2 class="font-semibold text-gray-900">Glass & Gradient</h2>
+          </div>
+          <p class="text-gray-500 text-sm">Tmavý gradient, glassmorphism karty, fialové tóny. Moderní premium look.</p>
+          <div class="mt-3 flex gap-1.5 flex-wrap">
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">DM Sans</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">glassmorphism</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded px-2 py-0.5">violet gradient</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Info card -->
+      <div class="bg-indigo-50 rounded-2xl border border-indigo-100 p-6 flex flex-col justify-between">
+        <div>
+          <div class="text-2xl mb-3">💡</div>
+          <h3 class="font-semibold text-indigo-900 mb-2">Jak vybrat design?</h3>
+          <p class="text-indigo-700 text-sm leading-relaxed">Klikni na každý návrh a prohlédni si ho v plném rozlišení. Zvol styl, který nejlépe odpovídá komunitě ŽďárAI.</p>
+        </div>
+        <div class="mt-4 text-xs text-indigo-500 border-t border-indigo-200 pt-3">
+          Vývoj portálu: <strong>Laravel 13</strong> · <strong>Livewire 3</strong> · <strong>Tailwind CSS v4</strong><br>
+          Server: <strong>Apache 2.4 + mod_php</strong> · Spravováno přes <strong>TaskForge</strong>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mt-8 text-center text-sm text-gray-400">
+      ŽďárAI portál · MtgForFun, Žďár nad Sázavou · Každý první čtvrtek v měsíci
+    </div>
+
+  </div>
+
+</body>
+</html>
