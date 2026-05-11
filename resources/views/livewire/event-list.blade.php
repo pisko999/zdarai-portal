@@ -3,11 +3,11 @@
     <div class="flex gap-4 mb-8">
         <button wire:click="$set('filter', 'upcoming')"
             class="{{ $filter === 'upcoming' ? 'text-green-400 border-b border-green-400' : 'text-green-700 hover:text-green-500' }} pb-1 text-sm font-semibold transition">
-            Nadcházející
+            {{ __("messages.events.upcoming") }}
         </button>
         <button wire:click="$set('filter', 'past')"
             class="{{ $filter === 'past' ? 'text-green-400 border-b border-green-400' : 'text-green-700 hover:text-green-500' }} pb-1 text-sm font-semibold transition">
-            Archiv
+            {{ __("messages.events.archive") }}
         </button>
     </div>
 
@@ -31,12 +31,12 @@
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
                             @if($event->price === null)
-                                <span class="text-xs font-bold text-green-500 border border-green-800 px-2 py-0.5 rounded">ZDARMA</span>
+                                <span class="text-xs font-bold text-green-500 border border-green-800 px-2 py-0.5 rounded">{{ __("messages.events.free") }}</span>
                             @else
                                 <span class="text-xs font-bold text-yellow-500 border border-yellow-800 px-2 py-0.5 rounded">{{ number_format((float) $event->price, 0) }} Kč</span>
                             @endif
                             @if($isFull)
-                                <span class="text-xs font-bold text-red-500 border border-red-800 px-2 py-0.5 rounded">OBSAZENO</span>
+                                <span class="text-xs font-bold text-red-500 border border-red-800 px-2 py-0.5 rounded">{{ __("messages.events.full") }}</span>
                             @endif
                         </div>
                         <h2 class="text-white text-lg font-bold mb-1">
@@ -61,7 +61,7 @@
                                 style="width: {{ $pct }}%"></div>
                         </div>
                         <div class="text-xs text-green-800">
-                            {{ $registered }} / {{ $event->capacity }} míst obsazeno
+                            {{ __("messages.events.capacity", ['registered' => $registered, 'capacity' => $event->capacity]) }}
                         </div>
                     </div>
 
@@ -69,10 +69,10 @@
                     @if($filter === 'upcoming' && !$isFull)
                         <a href="/udalosti/{{ $event->slug }}#registrace"
                            class="flex-shrink-0 bg-green-600 hover:bg-green-500 text-gray-950 font-bold text-sm px-4 py-2 rounded transition">
-                            Registrovat →
+                            {{ __("messages.events.register") }}
                         </a>
                     @elseif($isFull)
-                        <span class="flex-shrink-0 text-red-700 border border-red-900 text-sm px-4 py-2 rounded opacity-50">Obsazeno</span>
+                        <span class="flex-shrink-0 text-red-700 border border-red-900 text-sm px-4 py-2 rounded opacity-50">{{ __("messages.events.full") }}</span>
                     @endif
                 </div>
             </div>
@@ -80,7 +80,7 @@
     @empty
         <div class="text-center py-16 text-green-800">
             <div class="text-4xl mb-4">🤖</div>
-            <div class="text-lg">Žádné {{ $filter === 'upcoming' ? 'nadcházející' : 'minulé' }} události</div>
+            <div class="text-lg">{{ $filter === 'upcoming' ? __("messages.events.empty.upcoming") : __("messages.events.empty.past") }}</div>
         </div>
     @endforelse
 </div>

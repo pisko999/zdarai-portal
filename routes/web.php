@@ -22,6 +22,15 @@ Route::get('/opt-out/{token}', function (string $token) {
     return view('opt-out');
 })->name('opt-out');
 
+Route::get('/lang/{locale}', function (string $locale) {
+    $allowed = ['cs', 'en'];
+    if (!in_array($locale, $allowed, true)) {
+        abort(404);
+    }
+    session(['locale' => $locale]);
+    return redirect()->back();
+})->name('lang.switch');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
