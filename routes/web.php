@@ -10,7 +10,7 @@ Route::get('/', function () {
 Route::get('/udalosti/{slug}', function (string $slug) {
     $event = \App\Models\Event::where('slug', $slug)
         ->where('status', 'published')
-        ->with(['talks.speaker', 'registrations'])
+        ->with(['talks.speaker', 'talks.translations', 'registrations', 'translations'])
         ->firstOrFail();
     return view('events.show', compact('event'));
 })->name('events.show');

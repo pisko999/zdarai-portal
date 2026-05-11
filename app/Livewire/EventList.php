@@ -19,7 +19,7 @@ class EventList extends Component
             ->when($this->filter === 'upcoming', fn ($q) => $q->where('date', '>=', now()))
             ->when($this->filter === 'past', fn ($q) => $q->where('date', '<', now()))
             ->orderBy('date', $this->filter === 'past' ? 'desc' : 'asc')
-            ->with(['talks.speaker', 'registrations'])
+            ->with(['talks.speaker', 'talks.translations', 'registrations', 'translations'])
             ->get();
 
         return view('livewire.event-list', ['events' => $events]);

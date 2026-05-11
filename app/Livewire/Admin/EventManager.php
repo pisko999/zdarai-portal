@@ -21,6 +21,11 @@ class EventManager extends Component
     // Form fields
     public string $title = '';
     public string $description = '';
+    public string $title_cs = '';
+    public string $description_cs = '';
+    public string $title_en = '';
+    public string $description_en = '';
+    public string $langTab = 'cs';
     public string $date = '';
     public string $location = '';
     public ?int $capacity = 50;
@@ -33,13 +38,15 @@ class EventManager extends Component
     protected function rules(): array
     {
         return [
-            'title'       => ['required', 'string', 'min:3', 'max:255'],
-            'description' => ['nullable', 'string', 'max:10000'],
-            'date'        => ['required', 'date', 'after:now'],
-            'location'    => ['nullable', 'string', 'max:255'],
-            'capacity'    => ['required', 'integer', 'min:1', 'max:9999'],
-            'price'       => ['nullable', 'numeric', 'min:0'],
-            'status'      => ['required', 'in:draft,published,archived'],
+            'title_cs'       => ['required', 'string', 'min:3', 'max:255'],
+            'description_cs' => ['nullable', 'string', 'max:10000'],
+            'title_en'       => ['nullable', 'string', 'max:255'],
+            'description_en' => ['nullable', 'string', 'max:10000'],
+            'date'           => ['required', 'date', 'after:now'],
+            'location'       => ['nullable', 'string', 'max:255'],
+            'capacity'       => ['required', 'integer', 'min:1', 'max:9999'],
+            'price'          => ['nullable', 'numeric', 'min:0'],
+            'status'         => ['required', 'in:draft,published,archived'],
         ];
     }
 
@@ -52,10 +59,16 @@ class EventManager extends Component
 
     public function openEdit(int $id): void
     {
-        $event = Event::findOrFail($id);
+        $event = Event::with('translations')->findOrFail($id);
         $this->editingId = $id;
         $this->title = $event->title;
-        $this->description = $event->description ?? '';
+        $cs = $event->translationForLocale('cs');
+        $en = $event->translationForLocale('en');
+        $this->title_cs = $cs?->title ?? $event->title;
+        $this->description_cs = $cs?->description ?? $event->description ?? '';
+        $this->title_en = $en?->title ?? '';
+        $this->description_en = $en?->description ?? '';
+        $this->langTab = 'cs';
         $this->date = $event->date->format('Y-m-d\TH:i');
         $this->location = $event->location ?? '';
         $this->capacity = $event->capacity;
@@ -76,9 +89,9 @@ class EventManager extends Component
         $this->validate($rules);
 
         $data = [
-            'title'       => $this->title,
-            'slug'        => Str::slug($this->title) . '-' . now()->timestamp,
-            'description' => $this->description ?: null,
+            'title'       => $this->title_cs,
+            'slug'        => Str::slug($this->title_cs) . '-' . now()->timestamp,
+            'description' => $this->description_cs ?: null,
             'date'        => $this->date,
             'location'    => $this->location ?: null,
             'capacity'    => $this->capacity,
@@ -88,12 +101,24 @@ class EventManager extends Component
 
         if ($this->editingId) {
             $event = Event::findOrFail($this->editingId);
-            if ($event->title === $this->title) {
+            if ($event->title === $this->title_cs) {
                 unset($data['slug']);
             }
             $event->update($data);
         } else {
-            Event::create($data);
+            $event = Event::create($data);
+        }
+
+        // Ulož překlady
+        $event->translations()->updateOrCreate(
+            ['locale' => 'cs'],
+            ['title' => $this->title_cs, 'description' => $this->description_cs ?: null]
+        );
+        if ($this->title_en) {
+            $event->translations()->updateOrCreate(
+                ['locale' => 'en'],
+                ['title' => $this->title_en, 'description' => $this->description_en ?: null]
+            );
         }
 
         $this->showModal = false;
@@ -119,6 +144,11 @@ class EventManager extends Component
     {
         $this->title = '';
         $this->description = '';
+        $this->title_cs = '';
+        $this->description_cs = '';
+        $this->title_en = '';
+        $this->description_en = '';
+        $this->langTab = 'cs';
         $this->date = '';
         $this->location = '';
         $this->capacity = 50;

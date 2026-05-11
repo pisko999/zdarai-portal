@@ -27,11 +27,11 @@
 
             {{-- Title --}}
             <h2 class="{{ $isFeatured ? 'text-2xl font-bold mb-2' : 'text-xl font-bold text-gray-300 mb-2' }}">
-                <a href="/udalosti/{{ $event->slug }}" class="hover:text-green-400 transition">{{ $event->title }}</a>
+                <a href="/udalosti/{{ $event->slug }}" class="hover:text-green-400 transition">{{ $event->getTranslation('title') }}</a>
             </h2>
 
             {{-- Description --}}
-            <p class="text-gray-400 text-sm mb-4 line-clamp-2">{{ $event->description }}</p>
+            <p class="text-gray-400 text-sm mb-4 line-clamp-2">{{ $event->getTranslation('description') }}</p>
 
             {{-- Talks + Speaker avatars --}}
             @if($event->talks->isNotEmpty())
@@ -48,7 +48,7 @@
                                     </div>
                                 @endif
                             @endif
-                            <span class="text-xs text-gray-500">{{ $talk->title }}</span>
+                            <span class="text-xs text-gray-500">{{ $talk->getTranslation('title') }}</span>
                         </div>
                     @endforeach
                 </div>

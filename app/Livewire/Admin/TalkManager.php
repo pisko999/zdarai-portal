@@ -24,6 +24,11 @@ class TalkManager extends Component
     public ?int $speaker_id = null;
     public string $title = '';
     public string $description = '';
+    public string $title_cs = '';
+    public string $description_cs = '';
+    public string $title_en = '';
+    public string $description_en = '';
+    public string $langTab = 'cs';
     public string $duration_minutes = '';
     public string $sort_order = '0';
 
@@ -35,8 +40,10 @@ class TalkManager extends Component
         return [
             'event_id'         => ['required', 'integer', 'exists:events,id'],
             'speaker_id'       => ['nullable', 'integer', 'exists:speakers,id'],
-            'title'            => ['required', 'string', 'min:3', 'max:255'],
-            'description'      => ['nullable', 'string', 'max:5000'],
+            'title_cs'         => ['required', 'string', 'min:3', 'max:255'],
+            'description_cs'   => ['nullable', 'string', 'max:5000'],
+            'title_en'         => ['nullable', 'string', 'max:255'],
+            'description_en'   => ['nullable', 'string', 'max:5000'],
             'duration_minutes' => ['nullable', 'integer', 'min:1', 'max:480'],
             'sort_order'       => ['required', 'integer', 'min:0'],
         ];
@@ -51,12 +58,19 @@ class TalkManager extends Component
 
     public function openEdit(int $id): void
     {
-        $talk = Talk::findOrFail($id);
+        $talk = Talk::with('translations')->findOrFail($id);
         $this->editingId = $id;
         $this->event_id = $talk->event_id;
         $this->speaker_id = $talk->speaker_id;
         $this->title = $talk->title;
         $this->description = $talk->description ?? '';
+        $cs = $talk->translationForLocale('cs');
+        $en = $talk->translationForLocale('en');
+        $this->title_cs = $cs?->title ?? $talk->title;
+        $this->description_cs = $cs?->description ?? $talk->description ?? '';
+        $this->title_en = $en?->title ?? '';
+        $this->description_en = $en?->description ?? '';
+        $this->langTab = 'cs';
         $this->duration_minutes = $talk->duration_minutes !== null ? (string) $talk->duration_minutes : '';
         $this->sort_order = (string) $talk->sort_order;
         $this->showModal = true;
@@ -69,16 +83,29 @@ class TalkManager extends Component
         $data = [
             'event_id'         => $this->event_id,
             'speaker_id'       => $this->speaker_id ?: null,
-            'title'            => $this->title,
-            'description'      => $this->description ?: null,
+            'title'            => $this->title_cs,
+            'description'      => $this->description_cs ?: null,
             'duration_minutes' => $this->duration_minutes !== '' ? (int) $this->duration_minutes : null,
             'sort_order'       => (int) $this->sort_order,
         ];
 
         if ($this->editingId) {
-            Talk::findOrFail($this->editingId)->update($data);
+            $talk = Talk::findOrFail($this->editingId);
+            $talk->update($data);
         } else {
-            Talk::create($data);
+            $talk = Talk::create($data);
+        }
+
+        // Ulož překlady
+        $talk->translations()->updateOrCreate(
+            ['locale' => 'cs'],
+            ['title' => $this->title_cs, 'description' => $this->description_cs ?: null]
+        );
+        if ($this->title_en) {
+            $talk->translations()->updateOrCreate(
+                ['locale' => 'en'],
+                ['title' => $this->title_en, 'description' => $this->description_en ?: null]
+            );
         }
 
         $this->showModal = false;
@@ -106,6 +133,11 @@ class TalkManager extends Component
         $this->speaker_id = null;
         $this->title = '';
         $this->description = '';
+        $this->title_cs = '';
+        $this->description_cs = '';
+        $this->title_en = '';
+        $this->description_en = '';
+        $this->langTab = 'cs';
         $this->duration_minutes = '';
         $this->sort_order = '0';
         $this->resetErrorBag();

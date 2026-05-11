@@ -52,4 +52,27 @@ class Event extends Model
     {
         return $this->registrationCount() >= $this->capacity;
     }
+
+    public function getTranslation(string $field, ?string $locale = null): ?string
+    {
+        $locale ??= app()->getLocale();
+        $translation = $this->translations->firstWhere('locale', $locale);
+        if ($translation && !empty($translation->$field)) {
+            return $translation->$field;
+        }
+        // fallback to CS (primary)
+        if ($locale !== 'cs') {
+            $translation = $this->translations->firstWhere('locale', 'cs');
+            if ($translation && !empty($translation->$field)) {
+                return $translation->$field;
+            }
+        }
+        // ultimate fallback to main column
+        return $this->attributes[$field] ?? null;
+    }
+
+    public function translationForLocale(string $locale = 'cs'): ?EventTranslation
+    {
+        return $this->translations->firstWhere('locale', $locale);
+    }
 }

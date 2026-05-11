@@ -75,11 +75,45 @@
                     <button wire:click="$set('showModal', false)" class="text-green-800 hover:text-green-600 text-xl leading-none">&times;</button>
                 </div>
                 <form wire:submit.prevent="save" class="p-6 space-y-4">
-                    <div>
-                        <label class="block text-green-600 text-xs font-bold uppercase mb-1">Název přednášky *</label>
-                        <input type="text" wire:model="title"
-                            class="w-full bg-gray-900 border border-green-900/50 rounded px-3 py-2 text-green-300 text-sm focus:border-green-700 focus:outline-none">
-                        @error('title') <span class="text-red-400 text-xs">{{ $message }}</span> @enderror
+                    {{-- Language tabs --}}
+                    <div class="border border-gray-800 rounded-lg overflow-hidden">
+                        <div class="flex border-b border-gray-800">
+                            <button type="button" wire:click="$set('langTab', 'cs')"
+                                class="{{ $langTab === 'cs' ? 'bg-gray-900 text-green-400 border-b-2 border-green-400' : 'text-gray-500 hover:text-gray-300' }} px-4 py-2 text-sm font-bold transition flex-1">
+                                🇨🇿 Česky
+                            </button>
+                            <button type="button" wire:click="$set('langTab', 'en')"
+                                class="{{ $langTab === 'en' ? 'bg-gray-900 text-green-400 border-b-2 border-green-400' : 'text-gray-500 hover:text-gray-300' }} px-4 py-2 text-sm font-bold transition flex-1">
+                                🇬🇧 English
+                            </button>
+                        </div>
+                        {{-- CS tab --}}
+                        <div class="{{ $langTab === 'cs' ? '' : 'hidden' }} p-4 space-y-3 bg-gray-900/30">
+                            <div>
+                                <label class="block text-gray-500 text-xs font-bold uppercase mb-1">Název přednášky (CZ) *</label>
+                                <input type="text" wire:model="title_cs"
+                                    class="w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:border-green-500 focus:outline-none">
+                                @error('title_cs') <span class="text-red-400 text-xs">{{ $message }}</span> @enderror
+                            </div>
+                            <div>
+                                <label class="block text-gray-500 text-xs font-bold uppercase mb-1">Popis (CZ)</label>
+                                <textarea wire:model="description_cs" rows="3"
+                                    class="w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:border-green-500 focus:outline-none resize-none"></textarea>
+                            </div>
+                        </div>
+                        {{-- EN tab --}}
+                        <div class="{{ $langTab === 'en' ? '' : 'hidden' }} p-4 space-y-3 bg-gray-900/30">
+                            <div>
+                                <label class="block text-gray-500 text-xs font-bold uppercase mb-1">Talk title (EN) <span class="text-gray-700 font-normal normal-case">(optional)</span></label>
+                                <input type="text" wire:model="title_en"
+                                    class="w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:border-green-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-gray-500 text-xs font-bold uppercase mb-1">Description (EN)</label>
+                                <textarea wire:model="description_en" rows="3"
+                                    class="w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:border-green-500 focus:outline-none resize-none"></textarea>
+                            </div>
+                        </div>
                     </div>
                     <div>
                         <label class="block text-green-600 text-xs font-bold uppercase mb-1">Událost *</label>
@@ -101,11 +135,6 @@
                                 <option value="{{ $speaker->id }}">{{ $speaker->name }}</option>
                             @endforeach
                         </select>
-                    </div>
-                    <div>
-                        <label class="block text-green-600 text-xs font-bold uppercase mb-1">Popis</label>
-                        <textarea wire:model="description" rows="3"
-                            class="w-full bg-gray-900 border border-green-900/50 rounded px-3 py-2 text-green-300 text-sm focus:border-green-700 focus:outline-none resize-none"></textarea>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>

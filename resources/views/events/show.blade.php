@@ -1,6 +1,6 @@
 <x-layouts.app
-    :title="$event->title . ' — ŽďárAI'"
-    :description="\Illuminate\Support\Str::limit(strip_tags($event->description ?? ''), 155)"
+    :title="$event->getTranslation('title') . ' — ŽďárAI'"
+    :description="\Illuminate\Support\Str::limit(strip_tags($event->getTranslation('description') ?? ''), 155)"
     ogType="event">
     <div class="max-w-4xl mx-auto px-4 py-12">
         {{-- Back link --}}
@@ -36,7 +36,7 @@
                 @endif
             </div>
 
-            <h1 class="text-3xl font-bold text-white mb-4">{{ $event->title }}</h1>
+            <h1 class="text-3xl font-bold text-white mb-4">{{ $event->getTranslation('title') }}</h1>
 
             {{-- Capacity --}}
             @php
@@ -54,7 +54,7 @@
                 </div>
             </div>
 
-            <div class="text-gray-400 leading-relaxed whitespace-pre-wrap">{{ $event->description }}</div>
+            <div class="text-gray-400 leading-relaxed whitespace-pre-wrap">{{ $event->getTranslation('description') }}</div>
         </div>
 
         {{-- Talks --}}
@@ -77,7 +77,7 @@
                                     </div>
                                 @endif
                                 <div class="flex-1">
-                                    <h3 class="text-white font-bold mb-1">{{ $talk->title }}</h3>
+                                    <h3 class="text-white font-bold mb-1">{{ $talk->getTranslation('title') }}</h3>
                                     @if($talk->speaker)
                                         <div class="text-gray-400 text-sm mb-2">
                                             {{ $talk->speaker->name }}
@@ -93,7 +93,7 @@
                                         @endif
                                     @endif
                                     @if($talk->description)
-                                        <p class="text-gray-400 text-sm">{{ $talk->description }}</p>
+                                        <p class="text-gray-400 text-sm">{{ $talk->getTranslation('description') }}</p>
                                     @endif
                                     @if($talk->duration_minutes)
                                         <div class="mt-2 text-xs text-green-900">⏱ {{ $talk->duration_minutes }} minut</div>
