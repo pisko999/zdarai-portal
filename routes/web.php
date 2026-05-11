@@ -33,3 +33,11 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Admin routes
+Route::prefix('admin')
+    ->middleware(['auth', 'is_admin'])
+    ->group(function () {
+        Route::get('/', fn() => view('admin.index'))->name('admin.dashboard');
+        // Další routes přibydou v dalších taskách
+    });
