@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>003 — Wave 1+2+3: Portál</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #030712; color: #86efac; font-family: 'JetBrains Mono', monospace; padding: 40px 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { border-bottom: 1px solid #14532d; padding-bottom: 24px; margin-bottom: 32px; }
+        h1 { color: #4ade80; font-size: 28px; margin-bottom: 8px; }
+        .meta { color: #166534; font-size: 13px; }
+        h2 { color: #4ade80; font-size: 16px; margin: 28px 0 12px; text-transform: uppercase; letter-spacing: 0.1em; }
+        .card { border: 1px solid #14532d; border-radius: 8px; padding: 20px; margin-bottom: 12px; background: #0a0a0f; }
+        .card h3 { color: #fff; font-size: 14px; margin-bottom: 6px; }
+        .card p { color: #4ade80; font-size: 12px; line-height: 1.6; }
+        .badge { display: inline-block; background: #14532d; color: #4ade80; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-right: 4px; margin-bottom: 4px; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+        a { color: #4ade80; }
+        .back { color: #166534; text-decoration: none; font-size: 13px; margin-bottom: 24px; display: inline-block; }
+        .back:hover { color: #4ade80; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th { background: #0a0a0f; color: #166534; text-align: left; padding: 8px 12px; border-bottom: 1px solid #14532d; text-transform: uppercase; }
+        td { padding: 8px 12px; border-bottom: 1px solid #0f1a0f; color: #4ade80; }
+        tr:hover td { background: #0a0a0f; }
+        .status-done { color: #4ade80; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="index.html" class="back">← zpět na index</a>
+    
+    <div class="header">
+        <h1>&gt;_ Wave 1+2+3: Kompletní portál</h1>
+        <p class="meta">Veřejný portál + Admin panel + Emaily + Testy · Dokončeno: Květen 2026</p>
+    </div>
+
+    <h2>Veřejný portál — Wave 1</h2>
+    <div class="feature-grid">
+        <div class="card">
+            <h3>Homepage + EventList</h3>
+            <p>Livewire komponenta, filtr upcoming/archiv, Dark Tech karty, capacity progress bar</p>
+        </div>
+        <div class="card">
+            <h3>Detail události</h3>
+            <p>Hero sekce, program přednášek, speaker bio, registrační sekce s anchor #registrace</p>
+        </div>
+        <div class="card">
+            <h3>Registrační formulář</h3>
+            <p>Livewire + DB transakce lockForUpdate(), kontrola kapacity a duplikátů, UUID token</p>
+        </div>
+        <div class="card">
+            <h3>CZ/EN lokalizace</h3>
+            <p>Session-based locale middleware, lang/cs + lang/en, hreflang SEO tagy</p>
+        </div>
+        <div class="card">
+            <h3>O nás + Archiv</h3>
+            <p>Statická about stránka, archiv minulých událostí s počtem účastníků</p>
+        </div>
+        <div class="card">
+            <h3>Uživatelský účet</h3>
+            <p>Breeze Dark Tech, /moje-registrace, auth navigace, profile page</p>
+        </div>
+    </div>
+
+    <h2>Admin Panel — Wave 2</h2>
+    <div class="feature-grid">
+        <div class="card">
+            <h3>IsAdmin Middleware</h3>
+            <p>is_admin check na User modelu, 403 odepření, session timeout 120 min</p>
+        </div>
+        <div class="card">
+            <h3>Events CRUD</h3>
+            <p>Livewire Admin\EventManager, modální formulář, search, inline delete</p>
+        </div>
+        <div class="card">
+            <h3>Talks CRUD</h3>
+            <p>Admin\TalkManager, filtr dle události, vazba event+speaker</p>
+        </div>
+        <div class="card">
+            <h3>Speakers CRUD</h3>
+            <p>Admin\SpeakerManager, WithFileUploads, avatar s MIME check, Storage disk</p>
+        </div>
+        <div class="card">
+            <h3>Registrace + CSV</h3>
+            <p>Admin\RegistrationManager, inline payment status, export CSV s UTF-8 BOM</p>
+        </div>
+        <div class="card">
+            <h3>Dashboard</h3>
+            <p>Stats (eventos, talks, speakers, registrace), nadcházející akce, poslední registrace</p>
+        </div>
+    </div>
+
+    <h2>Emaily + Testy — Wave 3</h2>
+    <div class="feature-grid">
+        <div class="card">
+            <h3>RegistrationConfirmed Mail</h3>
+            <p>ShouldQueue, Dark Tech email šablona, opt-out link s UUID tokenem</p>
+        </div>
+        <div class="card">
+            <h3>EventReminder Mail</h3>
+            <p>SendEventReminders command, scheduler dailyAt 08:00, reminder_sent_at tracking</p>
+        </div>
+        <div class="card">
+            <h3>SEO</h3>
+            <p>OpenGraph, Twitter Card, canonical URL, sitemap.xml s published events</p>
+        </div>
+        <div class="card">
+            <h3>OWASP Hardening</h3>
+            <p>APP_DEBUG=false, security headers, robots.txt, composer audit = 0 CVE</p>
+        </div>
+        <div class="card">
+            <h3>Pest Testy</h3>
+            <p>40 testů, 88 assertions, 100% zelené — homepage, events, registration, admin, opt-out</p>
+        </div>
+    </div>
+
+    <h2>Dokončené tasky</h2>
+    <table>
+        <tr><th>#</th><th>Task</th><th>Status</th></tr>
+        <tr><td>#921</td><td>Homepage — výpis událostí</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#922</td><td>Event detail page</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#923</td><td>Registrační formulář + kapacita</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#924</td><td>Uživatelský účet (Breeze)</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#925</td><td>O nás stránka</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#926</td><td>Archiv událostí</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#927</td><td>CZ/EN lokalizace</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#928</td><td>Admin auth + IsAdmin middleware</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#929</td><td>Admin events CRUD</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#930</td><td>Admin talks CRUD</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#931</td><td>Admin speakers CRUD</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#932</td><td>Admin registrace + CSV export</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#933</td><td>Admin dashboard + stats</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#934</td><td>Email potvrzení registrace</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#935</td><td>Email připomínka 3 dny</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#936</td><td>SEO + sitemap</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#937</td><td>Pest testy</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#938</td><td>OWASP hardening</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#939</td><td>Platební status management</td><td class="status-done">✅ in_review</td></tr>
+        <tr><td>#940</td><td>Email opt-out</td><td class="status-done">✅ in_review</td></tr>
+    </table>
+</div>
+</body>
+</html>
