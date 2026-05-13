@@ -52,6 +52,15 @@
 
     <a href="{{ url('/udalosti/' . $registration->event->slug) }}" class="cta">Zobrazit detail akce →</a>
 
+    @if($setPasswordUrl)
+    <div style="border: 1px solid #14532d; border-radius: 8px; padding: 20px; margin: 24px 0; background: #0f1a0f;">
+        <p style="margin: 0 0 12px; color: #4ade80; font-size: 14px; font-weight: bold;">🔐 Nastavte si heslo a sledujte své registrace</p>
+        <p style="margin: 0 0 16px; color: #86efac; font-size: 13px;">Pro přihlášení a přehled registrací si nastavte heslo jedním kliknutím.</p>
+        <a href="{{ $setPasswordUrl }}" style="display: inline-block; background: #166534; color: #4ade80 !important; font-weight: bold; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-size: 13px; border: 1px solid #16a34a;">Nastavit heslo →</a>
+        <p style="margin: 12px 0 0; color: #166534; font-size: 11px;">Odkaz je platný 60 minut. Pokud heslo nenastavíte, nic se neděje — registrace je platná.</p>
+    </div>
+    @endif
+
     <p>Budeme rádi, pokud na akci přijdete! Připomínku vám pošleme 3 dny před akcí.</p>
 
     <div class="footer">

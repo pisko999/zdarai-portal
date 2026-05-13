@@ -114,6 +114,7 @@
         <a href="/admin/events" class="text-xs text-green-700 hover:text-green-500 border border-green-900/40 px-3 py-1.5 rounded transition">📅 Správa událostí</a>
         <a href="/admin/registrations" class="text-xs text-green-700 hover:text-green-500 border border-green-900/40 px-3 py-1.5 rounded transition">📋 Správa registrací</a>
         <a href="/admin/speakers" class="text-xs text-green-700 hover:text-green-500 border border-green-900/40 px-3 py-1.5 rounded transition">👤 Přednášející</a>
+        <a href="/admin/users" class="text-xs text-green-700 hover:text-green-500 border border-green-900/40 px-3 py-1.5 rounded transition">🧑‍💻 Uživatelé</a>
         <a href="/" target="_blank" class="text-xs text-green-800 hover:text-green-600 border border-green-900/20 px-3 py-1.5 rounded transition">🌐 Zobrazit portál ↗</a>
     </div>
 </x-layouts.admin>

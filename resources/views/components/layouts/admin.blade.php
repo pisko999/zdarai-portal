@@ -22,6 +22,7 @@
                 <a href="/admin/talks" class="{{ request()->is('admin/talks*') ? 'bg-green-950 text-green-300' : 'text-green-700 hover:text-green-500 hover:bg-green-950/50' }} block px-3 py-2 rounded text-sm transition">🎙️ Přednášky</a>
                 <a href="/admin/speakers" class="{{ request()->is('admin/speakers*') ? 'bg-green-950 text-green-300' : 'text-green-700 hover:text-green-500 hover:bg-green-950/50' }} block px-3 py-2 rounded text-sm transition">👤 Přednášející</a>
                 <a href="/admin/registrations" class="{{ request()->is('admin/registrations*') ? 'bg-green-950 text-green-300' : 'text-green-700 hover:text-green-500 hover:bg-green-950/50' }} block px-3 py-2 rounded text-sm transition">📋 Registrace</a>
+                <a href="/admin/users" class="{{ request()->is('admin/users*') ? 'bg-green-950 text-green-300' : 'text-green-700 hover:text-green-500 hover:bg-green-950/50' }} block px-3 py-2 rounded text-sm transition">🧑‍💻 Uživatelé</a>
             </nav>
             <div class="p-3 border-t border-green-900/30">
                 <div class="text-xs text-green-800 mb-2">{{ auth()->user()->email }}</div>

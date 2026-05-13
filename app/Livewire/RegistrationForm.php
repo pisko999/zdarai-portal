@@ -7,8 +7,11 @@ namespace App\Livewire;
 use App\Mail\RegistrationConfirmed;
 use App\Models\Event;
 use App\Models\Registration;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -70,9 +73,30 @@ class RegistrationForm extends Component
                     return;
                 }
 
+                // Resolve user_id — přihlášený uživatel / existující účet / nový účet
+                $userId = auth()->id();
+                $setPasswordUrl = null;
+
+                if (!$userId) {
+                    $existingUser = User::where('email', $this->email)->first();
+                    if ($existingUser) {
+                        $userId = $existingUser->id;
+                    } else {
+                        // Nový uživatel — vytvoříme účet s náhodným heslem
+                        $newUser = User::create([
+                            'name'     => $this->name,
+                            'email'    => $this->email,
+                            'password' => Hash::make(Str::random(32)),
+                        ]);
+                        $userId = $newUser->id;
+                        $token = Password::broker()->createToken($newUser);
+                        $setPasswordUrl = url('/reset-password/' . $token . '?email=' . urlencode($this->email));
+                    }
+                }
+
                 $registration = Registration::create([
                     'event_id'       => $event->id,
-                    'user_id'        => auth()->id(),
+                    'user_id'        => $userId,
                     'name'           => $this->name,
                     'email'          => $this->email,
                     'token'          => (string) Str::uuid(),
@@ -83,7 +107,7 @@ class RegistrationForm extends Component
                 ]);
 
                 Mail::to($this->email)
-                    ->queue(new RegistrationConfirmed($registration));
+                    ->queue(new RegistrationConfirmed($registration, $setPasswordUrl));
             });
 
             if (empty($this->errorMessage)) {

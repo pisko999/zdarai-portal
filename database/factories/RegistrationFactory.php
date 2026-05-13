@@ -24,7 +24,8 @@ class RegistrationFactory extends Factory
             'payment_status' => fake()->randomElement(['free', 'pending', 'paid', 'cancelled']),
             'reminder_sent_at' => null,
             'email_opt_out' => false,
-            'dietary_notes' => fake()->optional(0.2)->word(),
+            'ai_level' => fake()->optional(0.5)->randomElement(['beginner', 'intermediate', 'advanced', 'expert']),
+            'organization' => fake()->optional(0.4)->company(),
         ];
     }
 }

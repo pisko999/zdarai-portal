@@ -18,6 +18,7 @@ class RegistrationConfirmed extends Mailable implements ShouldQueue
 
     public function __construct(
         public readonly Registration $registration,
+        public readonly ?string $setPasswordUrl = null,
     ) {}
 
     public function envelope(): Envelope
