@@ -27,6 +27,7 @@ class RegistrationForm extends Component
     public bool $email_opt_in = true;
 
     public bool $success = false;
+    public bool $waitlisted = false;
     public string $errorMessage = '';
 
     protected function rules(): array
@@ -94,13 +95,19 @@ class RegistrationForm extends Component
                     }
                 }
 
+                // Kapacita — waitlist pokud je plno
+                $isWaitlisted = $event->isFull();
+                $paymentStatus = $isWaitlisted
+                    ? 'waitlist'
+                    : ($event->price === null ? 'free' : 'pending');
+
                 $registration = Registration::create([
                     'event_id'       => $event->id,
                     'user_id'        => $userId,
                     'name'           => $this->name,
                     'email'          => $this->email,
                     'token'          => (string) Str::uuid(),
-                    'payment_status' => $event->price === null ? 'free' : 'pending',
+                    'payment_status' => $paymentStatus,
                     'email_opt_out'  => ! $this->email_opt_in,
                     'ai_level'       => $this->ai_level ?: null,
                     'organization'   => $this->organization ?: null,
@@ -108,11 +115,16 @@ class RegistrationForm extends Component
 
                 Mail::to($this->email)
                     ->queue(new RegistrationConfirmed($registration, $setPasswordUrl));
+
+                $this->waitlisted = $isWaitlisted;
             });
 
             if (empty($this->errorMessage)) {
-                $this->success = true;
+                // Uložíme příznak před resetem properties
+                $wasWaitlisted = $this->waitlisted;
                 $this->reset(['name', 'email', 'ai_level', 'organization', 'email_opt_in']);
+                $this->waitlisted = $wasWaitlisted;
+                $this->success = ! $wasWaitlisted;
             }
         } catch (\Throwable $e) {
             report($e);

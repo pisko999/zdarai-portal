@@ -5,6 +5,12 @@
             <h3 class="text-white font-bold text-xl mb-2">{{ __('messages.registration.success_title') }}</h3>
             <p class="text-green-600 text-sm">{{ __('messages.registration.success_text') }}</p>
         </div>
+    @elseif($waitlisted)
+        <div class="border border-yellow-800/60 bg-yellow-950/30 rounded-xl p-8 text-center">
+            <div class="text-4xl mb-4">📋</div>
+            <h3 class="text-white font-bold text-xl mb-2">Jste na čekací listině</h3>
+            <p class="text-yellow-600 text-sm">Kapacita akce je momentálně plná. Pokud se místo uvolní, budeme vás kontaktovat e-mailem.</p>
+        </div>
     @else
         @if($errorMessage)
             <div class="border border-red-800 bg-red-950/30 rounded-lg px-4 py-3 mb-4 text-red-400 text-sm">

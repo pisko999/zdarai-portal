@@ -21,7 +21,7 @@ class RegistrationFactory extends Factory
             'token' => (string) Str::uuid(),
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'payment_status' => fake()->randomElement(['free', 'pending', 'paid', 'cancelled']),
+            'payment_status' => fake()->randomElement(['waitlist', 'free', 'free', 'free', 'pending', 'paid', 'confirmed', 'cancelled']),
             'reminder_sent_at' => null,
             'email_opt_out' => false,
             'ai_level' => fake()->optional(0.5)->randomElement(['beginner', 'intermediate', 'advanced', 'expert']),

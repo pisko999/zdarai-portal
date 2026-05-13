@@ -26,12 +26,21 @@ class RegistrationManager extends Component
 
     public function updatePaymentStatus(int $id, string $status): void
     {
-        $allowed = ['free', 'pending', 'paid', 'cancelled'];
+        $allowed = ['waitlist', 'free', 'pending', 'paid', 'confirmed', 'cancelled'];
         if (!in_array($status, $allowed, true)) {
             return;
         }
         Registration::findOrFail($id)->update(['payment_status' => $status]);
-        session()->flash('success', 'Platební status aktualizován.');
+        session()->flash('success', 'Status aktualizován.');
+    }
+
+    public function confirmRegistration(int $id): void
+    {
+        $reg = Registration::findOrFail($id);
+        if ($reg->payment_status === 'waitlist') {
+            $reg->update(['payment_status' => 'confirmed']);
+            session()->flash('success', 'Registrace potvrzena — účastník má zarezervované místo.');
+        }
     }
 
     public function confirmDeleteRegistration(int $id): void

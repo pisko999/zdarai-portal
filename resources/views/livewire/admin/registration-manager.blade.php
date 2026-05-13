@@ -28,9 +28,11 @@
         <select wire:model.live="filterStatus"
             class="bg-gray-950 border border-green-900/50 rounded px-3 py-2 text-green-300 text-sm focus:border-green-700 focus:outline-none">
             <option value="">Všechny statusy</option>
+            <option value="waitlist">Čekací listina</option>
             <option value="free">Zdarma</option>
-            <option value="pending">Čekající</option>
+            <option value="pending">Čekající platba</option>
             <option value="paid">Zaplaceno</option>
+            <option value="confirmed">Potvrzeno</option>
             <option value="cancelled">Zrušeno</option>
         </select>
     </div>
@@ -84,19 +86,32 @@
                         </td>
                         <td class="px-4 py-3 text-green-700 text-xs">{{ $reg->event?->title ?? '—' }}</td>
                         <td class="px-4 py-3">
-                            <select wire:change="updatePaymentStatus({{ $reg->id }}, $event.target.value)"
-                                class="bg-gray-900 border border-green-900/40 rounded px-2 py-0.5 text-xs focus:outline-none
-                                    {{ match($reg->payment_status) {
-                                        'paid' => 'text-green-400',
-                                        'pending' => 'text-yellow-500',
-                                        'cancelled' => 'text-red-600',
-                                        default => 'text-green-700',
-                                    } }}">
-                                <option value="free" {{ $reg->payment_status === 'free' ? 'selected' : '' }}>Zdarma</option>
-                                <option value="pending" {{ $reg->payment_status === 'pending' ? 'selected' : '' }}>Čekající</option>
-                                <option value="paid" {{ $reg->payment_status === 'paid' ? 'selected' : '' }}>Zaplaceno</option>
-                                <option value="cancelled" {{ $reg->payment_status === 'cancelled' ? 'selected' : '' }}>Zrušeno</option>
-                            </select>
+                            <div class="flex items-center gap-2">
+                                <select wire:change="updatePaymentStatus({{ $reg->id }}, $event.target.value)"
+                                    class="bg-gray-900 border border-green-900/40 rounded px-2 py-0.5 text-xs focus:outline-none
+                                        {{ match($reg->payment_status) {
+                                            'confirmed' => 'text-green-300',
+                                            'paid'      => 'text-green-400',
+                                            'pending'   => 'text-yellow-500',
+                                            'cancelled' => 'text-red-600',
+                                            'waitlist'  => 'text-orange-400',
+                                            default     => 'text-green-700',
+                                        } }}">
+                                    <option value="waitlist"   {{ $reg->payment_status === 'waitlist'   ? 'selected' : '' }}>📋 Čekací listina</option>
+                                    <option value="free"       {{ $reg->payment_status === 'free'       ? 'selected' : '' }}>Zdarma</option>
+                                    <option value="pending"    {{ $reg->payment_status === 'pending'    ? 'selected' : '' }}>Čekající platba</option>
+                                    <option value="paid"       {{ $reg->payment_status === 'paid'       ? 'selected' : '' }}>Zaplaceno</option>
+                                    <option value="confirmed"  {{ $reg->payment_status === 'confirmed'  ? 'selected' : '' }}>✓ Potvrzeno</option>
+                                    <option value="cancelled"  {{ $reg->payment_status === 'cancelled'  ? 'selected' : '' }}>Zrušeno</option>
+                                </select>
+                                @if($reg->payment_status === 'waitlist')
+                                    <button wire:click="confirmRegistration({{ $reg->id }})"
+                                        class="text-xs bg-green-900/40 hover:bg-green-800/60 text-green-400 px-2 py-0.5 rounded border border-green-800 transition whitespace-nowrap"
+                                        title="Potvrdit — přidat na seznam účastníků">
+                                        ✓ Potvrdit
+                                    </button>
+                                @endif
+                            </div>
                         </td>
                         <td class="px-4 py-3 text-green-800 text-xs">{{ $reg->created_at->format('j. n. Y H:i') }}</td>
                         <td class="px-4 py-3 text-right">
