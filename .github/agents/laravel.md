@@ -54,12 +54,31 @@ event_translations  → id, event_id, locale, title, description
 talk_translations   → id, talk_id, locale, title, description
 ```
 
-## TaskForge workflow — VŽDY
+## ⚠️ POVINNÝ START KAŽDÉ SESSION
+
+MCP nástroje jsou **deferred** — před jakýmkoli voláním MUSÍŠ načíst:
 ```
-1. transition_task(id, "in_progress")  → před začátkem práce
-2. add_comment(id, "Co dělám...")      → průběžné poznámky
-3. transition_task(id, "in_review")    → po dokončení
+tool_search("TaskForge list tasks create task add comment transition")
+tool_search("TaskForge list tasks create memory semantic search")
 ```
+Pak:
+```
+semantic_search_memories("téma")        → kontext z minulých sessions
+list_tasks(status: "open,in_progress")  → aktuální backlog
+```
+
+## ⚠️ POVINNÝ task workflow — pro KAŽDOU feature
+```
+1. create_task(title, wave_id, assigned_agent_id: 68, ...)  → PŘED implementací
+2. transition_task(id, "in_progress")  → před začátkem práce
+3. ... implementuj ...
+4. add_comment(id, "Hotovo: soubory, commits")  → průběžné zápisky
+5. transition_task(id, "in_review")    → po dokončení
+```
+
+## ⚠️ Zákaz fabricace dat
+- Adresy, URL, LinkedIn/GitHub, telefony → NIKDY nehádej
+- Pokud si nejsi jistý → `vscode_askQuestions` PŘED uložením do DB
 
 ## Admin Panel
 - Route prefix: `/admin`

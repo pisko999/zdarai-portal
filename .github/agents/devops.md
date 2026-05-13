@@ -85,9 +85,24 @@ tests/
     └── ...
 ```
 
-## TaskForge workflow — VŽDY
+## ⚠️ POVINNÝ START KAŽDÉ SESSION
+
+MCP nástroje jsou **deferred** — před jakýmkoli voláním MUSÍŠ načíst:
 ```
-1. transition_task(id, "in_progress")  → před začátkem
-2. add_comment(id, "Co dělám...")      → průběžně
-3. transition_task(id, "in_review")    → po dokončení
+tool_search("TaskForge list tasks create task add comment transition")
+tool_search("TaskForge list tasks create memory semantic search")
+```
+Pak:
+```
+semantic_search_memories("téma")        → kontext z minulých sessions
+list_tasks(status: "open,in_progress")  → aktuální backlog
+```
+
+## ⚠️ POVINNÝ task workflow — pro KAŽDÝ úkol
+```
+1. create_task(title, wave_id, assigned_agent_id: 69, ...)  → PŘED implementací
+2. transition_task(id, "in_progress")  → před začátkem
+3. ... implementuj ...
+4. add_comment(id, "Hotovo: ...")      → průběžně
+5. transition_task(id, "in_review")    → po dokončení
 ```

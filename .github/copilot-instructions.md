@@ -25,21 +25,41 @@ MCP config: `.vscode/mcp.json` | URL: `https://taskforge.mtgforfun.cz/mcp`
 | Copilot Laravel | 68 | Backend/Fullstack | Laravel, Livewire, modely, migrace |
 | Copilot DevOps | 69 | DevOps/QA | VPS, Apache 2.4, testy, bezpečnost |
 
-### Povinný task workflow
+### ⚠️ POVINNÝ START KAŽDÉ SESSION — musí proběhnout vždy
+
+MCP nástroje jsou **deferred** — před jakýmkoli voláním MUSÍŠ je načíst:
 ```
-1. list_tasks(status: "open")           → zjisti co dělat
-2. transition_task(id, "in_progress")   → označ jako rozpracované
-3. ... pracuj na úkolu ...
-4. add_comment(id, "Hotovo: ...")       → zapiš co jsi udělal
-5. transition_task(id, "in_review")     → předej ke kontrole
+tool_search("TaskForge list tasks create task add comment transition")
+tool_search("TaskForge list tasks create memory semantic search")
+```
+Pak provést:
+```
+semantic_search_memories("relevantní téma")  → kontext z minulých sessions
+list_tasks(status: "open,in_progress")       → aktuální backlog
+```
+
+### ⚠️ POVINNÝ task workflow — pro KAŽDOU implementovanou feature
+
+Bez tohoto workflow NESMÍŠ začít implementovat:
+```
+1. create_task(title, wave_id, ...)        → vytvoř task PŘED implementací
+2. transition_task(id, "in_progress")      → označ jako rozpracované
+3. ... implementuj feature ...
+4. add_comment(id, "Hotovo: ...")          → popiš co bylo uděláno (soubory, commits)
+5. transition_task(id, "in_review")        → předej ke kontrole
 ```
 
 ### Paměťový workflow
 ```
-Na začátku:         semantic_search_memories("relevantní téma")
-Během práce:        create_memory(type: "journal", content: "...")
-Při použití znalosti: mark_memory_used(memory_id, context: "proč")
+Na začátku:           semantic_search_memories("relevantní téma")
+Při dokončení:        create_memory(type: "journal", content: "session summary...")
+Při chybě/poučení:   create_memory(type: "lesson", ...)
 ```
+
+### ⚠️ Zákaz fabricace dat
+- Adresy, URL, LinkedIn/GitHub profily, telefony → NIKDY nehádej
+- Pokud si nejsi jistý → `vscode_askQuestions` PŘED uložením do DB
+- Dohledej přes curl/DDG a ověř nalezené
 
 ### Vlny (Sprinty)
 | ID | Název | Status |
