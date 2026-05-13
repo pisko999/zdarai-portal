@@ -7,6 +7,8 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use App\Models\Registration;
 use App\Models\Event;
+use App\Mail\RegistrationApproved;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -30,7 +32,14 @@ class RegistrationManager extends Component
         if (!in_array($status, $allowed, true)) {
             return;
         }
-        Registration::findOrFail($id)->update(['payment_status' => $status]);
+        $reg = Registration::findOrFail($id);
+        $wasNotConfirmed = $reg->payment_status !== 'confirmed';
+        $reg->update(['payment_status' => $status]);
+
+        if ($status === 'confirmed' && $wasNotConfirmed) {
+            Mail::to($reg->email)->queue(new RegistrationApproved($reg));
+        }
+
         session()->flash('success', 'Status aktualizován.');
     }
 
@@ -39,7 +48,8 @@ class RegistrationManager extends Component
         $reg = Registration::findOrFail($id);
         if ($reg->payment_status === 'waitlist') {
             $reg->update(['payment_status' => 'confirmed']);
-            session()->flash('success', 'Registrace potvrzena — účastník má zarezervované místo.');
+            Mail::to($reg->email)->queue(new RegistrationApproved($reg));
+            session()->flash('success', 'Registrace potvrzena — potvrzovací e-mail odeslán.');
         }
     }
 

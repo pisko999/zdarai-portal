@@ -12,26 +12,25 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class RegistrationConfirmed extends Mailable implements ShouldQueue
+class RegistrationWaitlisted extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     public function __construct(
         public readonly Registration $registration,
-        public readonly ?string $setPasswordUrl = null,
     ) {}
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Registrace přijata — ' . $this->registration->event->title,
+            subject: 'Čekací listina — ' . $this->registration->event->title,
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            view: 'emails.registration-confirmed',
+            view: 'emails.registration-waitlisted',
         );
     }
 }

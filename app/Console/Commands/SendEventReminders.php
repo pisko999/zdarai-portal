@@ -21,7 +21,7 @@ class SendEventReminders extends Command
         $registrations = Registration::query()
             ->whereNull('reminder_sent_at')
             ->where('email_opt_out', false)
-            ->whereNotIn('payment_status', ['cancelled'])
+            ->whereNotIn('payment_status', ['cancelled', 'waitlist'])
             ->whereHas('event', fn($q) => $q
                 ->where('status', 'published')
                 ->whereBetween('date', [

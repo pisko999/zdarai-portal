@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire;
 
 use App\Mail\RegistrationConfirmed;
+use App\Mail\RegistrationWaitlisted;
 use App\Models\Event;
 use App\Models\Registration;
 use App\Models\User;
@@ -60,8 +61,10 @@ class RegistrationForm extends Component
                 $event = Event::lockForUpdate()->find($this->event->id);
 
                 if ($event->isFull()) {
-                    $this->errorMessage = 'Omlouváme se, kapacita byla právě naplněna.';
-                    return;
+                    // Místo blokování přihlášky → zařadit na čekací listinu
+                    $isWaitlisted = true;
+                } else {
+                    $isWaitlisted = false;
                 }
 
                 $exists = Registration::where('event_id', $event->id)
@@ -95,8 +98,7 @@ class RegistrationForm extends Component
                     }
                 }
 
-                // Kapacita — waitlist pokud je plno
-                $isWaitlisted = $event->isFull();
+                // Kapacita — $isWaitlisted nastaveno výše v lockForUpdate bloku
                 $paymentStatus = $isWaitlisted
                     ? 'waitlist'
                     : ($event->price === null ? 'free' : 'pending');
@@ -113,8 +115,11 @@ class RegistrationForm extends Component
                     'organization'   => $this->organization ?: null,
                 ]);
 
-                Mail::to($this->email)
-                    ->queue(new RegistrationConfirmed($registration, $setPasswordUrl));
+                if ($isWaitlisted) {
+                    Mail::to($this->email)->queue(new RegistrationWaitlisted($registration));
+                } else {
+                    Mail::to($this->email)->queue(new RegistrationConfirmed($registration, $setPasswordUrl));
+                }
 
                 $this->waitlisted = $isWaitlisted;
             });

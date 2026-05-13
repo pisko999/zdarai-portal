@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Registrace přijata</title>
+    <title>Registrace potvrzena</title>
     <style>
         body { font-family: monospace; background: #f9fafb; color: #111827; margin: 0; padding: 0; }
         .container { max-width: 600px; margin: 0 auto; }
@@ -28,7 +28,7 @@
     <p class="subtitle">AI události pro vývojáře &middot; Hernice, Žďár nad Sázavou</p>
 
     <p>Dobrý den, <strong>{{ $registration->name }}</strong>,</p>
-    <p>Vaše registrace byla <strong>přijata</strong>. Potvrzení vám pošleme e-mailem jakmile ji admin schválí.</p>
+    <p>Vaše registrace byla <strong>potvrzena</strong>. Těšíme se na vás! 🎉</p>
 
     <div class="card">
         <div class="card-row">
@@ -57,14 +57,13 @@
 
     @if($setPasswordUrl)
     <div class="info-box">
-        <p style="margin: 0 0 8px; color: #15803d; font-weight: bold;">🔐 Nastavte si heslo a sledujte své registrace</p>
-        <p style="margin: 0 0 12px; font-size: 13px; color: #374151;">Pro přihlášení a přehled registrací si nastavte heslo jedním kliknutím.</p>
+        <p style="margin: 0 0 8px; color: #15803d; font-weight: bold;">🔐 Přihlaste se a sledujte své registrace</p>
+        <p style="margin: 0 0 12px; font-size: 13px; color: #374151;">Nastavte si heslo jedním kliknutím — odkaz je platný 24 hodin.</p>
         <a href="{{ $setPasswordUrl }}" style="display: inline-block; background: #15803d; color: #ffffff !important; font-weight: bold; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-size: 13px;">Nastavit heslo &rarr;</a>
-        <p style="margin: 10px 0 0; font-size: 11px; color: #9ca3af;">Odkaz je platný 60 minut. Registrace platí bez ohledu na to.</p>
     </div>
     @endif
 
-    <p>Jakmile registraci potvrdíme, dostanete e-mail. Připomínku vám pošleme také 3 dny před akcí.</p>
+    <p>Připomínku vám pošleme 3 dny před akcí.</p>
 
     <div class="footer">
         Tuto zprávu jste obdrželi, protože jste se zaregistrovali na akci.<br>
