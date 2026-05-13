@@ -22,7 +22,8 @@ class Registration extends Model
         'payment_status',
         'reminder_sent_at',
         'email_opt_out',
-        'dietary_notes',
+        'ai_level',
+        'organization',
     ];
 
     protected $casts = [

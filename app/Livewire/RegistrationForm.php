@@ -19,7 +19,8 @@ class RegistrationForm extends Component
 
     public string $name = '';
     public string $email = '';
-    public string $dietary_notes = '';
+    public string $ai_level = '';
+    public string $organization = '';
     public bool $email_opt_in = true;
 
     public bool $success = false;
@@ -28,9 +29,10 @@ class RegistrationForm extends Component
     protected function rules(): array
     {
         return [
-            'name'          => ['required', 'string', 'min:2', 'max:100'],
-            'email'         => ['required', 'email:rfc', 'max:200'],
-            'dietary_notes' => ['nullable', 'string', 'max:255'],
+            'name'         => ['required', 'string', 'min:2', 'max:100'],
+            'email'        => ['required', 'email:rfc', 'max:200'],
+            'ai_level'     => ['nullable', 'in:beginner,intermediate,advanced,expert'],
+            'organization' => ['nullable', 'string', 'max:255'],
         ];
     }
 
@@ -76,7 +78,8 @@ class RegistrationForm extends Component
                     'token'          => (string) Str::uuid(),
                     'payment_status' => $event->price === null ? 'free' : 'pending',
                     'email_opt_out'  => ! $this->email_opt_in,
-                    'dietary_notes'  => $this->dietary_notes ?: null,
+                    'ai_level'       => $this->ai_level ?: null,
+                    'organization'   => $this->organization ?: null,
                 ]);
 
                 Mail::to($this->email)
@@ -85,7 +88,7 @@ class RegistrationForm extends Component
 
             if (empty($this->errorMessage)) {
                 $this->success = true;
-                $this->reset(['name', 'email', 'dietary_notes', 'email_opt_in']);
+                $this->reset(['name', 'email', 'ai_level', 'organization', 'email_opt_in']);
             }
         } catch (\Throwable $e) {
             report($e);

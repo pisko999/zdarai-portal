@@ -41,6 +41,8 @@
                 <tr>
                     <th class="text-left px-4 py-3">Jméno</th>
                     <th class="text-left px-4 py-3">E-mail</th>
+                    <th class="text-left px-4 py-3">Organizace</th>
+                    <th class="text-left px-4 py-3">Úroveň AI</th>
                     <th class="text-left px-4 py-3">Událost</th>
                     <th class="text-left px-4 py-3">Status platby</th>
                     <th class="text-left px-4 py-3">Datum</th>
@@ -52,14 +54,34 @@
                     <tr class="hover:bg-gray-900/30 transition">
                         <td class="px-4 py-3 text-white">
                             {{ $reg->name }}
-                            @if($reg->dietary_notes)
-                                <span class="ml-1 text-xs text-yellow-700" title="{{ $reg->dietary_notes }}">🌿</span>
-                            @endif
                             @if($reg->email_opt_out)
                                 <span class="ml-1 text-xs text-gray-700" title="Odhlášen z emailů">✉</span>
                             @endif
                         </td>
                         <td class="px-4 py-3 text-green-600 text-xs">{{ $reg->email }}</td>
+                        <td class="px-4 py-3 text-gray-500 text-xs">{{ $reg->organization ?? '—' }}</td>
+                        <td class="px-4 py-3">
+                            @if($reg->ai_level)
+                                <span class="mono text-xs px-2 py-0.5 rounded border
+                                    {{ match($reg->ai_level) {
+                                        'beginner' => 'border-blue-900 text-blue-400',
+                                        'intermediate' => 'border-green-900 text-green-400',
+                                        'advanced' => 'border-yellow-900 text-yellow-400',
+                                        'expert' => 'border-purple-900 text-purple-400',
+                                        default => 'border-gray-800 text-gray-500',
+                                    } }}">
+                                    {{ match($reg->ai_level) {
+                                        'beginner' => 'Začátečník',
+                                        'intermediate' => 'Pokročilý',
+                                        'advanced' => 'Expert',
+                                        'expert' => 'Profesionál',
+                                        default => $reg->ai_level,
+                                    } }}
+                                </span>
+                            @else
+                                <span class="text-gray-700 text-xs">—</span>
+                            @endif
+                        </td>
                         <td class="px-4 py-3 text-green-700 text-xs">{{ $reg->event?->title ?? '—' }}</td>
                         <td class="px-4 py-3">
                             <select wire:change="updatePaymentStatus({{ $reg->id }}, $event.target.value)"

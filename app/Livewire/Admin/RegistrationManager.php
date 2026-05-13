@@ -60,8 +60,8 @@ class RegistrationManager extends Component
             fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
 
             fputcsv($handle, [
-                'ID', 'Jméno', 'E-mail', 'Událost', 'Platební status',
-                'Dietní omezení', 'Email opt-out', 'Datum registrace'
+                'ID', 'Jméno', 'E-mail', 'Organizace', 'Úroveň AI', 'Událost',
+                'Platební status', 'Email opt-out', 'Datum registrace'
             ], ';');
 
             foreach ($registrations as $reg) {
@@ -69,9 +69,16 @@ class RegistrationManager extends Component
                     $reg->id,
                     $reg->name,
                     $reg->email,
+                    $reg->organization ?? '',
+                    match($reg->ai_level) {
+                        'beginner'     => 'Začátečník',
+                        'intermediate' => 'Pokročilý',
+                        'advanced'     => 'Expert',
+                        'expert'       => 'Profesionál',
+                        default        => '',
+                    },
                     $reg->event?->title ?? '',
                     $reg->payment_status,
-                    $reg->dietary_notes ?? '',
                     $reg->email_opt_out ? 'Ano' : 'Ne',
                     $reg->created_at->format('j. n. Y H:i'),
                 ], ';');
