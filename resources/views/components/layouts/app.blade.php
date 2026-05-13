@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'ŽďárAI — AI události pro vývojáře' }}</title>
     {{-- SEO Meta --}}
-    <meta name="description" content="{{ $description ?? 'Měsíční AI přednášky pro vývojáře v MtgForFun ve Žďáru nad Sázavou. Každý první čtvrtek v měsíci.' }}">
+    <meta name="description" content="{{ $description ?? 'Měsíční AI přednášky pro vývojáře v Hernici ve Žďáru nad Sázavou. Každý první čtvrtek v měsíci.' }}">
     <meta name="keywords" content="AI, umělá inteligence, přednášky, vývojáři, Žďár nad Sázavou, programování">
     <meta name="author" content="ŽďárAI">
     <meta name="robots" content="index, follow">
@@ -15,7 +15,7 @@
     {{-- Open Graph --}}
     <meta property="og:type" content="{{ $ogType ?? 'website' }}">
     <meta property="og:title" content="{{ $title ?? 'ŽďárAI — AI události pro vývojáře' }}">
-    <meta property="og:description" content="{{ $description ?? 'Měsíční AI přednášky pro vývojáře v MtgForFun ve Žďáru nad Sázavou.' }}">
+    <meta property="og:description" content="{{ $description ?? 'Měsíční AI přednášky pro vývojáře v Hernici ve Žďáru nad Sázavou.' }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:site_name" content="ŽďárAI">
     <meta property="og:locale" content="{{ app()->getLocale() === 'cs' ? 'cs_CZ' : 'en_US' }}">
@@ -82,10 +82,10 @@
             <div class="flex items-center justify-between">
                 <div>
                     <div class="font-black text-lg"><span class="text-green-400">Žďár</span>AI</div>
-                    <div class="mono text-xs text-gray-600 mt-1">MtgForFun · Žďár nad Sázavou</div>
+                    <div class="mono text-xs text-gray-600 mt-1">Hernice · Žďár nad Sázavou</div>
                 </div>
                 <div class="mono text-xs text-gray-700">
-                    © {{ date('Y') }} MtgForFun · Built with 🤖 AI + TaskForge
+                    © {{ date('Y') }} <a href="https://www.mtgforfun.cz" target="_blank" rel="noopener" class="hover:text-gray-500 transition">MtgForFun</a> · Built with 🤖 AI + TaskForge
                 </div>
             </div>
         </div>

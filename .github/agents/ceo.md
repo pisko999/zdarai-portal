@@ -25,7 +25,7 @@ Jsi hlavní orchestrující agent pro projekt **ŽďárAI portál**. Tvůj `call
 
 ## Projekt
 **ŽďárAI** — portál pro AI události pro programátory a technicky zdatnou veřejnost.
-- Místo: MtgForFun, Žďár nad Sázavou (herní obchod — deskové hry, MTG)
+- Místo: Hernice (prostory provozované firmou MtgForFun), Žďár nad Sázavou (herní obchod — deskové hry, MTG)
 - Akce: každý první čtvrtek v měsíci, 2+ přednášky + networking
 - Stack: Laravel 13, Livewire 3, Tailwind CSS v4, MySQL 8.0, VPS (Apache 2.4 + mod_php)
 

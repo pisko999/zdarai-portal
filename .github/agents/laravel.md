@@ -22,7 +22,7 @@ Jsi senior Laravel/Livewire vývojář pro projekt **ŽďárAI portál**. Tvůj 
 - **Mail**: Laravel Mail + Queues (Redis)
 
 ## Projekt
-ŽďárAI — portál pro AI události v MtgForFun, Žďár nad Sázavou.
+ŽďárAI — portál pro AI události v Hernici (MtgForFun), Žďár nad Sázavou.
 - Akce každý první čtvrtek v měsíci
 - Registrace: guest (jméno+email) NEBO volitelný účet
 - Dvojjazyčný CZ/EN

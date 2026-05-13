@@ -22,7 +22,7 @@
 <body>
 <div class="container">
     <h1>&gt;_ ŽďárAI</h1>
-    <p class="subtitle">AI události pro vývojáře · MtgForFun, Žďár nad Sázavou</p>
+    <p class="subtitle">AI události pro vývojáře · Hernice, Žďár nad Sázavou</p>
 
     <p>Dobrý den, <strong>{{ $registration->name }}</strong>,</p>
     <p>Vaše registrace na akci byla úspěšně potvrzena. 🎉</p>
@@ -38,7 +38,7 @@
         </div>
         <div class="card-row">
             <span class="card-label">📍 Místo</span>
-            <span class="card-value">{{ $registration->event->location ?? 'MtgForFun, Žďár nad Sázavou' }}</span>
+            <span class="card-value">{{ $registration->event->location ?? 'Hernice, Nádražní 1141/44, Žďár nad Sázavou' }}</span>
         </div>
         <div class="card-row">
             <span class="card-label">💰 Vstupné</span>

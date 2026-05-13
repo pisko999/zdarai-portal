@@ -1,7 +1,7 @@
 # ŽďárAI portál — Copilot Instructions
 
 Portál pro AI události pro programátory a technicky zdatnou veřejnost.  
-Místo konání: **MtgForFun**, Žďár nad Sázavou.  
+Místo konání: **Hernice** (prostory provozované firmou MtgForFun), Žďár nad Sázavou.  
 Akce každý **první čtvrtek v měsíci**, 2+ přednášky + networking.
 
 ## Tech Stack

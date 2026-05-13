@@ -21,7 +21,7 @@
 
     <div class="card">
         <strong>📅 Datum:</strong> {{ $registration->event->date->format('j. n. Y H:i') }}<br>
-        <strong>📍 Místo:</strong> {{ $registration->event->location ?? 'MtgForFun, Žďár nad Sázavou' }}<br>
+        <strong>📍 Místo:</strong> {{ $registration->event->location ?? 'Hernice, Nádražní 1141/44, Žďár nad Sázavou' }}<br>
         @if($registration->event->price)
         <strong>💰 Vstupné:</strong> {{ number_format($registration->event->price, 0) }} Kč<br>
         @else
