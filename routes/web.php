@@ -22,6 +22,46 @@ Route::get('/opt-out/{token}', function (string $token) {
     return view('opt-out');
 })->name('opt-out');
 
+// Tracking pixel — sledování otevření informačního e-mailu
+Route::get('/e/o/{token}.png', function (string $token, \Illuminate\Http\Request $request) {
+    $registration = \App\Models\Registration::where('token', $token)->first();
+    if ($registration) {
+        $open = \App\Models\EmailOpen::firstOrNew([
+            'registration_id' => $registration->id,
+            'mailable' => 'first_meetup_info',
+        ]);
+        $now = now();
+        $open->first_opened_at ??= $now;
+        $open->last_opened_at = $now;
+        $open->open_count = (int) $open->open_count + 1;
+        $open->ip_address = $request->ip();
+        $open->user_agent = \Illuminate\Support\Str::limit((string) $request->userAgent(), 250, '');
+        $open->save();
+    }
+
+    // 1x1 transparentní GIF
+    $gif = base64_decode('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
+    return response($gif, 200, [
+        'Content-Type' => 'image/gif',
+        'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+        'Pragma' => 'no-cache',
+    ]);
+})->name('email.pixel');
+
+// Anketa — zájem o večeři/pivo po akci (sleduje otevření přes token)
+Route::get('/anketa/{token}', function (string $token) {
+    $registration = \App\Models\Registration::where('token', $token)
+        ->with('event')
+        ->firstOrFail();
+
+    \App\Models\DinnerPollResponse::firstOrCreate(
+        ['registration_id' => $registration->id],
+        ['opened_at' => now()],
+    );
+
+    return view('poll', compact('registration'));
+})->name('poll');
+
 Route::get('/lang/{locale}', function (string $locale) {
     $allowed = ['cs', 'en'];
     if (!in_array($locale, $allowed, true)) {
@@ -77,5 +117,6 @@ Route::prefix('admin')
         Route::get('/talks', fn() => view('admin.talks.index'))->name('admin.talks.index');
         Route::get('/speakers', fn() => view('admin.speakers.index'))->name('admin.speakers.index');
         Route::get('/registrations', fn() => view('admin.registrations.index'))->name('admin.registrations.index');
+        Route::get('/mailing', fn() => view('admin.mailing.index'))->name('admin.mailing.index');
         Route::get('/users', fn() => view('admin.users.index'))->name('admin.users.index');
     });
