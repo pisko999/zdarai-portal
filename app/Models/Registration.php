@@ -7,6 +7,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 class Registration extends Model
@@ -22,6 +24,7 @@ class Registration extends Model
         'payment_status',
         'reminder_sent_at',
         'email_opt_out',
+        'is_speaker',
         'ai_level',
         'organization',
     ];
@@ -29,6 +32,7 @@ class Registration extends Model
     protected $casts = [
         'reminder_sent_at' => 'datetime',
         'email_opt_out' => 'boolean',
+        'is_speaker' => 'boolean',
     ];
 
     protected static function boot(): void
@@ -49,5 +53,15 @@ class Registration extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function emailOpens(): HasMany
+    {
+        return $this->hasMany(EmailOpen::class);
+    }
+
+    public function dinnerPoll(): HasOne
+    {
+        return $this->hasOne(DinnerPollResponse::class);
     }
 }

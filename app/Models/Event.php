@@ -45,7 +45,10 @@ class Event extends Model
 
     public function registrationCount(): int
     {
-        return $this->registrations()->whereNotIn('payment_status', ['cancelled', 'waitlist'])->count();
+        return $this->registrations()
+            ->whereNotIn('payment_status', ['cancelled', 'waitlist'])
+            ->where('is_speaker', false)
+            ->count();
     }
 
     public function waitlistCount(): int

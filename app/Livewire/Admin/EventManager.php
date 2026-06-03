@@ -162,7 +162,8 @@ class EventManager extends Component
         $events = Event::query()
             ->when($this->search, fn ($q) => $q->where('title', 'like', "%{$this->search}%"))
             ->withCount(['registrations as active_registrations_count' => function ($q) {
-                $q->whereNotIn('payment_status', ['cancelled']);
+                $q->whereNotIn('payment_status', ['cancelled'])
+                    ->where('is_speaker', false);
             }])
             ->orderByDesc('date')
             ->get();
