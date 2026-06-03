@@ -5,9 +5,9 @@
     <section class="relative max-w-6xl mx-auto px-6 pt-20 pb-16">
         <div class="scanline absolute inset-0 pointer-events-none"></div>
         <div class="mono text-green-400/40 text-sm mb-4 fade-in">$ ./zdarai --next-event</div>
-        <h1 class="text-6xl font-black leading-none mb-4 fade-in cursor">
+        <h1 class="text-4xl sm:text-6xl font-black leading-tight sm:leading-none mb-4 fade-in">
             AI pro<br>
-            <span class="text-green-400 glow-text">programátory</span>
+            <span class="text-green-400 glow-text cursor">programátory</span>
         </h1>
         <p class="text-gray-400 text-lg max-w-xl mb-8 fade-in">
             {{ __("messages.hero.subtitle") }}
@@ -47,7 +47,7 @@
             </div>
             <div>
                 <div class="mono text-green-400 text-3xl font-bold">∞</div>
-                <div class="text-gray-500 text-sm mono mt-1">káva, čaj, deskohry</div>
+                <div class="text-gray-500 text-sm mono mt-1">Limo / Pivo</div>
             </div>
         </div>
     </div>

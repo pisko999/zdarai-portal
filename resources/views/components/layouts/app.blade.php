@@ -33,9 +33,9 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen antialiased">
+<body class="bg-gray-950 text-gray-100 min-h-screen antialiased overflow-x-hidden">
     <!-- Navigation -->
-    <nav class="border-b border-gray-800 bg-gray-950/80 backdrop-blur sticky top-0 z-50">
+    <nav x-data="{ open: false }" class="border-b border-gray-800 bg-gray-950/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
             <a href="/" class="flex items-center gap-3">
                 <div class="w-8 h-8 bg-green-400 rounded flex items-center justify-center flex-shrink-0">
@@ -46,7 +46,9 @@
                 </span>
                 <span class="mono text-xs text-green-400/50 ml-1">v2026</span>
             </a>
-            <div class="flex items-center gap-6 text-sm">
+
+            <!-- Desktop menu -->
+            <div class="hidden sm:flex items-center gap-6 text-sm">
                 <a href="/" class="text-sm text-gray-400 hover:text-green-400 transition mono">./udalosti</a>
                 <a href="/o-nas" class="text-sm text-gray-400 hover:text-green-400 transition mono">./o-nas</a>
                 <a href="/archiv" class="text-sm text-gray-400 hover:text-green-400 transition mono">./archiv</a>
@@ -70,6 +72,44 @@
                     <a href="{{ route('login') }}" class="text-gray-400 hover:text-green-400 text-xs border border-gray-700 hover:border-green-500/50 px-2 py-1 rounded transition mono">přihlásit</a>
                 @endauth
             </div>
+
+            <!-- Hamburger button -->
+            <button @click="open = !open" class="sm:hidden text-gray-400 hover:text-green-400 transition p-1" aria-label="Menu">
+                <svg x-show="!open" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+                <svg x-show="open" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile menu -->
+        <div x-show="open" x-transition class="sm:hidden border-t border-gray-800 bg-gray-950 px-6 py-4 space-y-4">
+            <a href="/" class="block text-gray-400 hover:text-green-400 transition mono text-sm py-1">./udalosti</a>
+            <a href="/o-nas" class="block text-gray-400 hover:text-green-400 transition mono text-sm py-1">./o-nas</a>
+            <a href="/archiv" class="block text-gray-400 hover:text-green-400 transition mono text-sm py-1">./archiv</a>
+            <div class="flex gap-2 pt-1">
+                @if(app()->getLocale() === 'cs')
+                    <span class="mono text-xs px-2 py-1 bg-green-400 text-gray-950 font-bold rounded">CZ</span>
+                    <a href="{{ route('lang.switch', 'en') }}" class="mono text-xs px-2 py-1 text-gray-500 hover:text-gray-300 transition">EN</a>
+                @else
+                    <a href="{{ route('lang.switch', 'cs') }}" class="mono text-xs px-2 py-1 text-gray-500 hover:text-gray-300 transition">CZ</a>
+                    <span class="mono text-xs px-2 py-1 bg-green-400 text-gray-950 font-bold rounded">EN</span>
+                @endif
+            </div>
+            <div class="border-t border-gray-800 pt-4 space-y-3">
+                @auth
+                    <a href="{{ route('my-registrations') }}" class="block text-gray-400 hover:text-green-400 text-sm transition mono py-1">{{ auth()->user()->name }}</a>
+                    <a href="{{ route('profile.edit') }}" class="block text-gray-400 hover:text-green-400 text-sm transition mono py-1">profil</a>
+                    <form method="POST" action="/logout">
+                        @csrf
+                        <button type="submit" class="text-gray-500 hover:text-gray-300 text-sm transition mono py-1">odhlásit</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="inline-block text-gray-400 hover:text-green-400 text-sm border border-gray-700 hover:border-green-500/50 px-3 py-1.5 rounded transition mono">přihlásit</a>
+                @endauth
+            </div>
         </div>
     </nav>
 
@@ -79,13 +119,14 @@
 
     <footer class="border-t border-gray-800 mt-20">
         <div class="max-w-6xl mx-auto px-6 py-8">
-            <div class="flex items-center justify-between">
-                <div>
+            <div class="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div class="text-center sm:text-left">
                     <div class="font-black text-lg"><span class="text-green-400">Žďár</span>AI</div>
-                    <div class="mono text-xs text-gray-600 mt-1">Hernice · Žďár nad Sázavou</div>
                 </div>
-                <div class="mono text-xs text-gray-700">
-                    © {{ date('Y') }} <a href="https://www.mtgforfun.cz" target="_blank" rel="noopener" class="hover:text-gray-500 transition">MtgForFun</a> · Built with 🤖 AI + TaskForge
+                <div class="mono text-xs text-gray-600 text-center">Hernice · Žďár nad Sázavou</div>
+                <div class="mono text-xs text-gray-700 text-center sm:text-right">
+                    <div>© {{ date('Y') }} <a href="https://www.mtgforfun.cz" target="_blank" rel="noopener" class="hover:text-gray-500 transition">MtgForFun</a></div>
+                    <div class="mt-1">Built with 🤖 AI + TaskForge</div>
                 </div>
             </div>
         </div>
