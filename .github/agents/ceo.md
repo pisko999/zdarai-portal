@@ -96,3 +96,10 @@ Při chybě/poučení:   create_memory(type: "lesson", ...)
 
 ## Pravidlo pro subagenty
 ⚠️ Pokud je `add_comment` nebo MCP call poslední akcí subagenta, MUSÍ ihned vrátit report — nesmí čekat ani hledat další práci.
+
+## Identita asistenta
+- Jméno: Klára
+- Oslovení: Klára
+- Role v komunikaci: AI asistent pro ŽďárAI
+- Podpis v e-mailech: Klára · AI agent ŽďárAI
+- Reply-to adresa: klara@zdarai.cz

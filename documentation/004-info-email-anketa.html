@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>004 — Informační e-mail + anketa + tracking · ŽďárAI</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'JetBrains Mono', monospace; background: #030a03; color: #86efac; padding: 32px 28px; min-height: 100vh; line-height: 1.6; }
+    a { color: #22c55e; }
+    .back { font-size: 0.7rem; color: #166534; display: inline-block; margin-bottom: 24px; }
+    h1 { color: #4ade80; font-size: 1.25rem; margin-bottom: 4px; }
+    .sub { color: #166534; font-size: 0.72rem; margin-bottom: 28px; }
+    h2 { color: #4ade80; font-size: 0.85rem; margin: 28px 0 10px; border-bottom: 1px solid #166534; padding-bottom: 5px; }
+    p { font-size: 0.74rem; color: #86efac; margin-bottom: 10px; }
+    ul { list-style: none; margin: 0 0 14px; }
+    li { font-size: 0.72rem; color: #86efac; padding: 3px 0 3px 16px; position: relative; }
+    li::before { content: "▸"; color: #22c55e; position: absolute; left: 0; }
+    code { background: #0d1a0d; border: 1px solid #166534; border-radius: 3px; padding: 1px 6px; font-size: 0.68rem; color: #4ade80; }
+    .card { background: #0d1a0d; border: 1px solid #166534; border-radius: 8px; padding: 18px 20px; margin-bottom: 18px; }
+    .map { max-width: 100%; border: 1px solid #166534; border-radius: 8px; margin: 10px 0; display: block; }
+    .flow { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+    .node { background: #0d1a0d; border: 1px solid #166534; border-radius: 6px; padding: 8px 12px; font-size: 0.66rem; color: #4ade80; }
+    .arrow { color: #166534; align-self: center; font-size: 0.8rem; }
+    .tag { display:inline-block; font-size:0.6rem; font-weight:700; padding:2px 7px; border-radius:3px; background:#14532d; color:#4ade80; }
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">&larr; zpět na index</a>
+  <h1>&gt;_ 004 — Informační e-mail pro 1. setkání</h1>
+  <p class="sub">// Připomínkový e-mail + anketa (večeře/pivo) + tracking otevření · task #1135 · agent: CEO/1</p>
+
+  <div class="card">
+    <p><span class="tag">✓ HOTOVO (test)</span> &nbsp; Připraveno a ověřeno end-to-end. Reálné rozeslání čeká na schválení uživatele. Testovací mail odeslán na <code>spinarp@gmail.com</code>.</p>
+  </div>
+
+  <h2>🗺️ Mapa cesty (statická, z OSM dlaždic)</h2>
+  <p>Generátor <code>scripts/generate-map.php</code> složí dlaždice z OpenStreetMap, vyznačí trasu od parkoviště u <strong>Maxi Hit</strong> (modré <strong>P</strong>) ke vchodu <strong>Hernice</strong> (červené <strong>C</strong>). Výstup je obrázek k ručnímu doladění.</p>
+  <img class="map" src="../public/images/email/mapa-hernice.png" alt="Mapa parkoviště → vchod Hernice">
+
+  <h2>🔄 Tok dat</h2>
+  <div class="flow">
+    <span class="node">📧 FirstMeetupInfo</span>
+    <span class="arrow">→</span>
+    <span class="node">🖼️ tracking pixel /e/o/{token}.png</span>
+    <span class="arrow">→</span>
+    <span class="node">📊 email_opens (open_count)</span>
+  </div>
+  <div class="flow">
+    <span class="node">🔗 /anketa/{token}</span>
+    <span class="arrow">→</span>
+    <span class="node">🍽️ Livewire DinnerPoll</span>
+    <span class="arrow">→</span>
+    <span class="node">📊 dinner_poll_responses</span>
+    <span class="arrow">→</span>
+    <span class="node">🛠️ /admin/mailing + CSV</span>
+  </div>
+
+  <h2>🧱 Co vzniklo</h2>
+  <ul>
+    <li>Migrace <code>email_opens</code> + <code>dinner_poll_responses</code></li>
+    <li>Modely <code>EmailOpen</code>, <code>DinnerPollResponse</code> + relace na <code>Registration</code></li>
+    <li>Mailable <code>FirstMeetupInfo</code> + šablona ve stylu webu (vložená mapa, GDPR zmínka)</li>
+    <li>Anketa: Livewire <code>DinnerPoll</code>, restaurace Ingot, kuchyně do 19:45, výběr jídla</li>
+    <li>Tracking pixel <code>/e/o/{token}.png</code> + otevření ankety přes token</li>
+    <li>Admin <code>/admin/mailing</code>: kdo otevřel e-mail/anketu, souhrn pro rezervaci, CSV export</li>
+    <li>Command <code>php artisan mail:first-meetup-test {email}</code></li>
+  </ul>
+
+  <h2>🔐 Bezpečnost / GDPR</h2>
+  <ul>
+    <li>Tracking pixel + jeho zmínka v patičce e-mailu</li>
+    <li>Token (UUID) jako jediný identifikátor — žádné hádání URL</li>
+    <li>Eloquent (žádné raw SQL), validace vstupů ankety</li>
+  </ul>
+</body>
+</html>
