@@ -22,6 +22,15 @@ Route::get('/opt-out/{token}', function (string $token) {
     return view('opt-out');
 })->name('opt-out');
 
+// Newsletter — odhlášení přes neuhodnutelný UUID token
+Route::get('/newsletter/odhlasit/{token}', function (string $token) {
+    $subscriber = \App\Models\NewsletterSubscriber::where('token', $token)->firstOrFail();
+    if ($subscriber->unsubscribed_at === null) {
+        $subscriber->update(['unsubscribed_at' => now()]);
+    }
+    return view('newsletter.unsubscribed');
+})->middleware('throttle:20,1')->name('newsletter.unsubscribe');
+
 // Tracking pixel — sledování otevření informačního e-mailu
 Route::get('/e/o/{token}.png', function (string $token, \Illuminate\Http\Request $request) {
     $registration = \App\Models\Registration::where('token', $token)->first();

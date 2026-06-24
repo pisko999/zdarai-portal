@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'google_analytics' => [
+        // GA4 Measurement ID (G-XXXXXXX). Když není nastaveno, gtag.js se nevkládá vůbec.
+        'id' => env('GOOGLE_ANALYTICS_ID'),
+    ],
+
 ];

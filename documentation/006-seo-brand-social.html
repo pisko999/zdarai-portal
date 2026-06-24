@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>006 — SEO, brand &amp; sdílení · ŽďárAI</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'JetBrains Mono', monospace; background: #030a03; color: #86efac; padding: 32px 28px; min-height: 100vh; line-height: 1.6; }
+    a { color: #22c55e; }
+    .back { font-size: 0.7rem; color: #166534; display: inline-block; margin-bottom: 24px; }
+    h1 { color: #4ade80; font-size: 1.25rem; margin-bottom: 4px; }
+    .sub { color: #166534; font-size: 0.72rem; margin-bottom: 28px; }
+    h2 { color: #4ade80; font-size: 0.85rem; margin: 28px 0 10px; border-bottom: 1px solid #166534; padding-bottom: 5px; }
+    p { font-size: 0.74rem; color: #86efac; margin-bottom: 10px; }
+    ul { list-style: none; margin: 0 0 14px; }
+    li { font-size: 0.72rem; color: #86efac; padding: 3px 0 3px 16px; position: relative; }
+    li::before { content: "▸"; color: #22c55e; position: absolute; left: 0; }
+    code { background: #0d1a0d; border: 1px solid #166534; border-radius: 3px; padding: 1px 6px; font-size: 0.68rem; color: #4ade80; }
+    .card { background: #0d1a0d; border: 1px solid #166534; border-radius: 8px; padding: 18px 20px; margin-bottom: 18px; }
+    .img { max-width: 100%; border: 1px solid #166534; border-radius: 8px; margin: 10px 0; display: block; }
+    .tag { display:inline-block; font-size:0.6rem; font-weight:700; padding:2px 7px; border-radius:3px; margin-right:4px; }
+    .tag-done { background:#14532d; color:#4ade80; }
+    .tag-progress { background:#713f12; color:#fbbf24; }
+    table { width:100%; border-collapse:collapse; font-size:0.68rem; margin:10px 0; }
+    th, td { border:1px solid #166534; padding:6px 8px; text-align:left; color:#86efac; }
+    th { color:#4ade80; }
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">&larr; zpět na index</a>
+  <h1>&gt;_ 006 — SEO, brand &amp; sdílení na sociálních sítích</h1>
+  <p class="sub">// Logo do SVG, OG/Twitter náhledy, JSON-LD structured data, favicon, cookie consent &amp; newsletter · tasky #1292–#1297 · agent: Klára/1 + laravel/68</p>
+
+  <div class="card">
+    <p><span class="tag tag-done">✓ HOTOVO</span> SEO foundation (#1292) &middot; SVG logo (#1293) &middot; Dynamický OG per akce (#1294) &middot; Cookie consent (#1295) &middot; Newsletter (#1296) &middot; Testy &amp; security (#1297)</p>
+    <p style="color:#166534;font-size:0.7rem;">Vše v <code>in_review</code>. Test suite 51/51 zelených (116 assertions). Security review: throttle na unsubscribe, ConsentLog ip-hash, GA gating ověřeno. Follow-up #1298 (is_admin mass-assignment).</p>
+  </div>
+
+  <h2>🎨 Logo jako SVG</h2>
+  <p>Textové logo nahrazeno škálovatelným SVG. Komponenta <code>&lt;x-logo&gt;</code> (varianty <code>full</code> / <code>mark</code>), použitá v hlavičce, patičce i jako zdroj faviconu. Badge <code>v2026</code> odstraněn.</p>
+  <ul>
+    <li>Zelený zaoblený čtvereček s <strong>AI</strong> (#22c55e / gray-950) + wordmark <strong>Žďár</strong>AI (mono font)</li>
+    <li><code>public/logo.svg</code> (plné), <code>public/favicon.svg</code> (mark) — pro e-maily a favicon</li>
+  </ul>
+  <img class="img" src="../public/logo.svg" alt="ŽďárAI logo" style="background:#0a0a0a; padding:20px; max-width:280px;">
+
+  <h2>🔗 Náhled při sdílení (Open Graph)</h2>
+  <p>Dřív byl <code>og:image</code> prázdný → při sdílení odkazu se neukázal žádný obsah. Nyní brand default 1200×630 (a per-akce dynamický se generuje, #1294).</p>
+  <img class="img" src="../public/og-default.png" alt="OG náhledový obrázek" style="max-width:520px;">
+
+  <h2>🔎 Co se zlepšilo pro vyhledávače</h2>
+  <table>
+    <tr><th>Oblast</th><th>Před</th><th>Po</th></tr>
+    <tr><td>robots.txt sitemap</td><td>špatná doména (zdarai.mtgforfun.cz)</td><td>https://www.zdarai.cz/sitemap.xml</td></tr>
+    <tr><td>favicon</td><td>0 bajtů (prázdný)</td><td>.ico + svg + apple-touch</td></tr>
+    <tr><td>Structured data</td><td>žádná</td><td>Organization (web) + Event (detail akce)</td></tr>
+    <tr><td>Twitter card</td><td>summary (malý)</td><td>summary_large_image</td></tr>
+    <tr><td>og:image</td><td>prázdný</td><td>brand default + per-akce</td></tr>
+  </table>
+  <p>Event JSON-LD nese datum, místo (IT NeŠkola, Žďár n. S.), cenu a obsazenost → šance na rich results v Googlu.</p>
+
+  <h2>🍪 Cookie consent &amp; 📰 newsletter</h2>
+  <ul>
+    <li>Cookie lišta: kategorie Nezbytné / Analytika (GA4), souhlas v cookie + audit do <code>consent_logs</code>, možnost kdykoli odebrat z patičky</li>
+    <li>GA4 se načte až po souhlasu (gating)</li>
+    <li>Newsletter: vlastní tabulka <code>newsletter_subscribers</code>, checkbox v registraci, modal pro již přihlášené uživatele, unsubscribe přes token</li>
+  </ul>
+</body>
+</html>

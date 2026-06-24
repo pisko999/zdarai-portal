@@ -39,7 +39,7 @@
         <div class="max-w-6xl mx-auto px-6 grid grid-cols-3 gap-8 text-center">
             <div>
                 <div class="mono text-green-400 text-3xl font-bold">1×</div>
-                <div class="text-gray-500 text-sm mono mt-1">měsíčně / první čtvrtek</div>
+                <div class="text-gray-500 text-sm mono mt-1">měsíčně / většinou první čtvrtek</div>
             </div>
             <div>
                 <div class="mono text-green-400 text-3xl font-bold">2+</div>

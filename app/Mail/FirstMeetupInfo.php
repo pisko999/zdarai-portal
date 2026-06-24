@@ -23,9 +23,12 @@ class FirstMeetupInfo extends Mailable implements ShouldQueue
 
     public function envelope(): Envelope
     {
+        $isToday = $this->registration->event->date->isToday();
+        $prefix = $isToday ? 'Dnes večer: ' : 'Už zítra: ';
+
         return new Envelope(
             replyTo: [new Address('klara@zdarai.cz', 'Klára')],
-            subject: 'Už zítra: ' . $this->registration->event->title . ' — info, mapa a anketa 🍺',
+            subject: $prefix . $this->registration->event->title . ' — info, mapa a anketa 🍺',
         );
     }
 
@@ -34,7 +37,8 @@ class FirstMeetupInfo extends Mailable implements ShouldQueue
         return new Content(
             view: 'emails.first-meetup-info',
             with: [
-                'pollUrl' => url('/anketa/' . $this->registration->token),
+                'isToday'  => $this->registration->event->date->isToday(),
+                'pollUrl'  => url('/anketa/' . $this->registration->token),
                 'pixelUrl' => url('/e/o/' . $this->registration->token . '.png'),
                 'eventUrl' => url('/udalosti/' . $this->registration->event->slug),
                 'optOutUrl' => url('/opt-out/' . $this->registration->token),

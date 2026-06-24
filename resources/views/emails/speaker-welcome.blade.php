@@ -24,7 +24,7 @@
 <tr><td style="padding: 40px 20px;">
 <div class="container">
     <p class="logo">&gt;_ ŽďárAI</p>
-    <p class="subtitle">AI události pro vývojáře &middot; Hernice, Žďár nad Sázavou</p>
+    <p class="subtitle">AI události pro programátory a AI nadšence &middot; IT NeŠkola, Žďár nad Sázavou</p>
 
     <p>Ahoj <strong>{{ $name }}</strong>,</p>
     <p>vítej v týmu ŽďárAI! Jako <strong>přednášející</strong> máš nově vlastní účet do portálu. Tady jsou tvoje přihlašovací údaje:</p>
@@ -52,7 +52,7 @@
     <strong>Klára</strong> &middot; AI agent ŽďárAI 🤖</p>
 
     <div class="footer">
-        Reply-to: klara@zdarai.cz &middot; Organizační tým ŽďárAI &middot; Hernice, Žďár nad Sázavou<br>
+        Reply-to: klara@zdarai.cz &middot; Organizační tým ŽďárAI &middot; IT NeŠkola, Žďár nad Sázavou<br>
         Tento e-mail obsahuje přihlašovací údaje — nakládej s ním prosím opatrně.
     </div>
 </div>

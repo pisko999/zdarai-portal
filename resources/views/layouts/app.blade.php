@@ -73,7 +73,7 @@
     </main>
 
     <footer class="border-t border-green-900/30 mt-20 py-8 text-center text-green-800 text-xs">
-        ŽďárAI &nbsp;·&nbsp; MtgForFun, Žďár nad Sázavou &nbsp;·&nbsp; každý první čtvrtek v měsíci
+        ŽďárAI &nbsp;·&nbsp; IT NeŠkola, Žďár nad Sázavou &nbsp;·&nbsp; většinou první čtvrtek v měsíci
     </footer>
 
     @livewireScripts

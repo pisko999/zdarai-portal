@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'phone', 'bio', 'is_admin'])]
+#[Fillable(['name', 'email', 'password', 'phone', 'bio', 'is_admin', 'newsletter_prompted_at'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -32,12 +32,18 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'newsletter_prompted_at' => 'datetime',
         ];
     }
 
     public function registrations(): HasMany
     {
         return $this->hasMany(Registration::class);
+    }
+
+    public function newsletterSubscriber(): HasOne
+    {
+        return $this->hasOne(NewsletterSubscriber::class);
     }
 
     public function speaker(): HasOne

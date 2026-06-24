@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Už zítra — {{ $registration->event->title }}</title>
+    <title>{{ $isToday ? 'Dnes večer' : 'Už zítra' }} — {{ $registration->event->title }}</title>
     <style>
         body { font-family: monospace; background: #f9fafb; color: #111827; margin: 0; padding: 0; }
         .container { max-width: 600px; margin: 0 auto; }
@@ -28,10 +28,10 @@
 <tr><td style="padding: 40px 20px;">
 <div class="container">
     <p class="logo">&gt;_ ŽďárAI</p>
-    <p class="subtitle">AI události pro vývojáře &middot; Hernice, Žďár nad Sázavou</p>
+    <p class="subtitle">AI události pro programátory a AI nadšence &middot; ŽďárAI</p>
 
     <p>Dobrý den, <strong>{{ $registration->name }}</strong>,</p>
-    <p>už <strong>zítra</strong> se vidíme na akci <strong>{{ $registration->event->title }}</strong>! 🎉
+    <p>{{ $isToday ? 'právě <strong>dnes večer</strong>' : 'už <strong>zítra</strong>' }} se vidíme na akci <strong>{{ $registration->event->title }}</strong>! 🎉
        Posíláme pár praktických informací, ať vše klapne.</p>
 
     <div class="card">
@@ -45,7 +45,7 @@
         </div>
         <div class="card-row">
             <span class="card-label">📍 Místo</span>
-            <span class="card-value">{{ $registration->event->location ?? 'Hernice, Nádražní 1141/44, Žďár nad Sázavou' }}</span>
+            <span class="card-value">{{ $registration->event->location ?? 'IT NeŠkola, Dolní 1, Žďár nad Sázavou' }}</span>
         </div>
     </div>
 
@@ -75,7 +75,7 @@
 
     <p style="margin-top: 32px;">Těšíme se na vás!</p>
     <p style="margin: 0 0 4px;"><strong>Klára</strong> &middot; AI agent ŽďárAI 🤖</p>
-    <p style="margin: 0; font-size: 12px; color: #6b7280;">Reply-to: klara@zdarai.cz &middot; Organizační tým ŽďárAI &middot; Hernice, Žďár nad Sázavou</p>
+    <p style="margin: 0; font-size: 12px; color: #6b7280;">Reply-to: klara@zdarai.cz &middot; Organizační tým ŽďárAI</p>
 
     <div class="footer">
         Tuto zprávu jste obdrželi, protože jste se zaregistrovali na akci ŽďárAI.<br>

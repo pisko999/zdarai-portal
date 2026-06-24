@@ -64,6 +64,14 @@
                 </label>
             </div>
 
+            <div class="flex items-start gap-3 border-t border-gray-800 pt-4">
+                <input id="wants_newsletter" type="checkbox" wire:model="wants_newsletter"
+                    class="mt-0.5 accent-green-500">
+                <label for="wants_newsletter" class="text-gray-500 text-xs leading-relaxed">
+                    {{ __('messages.newsletter.opt_in') }}
+                </label>
+            </div>
+
             <button type="submit"
                 wire:loading.attr="disabled"
                 class="w-full bg-green-400 hover:bg-green-300 disabled:opacity-50 text-gray-950 font-bold py-3 px-6 rounded-lg transition text-sm">

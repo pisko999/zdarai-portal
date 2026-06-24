@@ -1,7 +1,51 @@
 <x-layouts.app
     :title="$event->getTranslation('title') . ' — ŽďárAI'"
     :description="\Illuminate\Support\Str::limit(strip_tags($event->getTranslation('description') ?? ''), 155)"
+    :ogImage="$event->ogImageUrl()"
     ogType="event">
+
+    {{-- Structured data: Event (rich results — datum, místo, cena ve výsledcích Googlu) --}}
+    <script type="application/ld+json">
+    {!! json_encode(array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'Event',
+        'name' => $event->getTranslation('title'),
+        'description' => \Illuminate\Support\Str::limit(strip_tags($event->getTranslation('description') ?? ''), 300),
+        'startDate' => $event->date->toIso8601String(),
+        'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+        'eventStatus' => $event->status === 'cancelled'
+            ? 'https://schema.org/EventCancelled'
+            : 'https://schema.org/EventScheduled',
+        'url' => url()->current(),
+        'image' => asset('og-default.png'),
+        'location' => [
+            '@type' => 'Place',
+            'name' => $event->location ?: 'IT NeŠkola',
+            'address' => [
+                '@type' => 'PostalAddress',
+                'streetAddress' => 'Dolní 1',
+                'addressLocality' => 'Žďár nad Sázavou',
+                'addressCountry' => 'CZ',
+            ],
+        ],
+        'organizer' => [
+            '@type' => 'Organization',
+            'name' => 'ŽďárAI',
+            'url' => config('app.url'),
+        ],
+        'offers' => [
+            '@type' => 'Offer',
+            'price' => $event->price !== null ? number_format((float) $event->price, 2, '.', '') : '0',
+            'priceCurrency' => 'CZK',
+            'availability' => $event->isFull()
+                ? 'https://schema.org/SoldOut'
+                : 'https://schema.org/InStock',
+            'url' => url()->current() . '#registrace',
+            'validFrom' => $event->created_at?->toIso8601String(),
+        ],
+    ]), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+
     <div class="max-w-4xl mx-auto px-4 py-12">
         {{-- Back link --}}
         <a href="/" class="text-gray-500 hover:text-green-400 text-sm mb-6 inline-block transition">← zpět na seznam</a>

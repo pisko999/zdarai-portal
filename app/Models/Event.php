@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Services\OgImageService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -82,5 +83,14 @@ class Event extends Model
     public function translationForLocale(string $locale = 'cs'): ?EventTranslation
     {
         return $this->translations->firstWhere('locale', $locale);
+    }
+
+    /**
+     * Absolutní URL dynamického OG (náhledového) obrázku akce.
+     * Lazy generuje obrázek; při chybě vrací brand default.
+     */
+    public function ogImageUrl(): string
+    {
+        return app(OgImageService::class)->forEvent($this);
     }
 }

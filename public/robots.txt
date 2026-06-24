@@ -1,6 +1,7 @@
 User-agent: *
 Disallow: /admin
 Disallow: /opt-out
+Disallow: /newsletter/odhlasit
 Allow: /
 
-Sitemap: https://zdarai.mtgforfun.cz/sitemap.xml
+Sitemap: https://www.zdarai.cz/sitemap.xml

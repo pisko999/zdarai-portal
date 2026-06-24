@@ -5,8 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'ŽďárAI — AI události pro vývojáře' }}</title>
+
+    {{-- Favicon --}}
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+    <meta name="theme-color" content="#0a0a0a">
     {{-- SEO Meta --}}
-    <meta name="description" content="{{ $description ?? 'Měsíční AI přednášky pro vývojáře v Hernici ve Žďáru nad Sázavou. Každý první čtvrtek v měsíci.' }}">
+    <meta name="description" content="{{ $description ?? 'Měsíční AI přednášky pro programátory a AI nadšence v IT NeŠkole ve Žďáru nad Sázavou. Většinou první čtvrtek v měsíci.' }}">
     <meta name="keywords" content="AI, umělá inteligence, přednášky, vývojáři, Žďár nad Sázavou, programování">
     <meta name="author" content="ŽďárAI">
     <meta name="robots" content="index, follow">
@@ -15,36 +21,59 @@
     {{-- Open Graph --}}
     <meta property="og:type" content="{{ $ogType ?? 'website' }}">
     <meta property="og:title" content="{{ $title ?? 'ŽďárAI — AI události pro vývojáře' }}">
-    <meta property="og:description" content="{{ $description ?? 'Měsíční AI přednášky pro vývojáře v Hernici ve Žďáru nad Sázavou.' }}">
+    <meta property="og:description" content="{{ $description ?? 'Měsíční AI přednášky pro programátory a AI nadšence v IT NeŠkole ve Žďáru nad Sázavou.' }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:site_name" content="ŽďárAI">
     <meta property="og:locale" content="{{ app()->getLocale() === 'cs' ? 'cs_CZ' : 'en_US' }}">
-    @isset($ogImage)
-    <meta property="og:image" content="{{ $ogImage }}">
-    @endisset
+    <meta property="og:image" content="{{ $ogImage ?? asset('og-default.png') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="ŽďárAI — AI události pro vývojáře">
 
     {{-- Twitter Card --}}
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ $title ?? 'ŽďárAI' }}">
     <meta name="twitter:description" content="{{ $description ?? 'Měsíční AI přednášky pro vývojáře ve Žďáru nad Sázavou.' }}">
+    <meta name="twitter:image" content="{{ $ogImage ?? asset('og-default.png') }}">
 
     <link rel="alternate" hreflang="cs" href="{{ url('/lang/cs') }}">
     <link rel="alternate" hreflang="en" href="{{ url('/lang/en') }}">
+
+    {{-- Structured data: Organization (site-wide). Event schema se přidává na detailu akce. --}}
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'Organization',
+        'name' => 'ŽďárAI',
+        'url' => config('app.url'),
+        'logo' => asset('og-default.png'),
+        'description' => 'Měsíční AI přednášky pro programátory a AI nadšence v IT NeŠkole ve Žďáru nad Sázavou.',
+        'email' => 'klara@zdarai.cz',
+        'location' => [
+            '@type' => 'Place',
+            'name' => 'IT NeŠkola',
+            'address' => [
+                '@type' => 'PostalAddress',
+                'streetAddress' => 'Dolní 1',
+                'addressLocality' => 'Žďár nad Sázavou',
+                'addressCountry' => 'CZ',
+            ],
+        ],
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+
+    {{-- Google Analytics 4 — vkládá se jen se souhlasem (a jen je-li GOOGLE_ANALYTICS_ID nastaveno) --}}
+    @include('partials.analytics')
 </head>
 <body class="bg-gray-950 text-gray-100 min-h-screen antialiased overflow-x-hidden">
     <!-- Navigation -->
     <nav x-data="{ open: false }" class="border-b border-gray-800 bg-gray-950/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-            <a href="/" class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-green-400 rounded flex items-center justify-center flex-shrink-0">
-                    <span class="text-gray-950 font-black text-xs mono">AI</span>
-                </div>
-                <span class="text-xl font-black tracking-tight">
-                    <span class="text-green-400 glow-text">Žďár</span><span class="text-white">AI</span>
-                </span>
-                <span class="mono text-xs text-green-400/50 ml-1">v2026</span>
+            <a href="/" class="flex items-center" aria-label="ŽďárAI — domů">
+                <x-logo class="h-8 w-auto text-white glow-text" />
             </a>
 
             <!-- Desktop menu -->
@@ -121,16 +150,26 @@
         <div class="max-w-6xl mx-auto px-6 py-8">
             <div class="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div class="text-center sm:text-left">
-                    <div class="font-black text-lg"><span class="text-green-400">Žďár</span>AI</div>
+                    <x-logo class="h-7 w-auto text-white" />
                 </div>
-                <div class="mono text-xs text-gray-600 text-center">Hernice · Žďár nad Sázavou</div>
+                <div class="mono text-xs text-gray-600 text-center">IT NeŠkola · Žďár nad Sázavou</div>
                 <div class="mono text-xs text-gray-700 text-center sm:text-right">
                     <div>© {{ date('Y') }} <a href="https://www.mtgforfun.cz" target="_blank" rel="noopener" class="hover:text-gray-500 transition">MtgForFun</a></div>
                     <div class="mt-1">Built with 🤖 AI + TaskForge</div>
+                    <div class="mt-1">
+                        <button type="button"
+                            onclick="window.dispatchEvent(new CustomEvent('open-cookie-settings'))"
+                            class="hover:text-gray-500 transition underline decoration-dotted">{{ __('messages.cookies.footer_link') }}</button>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
+
+    <livewire:cookie-consent />
+    @auth
+        <livewire:newsletter-prompt />
+    @endauth
 
     @livewireScripts
 </body>

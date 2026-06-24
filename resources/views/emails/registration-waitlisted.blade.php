@@ -23,7 +23,7 @@
 <tr><td style="padding: 40px 20px;">
 <div class="container">
     <p class="logo">&gt;_ ŽďárAI</p>
-    <p class="subtitle">AI události pro vývojáře &middot; Hernice, Žďár nad Sázavou</p>
+    <p class="subtitle">AI události pro programátory a AI nadšence &middot; IT NeŠkola, Žďár nad Sázavou</p>
 
     <p>Dobrý den, <strong>{{ $registration->name }}</strong>,</p>
     <p>Děkujeme za zájem o akci. Bohužel je kapacita <strong>obsazena</strong> — vaše přihláška byla zařazena na čekací listinu.</p>
@@ -44,7 +44,7 @@
         </div>
         <div class="card-row">
             <span class="card-label">📍 Místo</span>
-            <span class="card-value">{{ $registration->event->location ?? 'Hernice, Nádražní 1141/44, Žďár nad Sázavou' }}</span>
+            <span class="card-value">{{ $registration->event->location ?? 'IT NeŠkola, Dolní 1, Žďár nad Sázavou' }}</span>
         </div>
     </div>
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use App\Actions\SubscribeToNewsletter;
 use App\Mail\RegistrationConfirmed;
 use App\Mail\RegistrationWaitlisted;
 use App\Models\Event;
@@ -26,6 +27,7 @@ class RegistrationForm extends Component
     public string $ai_level = '';
     public string $organization = '';
     public bool $email_opt_in = true;
+    public bool $wants_newsletter = false;
 
     public bool $success = false;
     public bool $waitlisted = false;
@@ -56,8 +58,10 @@ class RegistrationForm extends Component
         $this->errorMessage = '';
         $this->validate();
 
+        $resolvedUserId = null;
+
         try {
-            DB::transaction(function (): void {
+            DB::transaction(function () use (&$resolvedUserId): void {
                 $event = Event::lockForUpdate()->find($this->event->id);
 
                 if ($event->isFull()) {
@@ -122,12 +126,23 @@ class RegistrationForm extends Component
                 }
 
                 $this->waitlisted = $isWaitlisted;
+                $resolvedUserId = $userId;
             });
 
             if (empty($this->errorMessage)) {
+                // Newsletter — pouze pokud uživatel aktivně zaškrtl (samostatný souhlas).
+                if ($this->wants_newsletter) {
+                    app(SubscribeToNewsletter::class)->execute(
+                        email: $this->email,
+                        name: $this->name,
+                        userId: $resolvedUserId,
+                        source: 'registration',
+                    );
+                }
+
                 // Uložíme příznak před resetem properties
                 $wasWaitlisted = $this->waitlisted;
-                $this->reset(['name', 'email', 'ai_level', 'organization', 'email_opt_in']);
+                $this->reset(['name', 'email', 'ai_level', 'organization', 'email_opt_in', 'wants_newsletter']);
                 $this->waitlisted = $wasWaitlisted;
                 $this->success = ! $wasWaitlisted;
             }

@@ -19,7 +19,7 @@
 <tr><td style="padding: 40px 20px;">
 <div class="container">
     <p class="logo">&gt;_ ŽďárAI</p>
-    <p class="subtitle">AI události pro vývojáře &middot; Hernice, Žďár nad Sázavou</p>
+    <p class="subtitle">AI události pro programátory a AI nadšence &middot; IT NeŠkola, Žďár nad Sázavou</p>
 
     <p>Ahoj <strong>{{ $name }}</strong>,</p>
     <p>omlouvám se 🙏 — při úpravě registrací přednášejících se ti změnil odkaz na anketu, takže ten původní už nefunguje. Tady je <strong>nový, funkční odkaz</strong>:</p>
@@ -32,7 +32,7 @@
     <strong>Klára</strong> &middot; AI agent ŽďárAI 🤖</p>
 
     <div class="footer">
-        Reply-to: klara@zdarai.cz &middot; Organizační tým ŽďárAI &middot; Hernice, Žďár nad Sázavou
+        Reply-to: klara@zdarai.cz &middot; Organizační tým ŽďárAI &middot; IT NeŠkola, Žďár nad Sázavou
     </div>
 </div>
 </td></tr>
