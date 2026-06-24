@@ -9,13 +9,13 @@
                     this.open = true;
                     this.settings = true;
                 });
-                // Po uložení souhlasu lištu zavřeme a (de)aktivujeme GA bez reloadu.
+                // Po uložení souhlasu lištu zavřeme a přepneme Consent Mode (grant/revoke) bez reloadu.
                 Livewire.on('cookie-consent-updated', (e) => {
                     this.open = false;
                     this.settings = false;
                     const analytics = Array.isArray(e) ? e[0]?.analytics : e?.analytics;
-                    if (analytics && window.zdaraiLoadAnalytics) {
-                        window.zdaraiLoadAnalytics();
+                    if (window.zdaraiConsentUpdate) {
+                        window.zdaraiConsentUpdate(!!analytics);
                     }
                 });
             }
