@@ -39,10 +39,13 @@
     <link rel="alternate" hreflang="cs" href="{{ url('/lang/cs') }}">
     <link rel="alternate" hreflang="en" href="{{ url('/lang/en') }}">
 
-    {{-- Structured data: Organization (site-wide). Event schema se přidává na detailu akce. --}}
+    {{-- Structured data: Organization (site-wide). Event schema se přidává na detailu akce.
+         Pozn.: '@context' nelze psát přímo — Blade by ho zkompiloval jako direktivu @context
+         (Laravel 11+) a vložil PHP do výstupu (rozbije JSON-LD i spustí ModSecurity). Proto
+         klíč skládáme přes konkatenaci '@'.'context'. --}}
     <script type="application/ld+json">
     {!! json_encode([
-        '@context' => 'https://schema.org',
+        '@'.'context' => 'https://schema.org',
         '@type' => 'Organization',
         'name' => 'ŽďárAI',
         'url' => config('app.url'),

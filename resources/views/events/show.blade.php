@@ -6,8 +6,9 @@
 
     {{-- Structured data: Event (rich results — datum, místo, cena ve výsledcích Googlu) --}}
     <script type="application/ld+json">
+    {{-- '@context' přes konkatenaci — viz pozn. v layoutu (kolize s Blade direktivou @context). --}}
     {!! json_encode(array_filter([
-        '@context' => 'https://schema.org',
+        '@'.'context' => 'https://schema.org',
         '@type' => 'Event',
         'name' => $event->getTranslation('title'),
         'description' => \Illuminate\Support\Str::limit(strip_tags($event->getTranslation('description') ?? ''), 300),
