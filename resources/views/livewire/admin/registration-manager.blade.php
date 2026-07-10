@@ -57,7 +57,9 @@
                         <td class="px-4 py-3 text-white">
                             {{ $reg->name }}
                             @if($reg->email_opt_out)
-                                <span class="ml-1 text-xs text-gray-700" title="Odhlášen z emailů">✉</span>
+                                <span class="ml-1 text-xs text-red-500 line-through" title="Odhlášen z odběru e-mailů">✉</span>
+                            @else
+                                <span class="ml-1 text-xs text-green-500" title="Odebírá e-maily">✉</span>
                             @endif
                         </td>
                         <td class="px-4 py-3 text-green-600 text-xs">{{ $reg->email }}</td>
