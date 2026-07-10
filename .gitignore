@@ -28,5 +28,6 @@ Thumbs.db
 
 # secrets & local (přidáno Klárou)
 .mcp.json
+.vscode/mcp.json
 .claude/
 /zdarai
