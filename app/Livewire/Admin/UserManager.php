@@ -30,7 +30,9 @@ class UserManager extends Component
             return;
         }
 
-        $user->update(['is_admin' => ! $user->is_admin]);
+        // is_admin není ve $fillable (mass-assignment hardening) — nastavujeme explicitně
+        $user->is_admin = ! $user->is_admin;
+        $user->save();
     }
 
     public function confirmDelete(int $id): void
