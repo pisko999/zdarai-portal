@@ -82,6 +82,45 @@ Route::get('/lang/{locale}', function (string $locale) {
 
 Route::get('/o-nas', fn() => view('about'))->name('about');
 
+Route::get('/flayer', function () {
+    $event = \App\Models\Event::with(['talks.speaker'])
+        ->where('status', 'published')
+        ->where('date', '>=', now())
+        ->orderBy('date')
+        ->firstOrFail();
+    return view('flayer', compact('event'));
+})->name('flayer');
+
+Route::get('/flayer/pdf', function () {
+    $event = \App\Models\Event::with(['talks.speaker'])
+        ->where('status', 'published')
+        ->where('date', '>=', now())
+        ->orderBy('date')
+        ->firstOrFail();
+
+    $slug = \Illuminate\Support\Str::slug($event->title);
+    $filename = "zdarai-flyer-{$slug}.pdf";
+    $path = storage_path("app/public/flyers/{$filename}");
+
+    if (! is_dir(dirname($path))) {
+        mkdir(dirname($path), 0755, true);
+    }
+
+    \Spatie\Browsershot\Browsershot::url(route('flayer'))
+        ->setChromePath('/usr/bin/google-chrome')
+        ->noSandbox()
+        ->waitUntilNetworkIdle()
+        ->paperSize(148, 210)
+        ->landscape(false)
+        ->margins(0, 0, 0, 0)
+        ->showBackground()
+        ->save($path);
+
+    return response()->download($path, $filename, [
+        'Content-Type' => 'application/pdf',
+    ]);
+})->name('flayer.pdf');
+
 Route::get('/archiv', function () {
     $events = \App\Models\Event::where('status', 'published')
         ->where('date', '<', now())
