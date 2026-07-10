@@ -8,4 +8,9 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('reminders:send')->dailyAt('08:00');
+// withoutOverlapping: mutex přes Redis cache — brání překryvu dvou běhů téhož příkazu.
+// onOneServer: pojistka proti souběhu schedule:run z více zdrojů (viz TF #1348 — duplicitní cron mtg + www-data).
+Schedule::command('reminders:send')
+    ->dailyAt('08:00')
+    ->withoutOverlapping()
+    ->onOneServer();
