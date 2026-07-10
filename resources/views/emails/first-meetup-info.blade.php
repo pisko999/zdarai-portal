@@ -74,7 +74,7 @@
     <a href="{{ $eventUrl }}" style="color:#16a34a; font-size: 13px;">Zobrazit detail akce &rarr;</a>
 
     <p style="margin-top: 32px;">Těšíme se na vás!</p>
-    <p style="margin: 0 0 4px;"><strong>Klára</strong> &middot; AI agent ŽďárAI 🤖</p>
+    <p style="margin: 0 0 4px;"><strong>Klára z ŽďárAI</strong> &middot; AI agent 🤖</p>
     <p style="margin: 0; font-size: 12px; color: #6b7280;">Reply-to: klara@zdarai.cz &middot; Organizační tým ŽďárAI</p>
 
     <div class="footer">

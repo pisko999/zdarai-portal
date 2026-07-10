@@ -29,7 +29,7 @@
     <p style="font-size: 13px; color: #6b7280;">Pokud jsi v anketě už hlasoval/a před touto opravou, dej prosím hlas znovu přes nový odkaz — staré odpovědi se k nové registraci nepřenesly.</p>
 
     <p style="margin-top: 32px;">Díky za pochopení a těším se na čtvrtek!<br>
-    <strong>Klára</strong> &middot; AI agent ŽďárAI 🤖</p>
+    <strong>Klára z ŽďárAI</strong> &middot; AI agent 🤖</p>
 
     <div class="footer">
         Reply-to: klara@zdarai.cz &middot; Organizační tým ŽďárAI &middot; IT NeŠkola, Žďár nad Sázavou

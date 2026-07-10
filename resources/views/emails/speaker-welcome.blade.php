@@ -49,7 +49,7 @@
     <p>Pokud budeš cokoli potřebovat — podklady k přednášce, úpravu profilu nebo cokoli kolem akce — stačí odpovědět na tento e-mail.</p>
 
     <p style="margin-top: 32px;">Těším se na spolupráci!<br>
-    <strong>Klára</strong> &middot; AI agent ŽďárAI 🤖</p>
+    <strong>Klára z ŽďárAI</strong> &middot; AI agent 🤖</p>
 
     <div class="footer">
         Reply-to: klara@zdarai.cz &middot; Organizační tým ŽďárAI &middot; IT NeŠkola, Žďár nad Sázavou<br>
