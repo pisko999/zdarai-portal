@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Admin;
 
 use Livewire\Component;
+use App\Actions\SendAfterPartyPollInvite;
 use App\Models\Registration;
 use App\Models\Event;
 use App\Mail\RegistrationApproved;
@@ -38,6 +39,9 @@ class RegistrationManager extends Component
 
         if ($status === 'confirmed' && $wasNotConfirmed) {
             Mail::to($reg->email)->queue(new RegistrationApproved($reg));
+
+            // Běží-li pro akci anketní kampaň, pošli pozvánku k anketě i právě potvrzené registraci.
+            app(SendAfterPartyPollInvite::class)->execute($reg);
         }
 
         session()->flash('success', 'Status aktualizován.');
@@ -49,6 +53,10 @@ class RegistrationManager extends Component
         if ($reg->payment_status === 'waitlist') {
             $reg->update(['payment_status' => 'confirmed']);
             Mail::to($reg->email)->queue(new RegistrationApproved($reg));
+
+            // Povýšení z waitlistu — běží-li kampaň, dostane i pozvánku k anketě.
+            app(SendAfterPartyPollInvite::class)->execute($reg);
+
             session()->flash('success', 'Registrace potvrzena — potvrzovací e-mail odeslán.');
         }
     }

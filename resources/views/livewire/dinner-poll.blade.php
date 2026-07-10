@@ -26,15 +26,14 @@
         </div>
     @else
         <p class="text-gray-400 text-sm leading-relaxed mb-6">
-            Po programu se chystáme do <strong class="text-green-500">Restaurace Ingot</strong>
-            (<a href="https://ingot.ala-gastro.cz" target="_blank" rel="noopener" class="text-green-600 hover:text-green-400">ingot.ala-gastro.cz</a>).
+            Po programu se chystáme do <strong class="text-green-500">Restaurace Krystal</strong>
+            (Dolní 183/30, Žďár nad Sázavou).
             Dej nám vědět, jestli dorazíš — ať víme, pro kolik lidí zarezervovat místo.
         </p>
 
-        <div class="border-l-2 border-amber-600 bg-amber-950/20 text-amber-300 text-sm rounded p-3 mb-6">
-            ⏰ Kuchyně vaří jen <strong>do 19:45</strong> — pokud chceš večeřet, vyber prosím jídlo z
-            <a href="https://cdn.website.dish.co/media/c2/36/9986858/JIDELNI-LISTEK.pdf" target="_blank" rel="noopener" class="underline">jídelního lístku</a>
-            předem, ať to stihneme objednat.
+        <div class="border-l-2 border-green-600 bg-green-950/20 text-green-300 text-sm rounded p-3 mb-6">
+            ⏰ Restaurace potřebuje počty jídel nahlásit předem — odpověz prosím
+            <strong>do středy 8.&nbsp;7.&nbsp;2026 20:00</strong>. Díky!
         </div>
 
         <form wire:submit="submit" class="space-y-6">
@@ -53,16 +52,27 @@
 
             @if($attendance === 'dinner')
                 <div>
-                    <label class="block text-green-600 text-xs uppercase font-bold mb-2">Vybrané jídlo z lístku</label>
-                    <input type="text" wire:model="foodChoice" placeholder="např. Svíčková na smetaně, Smažený sýr…"
-                           class="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-gray-200 text-sm focus:border-green-700 focus:outline-none">
+                    <label class="block text-green-600 text-xs uppercase font-bold mb-2">Vyber si jídlo</label>
+                    <p class="text-gray-500 text-xs mb-3">Ceny jsou informativní — každý si platí sám.</p>
+                    <div class="space-y-2">
+                        @foreach($foodOptions as $option)
+                            <label class="flex items-start gap-3 border border-gray-800 rounded-lg px-4 py-3 cursor-pointer hover:border-green-800 transition {{ $foodChoice === $option ? 'border-green-600 bg-green-950/30' : 'bg-gray-900/40' }}">
+                                <input type="radio" wire:model.live="foodChoice" value="{{ $option }}" class="accent-green-600 mt-0.5 shrink-0">
+                                <span class="text-gray-200 text-sm">{{ $option }}</span>
+                            </label>
+                        @endforeach
+                        <label class="flex items-start gap-3 border border-gray-800 rounded-lg px-4 py-3 cursor-pointer hover:border-green-800 transition {{ $foodChoice === $otherChoice ? 'border-green-600 bg-green-950/30' : 'bg-gray-900/40' }}">
+                            <input type="radio" wire:model.live="foodChoice" value="{{ $otherChoice }}" class="accent-green-600 mt-0.5 shrink-0">
+                            <span class="text-gray-200 text-sm">{{ $otherLabel }}</span>
+                        </label>
+                    </div>
                     @error('foodChoice') <p class="text-red-500 text-xs mt-2">{{ $message }}</p> @enderror
                 </div>
             @endif
 
             <div>
                 <label class="block text-green-600 text-xs uppercase font-bold mb-2">Poznámka (volitelné)</label>
-                <input type="text" wire:model="note" placeholder="alergie, +1 host, …"
+                <input type="text" wire:model="note" placeholder="jiné jídlo (řízek, smažák…), alergie, +1 host, …"
                        class="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-gray-200 text-sm focus:border-green-700 focus:outline-none">
                 @error('note') <p class="text-red-500 text-xs mt-2">{{ $message }}</p> @enderror
             </div>

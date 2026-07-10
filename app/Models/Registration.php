@@ -23,6 +23,7 @@ class Registration extends Model
         'email',
         'payment_status',
         'reminder_sent_at',
+        'poll_invite_sent_at',
         'email_opt_out',
         'is_speaker',
         'ai_level',
@@ -31,6 +32,7 @@ class Registration extends Model
 
     protected $casts = [
         'reminder_sent_at' => 'datetime',
+        'poll_invite_sent_at' => 'datetime',
         'email_opt_out' => 'boolean',
         'is_speaker' => 'boolean',
     ];

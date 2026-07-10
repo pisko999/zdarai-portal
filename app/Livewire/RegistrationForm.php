@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use App\Actions\SendAfterPartyPollInvite;
 use App\Actions\SubscribeToNewsletter;
 use App\Mail\RegistrationConfirmed;
 use App\Mail\RegistrationWaitlisted;
@@ -123,6 +124,9 @@ class RegistrationForm extends Component
                     Mail::to($this->email)->queue(new RegistrationWaitlisted($registration));
                 } else {
                     Mail::to($this->email)->queue(new RegistrationConfirmed($registration, $setPasswordUrl));
+
+                    // Běží-li pro akci anketní kampaň, pošli pozvánku k anketě hned při registraci.
+                    app(SendAfterPartyPollInvite::class)->execute($registration);
                 }
 
                 $this->waitlisted = $isWaitlisted;
