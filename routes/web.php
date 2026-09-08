@@ -1,11 +1,12 @@
 <?php
 
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
 Route::get('/udalosti/{slug}', function (string $slug) {
     $event = \App\Models\Event::where('slug', $slug)
@@ -71,14 +72,8 @@ Route::get('/anketa/{token}', function (string $token) {
     return view('poll', compact('registration'));
 })->name('poll');
 
-Route::get('/lang/{locale}', function (string $locale) {
-    $allowed = ['cs', 'en'];
-    if (!in_array($locale, $allowed, true)) {
-        abort(404);
-    }
-    session(['locale' => $locale]);
-    return redirect()->back();
-})->name('lang.switch');
+// Přepnutí jazyka — bezpečný redirect podle refereru (viz LocaleController)
+Route::get('/lang/{locale}', LocaleController::class)->name('lang.switch');
 
 Route::get('/o-nas', fn() => view('about'))->name('about');
 
