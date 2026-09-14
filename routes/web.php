@@ -161,5 +161,6 @@ Route::prefix('admin')
         Route::get('/speakers', fn() => view('admin.speakers.index'))->name('admin.speakers.index');
         Route::get('/registrations', fn() => view('admin.registrations.index'))->name('admin.registrations.index');
         Route::get('/mailing', fn() => view('admin.mailing.index'))->name('admin.mailing.index');
+        Route::get('/newslettery', fn() => view('admin.newslettery.index'))->name('admin.newslettery.index');
         Route::get('/users', fn() => view('admin.users.index'))->name('admin.users.index');
     });
