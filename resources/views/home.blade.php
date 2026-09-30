@@ -47,7 +47,7 @@
             </div>
             <div>
                 <div class="mono text-green-400 text-3xl font-bold">∞</div>
-                <div class="text-gray-500 text-sm mono mt-1">Limo / Pivo</div>
+                <div class="text-gray-500 text-sm mono mt-1">Káva / čaj</div>
             </div>
         </div>
     </div>
