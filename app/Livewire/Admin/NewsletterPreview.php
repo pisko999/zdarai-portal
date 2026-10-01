@@ -9,6 +9,7 @@ use App\Mail\EventFollowUp;
 use App\Mail\EventNewsletter;
 use App\Mail\EventReminder;
 use App\Mail\FirstMeetupInfo;
+use App\Mail\PartnerEventInvite;
 use App\Mail\RegistrationApproved;
 use App\Mail\RegistrationConfirmed;
 use App\Mail\RegistrationWaitlisted;
@@ -51,6 +52,11 @@ final class NewsletterPreview extends Component
             'label' => 'Newsletter k akci',
             'group' => 'Newsletter',
             'note' => 'Pozvánka na akci pro odběratele newsletteru. Program se bere z přednášek vybrané akce.',
+        ],
+        'partner-event-ai-monday-zdar-1' => [
+            'label' => 'Pozvánka na spřátelenou akci — AI Monday Žďár #1',
+            'group' => 'Newsletter',
+            'note' => 'Akci pořádá AI Monday, ne ŽďárAI. Nezávisí na vybrané akci — data jsou v config/partner_events.php.',
         ],
         'event-follow-up-attended' => [
             'label' => 'Follow-up — účastníkům (attended)',
@@ -198,10 +204,11 @@ final class NewsletterPreview extends Component
         }
     }
 
-    /** Jediná šablona nezávislá na akci je uvítání přednášejícího. */
+    /** Šablony nezávislé na akci ŽďárAI — uvítání přednášejícího a pozvánky na spřátelené akce. */
     private function needsEvent(string $template): bool
     {
-        return $template !== 'speaker-welcome';
+        return $template !== 'speaker-welcome'
+            && ! str_starts_with($template, 'partner-event-');
     }
 
     /**
@@ -211,13 +218,20 @@ final class NewsletterPreview extends Component
      */
     private function makeMailable(string $template, ?Event $event, array $attachmentPaths): Mailable
     {
-        // speaker-welcome akci nepotřebuje, ostatní ano — ošetřeno v preview().
+        // speaker-welcome a partner-event-* akci nepotřebují, ostatní ano — ošetřeno v preview().
         if ($template === 'speaker-welcome') {
             return new SpeakerWelcome(
                 name: self::SAMPLE_NAME,
                 email: self::SAMPLE_EMAIL,
                 password: 'ukazkove-heslo',
                 loginUrl: route('login'),
+            );
+        }
+
+        if ($template === 'partner-event-ai-monday-zdar-1') {
+            return new PartnerEventInvite(
+                partnerEvent: (array) config('partner_events.ai-monday-zdar-1'),
+                unsubscribeUrl: route('newsletter.unsubscribe', self::SAMPLE_TOKEN),
             );
         }
 
