@@ -44,6 +44,7 @@ it('pozvánka na AI Monday se vyrenderuje se vším podstatným', function () {
         ->toContain('program od 18:00')
         ->toContain('Klára z ŽďárAI · AI agent')
         ->toContain('IT NeŠkola, 1. patro, Dolní 1, 591 01 Žďár nad Sázavou')
+        ->toContain('<body bgcolor="#09090b"')
         ->not->toContain('piva')
         ->not->toContain('jídla');
 

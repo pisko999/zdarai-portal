@@ -55,8 +55,11 @@
         .footer a { color: #52525b; text-decoration: underline; }
     </style>
 </head>
-<body>
-<div class="wrap">
+{{-- Gmail zahazuje styly na <body> → pozadí i barvu textu i inline + bgcolor na obalové tabulce. --}}
+<body bgcolor="#09090b" style="font-family: monospace; background: #09090b; color: #f4f4f5; margin: 0; padding: 0;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#09090b" style="background: #09090b;">
+<tr><td bgcolor="#09090b" style="background: #09090b;">
+<div class="wrap" style="max-width: 600px; margin: 0 auto; padding: 40px 20px; background: #09090b; color: #f4f4f5;">
 
     <p class="logo"><span>&gt;_</span> ŽďárAI</p>
     <p class="subtitle">AI události pro programátory a AI nadšence &middot; zdarai.cz</p>
@@ -138,5 +141,7 @@
     </div>
 
 </div>
+</td></tr>
+</table>
 </body>
 </html>
