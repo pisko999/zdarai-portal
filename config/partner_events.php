@@ -35,7 +35,7 @@ return [
                 'title' => 'Úvod',
             ],
             [
-                'time' => '18:00',
+                'time' => '18:10',
                 'title' => 'AI tvorba AI chatbota pro Kraj Vysočina',
                 'duration' => '30 min',
                 'speaker' => 'Martin Hejl',
@@ -43,14 +43,14 @@ return [
                 'description' => 'Student vyvíjí chatbota s RAG vyhledáváním pro Kraj Vysočina.',
             ],
             [
-                'time' => '18:45',
+                'time' => '18:50',
                 'title' => 'AI v každodenní práci: od textů k reálným procesům',
                 'duration' => '30 min',
                 'speaker' => 'Ondřej Matějka',
                 'speaker_role' => 'manažer marketingu, DEL a. s.',
             ],
             [
-                'time' => '20:00+',
+                'time' => '19:30+',
                 'title' => 'Diskuze a networking',
             ],
         ],
