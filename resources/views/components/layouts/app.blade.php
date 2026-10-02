@@ -36,9 +36,6 @@
     <meta name="twitter:description" content="{{ $description ?? 'Měsíční AI přednášky pro vývojáře ve Žďáru nad Sázavou.' }}">
     <meta name="twitter:image" content="{{ $ogImage ?? asset('og-default.png') }}">
 
-    <link rel="alternate" hreflang="cs" href="{{ url('/lang/cs') }}">
-    <link rel="alternate" hreflang="en" href="{{ url('/lang/en') }}">
-
     {{-- Structured data: Organization (site-wide). Event schema se přidává na detailu akce.
          Pozn.: '@context' nelze psát přímo — Blade by ho zkompiloval jako direktivu @context
          (Laravel 11+) a vložil PHP do výstupu (rozbije JSON-LD i spustí ModSecurity). Proto

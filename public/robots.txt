@@ -2,6 +2,7 @@ User-agent: *
 Disallow: /admin
 Disallow: /opt-out
 Disallow: /newsletter/odhlasit
+Disallow: /lang/
 Allow: /
 
 Sitemap: https://www.zdarai.cz/sitemap.xml
