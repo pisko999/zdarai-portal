@@ -20,6 +20,8 @@ return [
         'organizer' => 'AI Monday',
         'organizer_url' => 'https://www.aimonday.cz',
         'url' => 'https://www.aimonday.cz/events/ai-monday-zdar-n-s-1',
+        // Odkaz v CTA — se zdrojem, ať pořadatel vidí registrace od nás
+        'registration_url' => 'https://www.aimonday.cz/events/ai-monday-zdar-n-s-1?utm_source=zdarai',
         'date' => '2026-10-12',
         'date_label' => 'pondělí 12. října 2026',
         'date_short' => 'po 12. října',

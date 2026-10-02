@@ -114,9 +114,9 @@
 
     {{-- CTA --}}
     <div class="cta-wrap">
-        <a class="cta" href="{{ $e['url'] }}">Registrace u {{ $e['organizer'] }} &rarr;</a>
+        <a class="cta" href="{{ $e['registration_url'] ?? $e['url'] }}">Registrace u {{ $e['organizer'] }} &rarr;</a>
     </div>
-    <p class="cta-note">{{ $e['url'] }}</p>
+    <p class="cta-note">{{ $e['registration_url'] ?? $e['url'] }}</p>
     <div class="free-row">
         Vstup <strong>{{ $e['price_label'] }}</strong> &middot; kapacita je omezená, s registrací neotálejte
     </div>

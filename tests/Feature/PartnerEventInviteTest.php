@@ -38,7 +38,7 @@ it('pozvánka na AI Monday se vyrenderuje se vším podstatným', function () {
         ->toContain('Martin Hejl')
         ->toContain('Ondřej Matějka')
         ->toContain('AI tvorba AI chatbota pro Kraj Vysočina')
-        ->toContain('https://www.aimonday.cz/events/ai-monday-zdar-n-s-1')
+        ->toContain('href="https://www.aimonday.cz/events/ai-monday-zdar-n-s-1?utm_source=zdarai"')
         ->toContain('https://www.zdarai.cz/newsletter/odhlasit/test-token')
         ->toContain('Odhlásit odběr')
         ->toContain('program od 18:00')
