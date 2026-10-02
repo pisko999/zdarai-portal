@@ -83,7 +83,7 @@
         </div>
         <div class="meta-row">
             <span class="meta-icon">📍</span>
-            <span class="meta-val">Žďár nad Sázavou &mdash; místo {{ $e['venue'] }}</span>
+            <span class="meta-val">{{ $e['venue'] }}</span>
         </div>
         <div class="meta-row">
             <span class="meta-icon">👥</span>

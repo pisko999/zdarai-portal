@@ -24,13 +24,13 @@ return [
         'date_label' => 'pondělí 12. října 2026',
         'date_short' => 'po 12. října',
         'time_label' => 'program od 18:00',
-        'venue' => 'upřesní pořadatel',
+        'venue' => 'IT NeŠkola, 1. patro, Dolní 1, 591 01 Žďár nad Sázavou',
         'capacity' => 30,
         'price_label' => 'zdarma',
         'program' => [
             [
                 'time' => '18:00',
-                'title' => 'Úvod, objednání piva a jídla',
+                'title' => 'Úvod',
             ],
             [
                 'time' => '18:00',

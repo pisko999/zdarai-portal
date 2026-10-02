@@ -24,7 +24,7 @@ it('konfigurace AI Monday Žďár #1 obsahuje ověřená data', function () {
         ->and($e['url'])->toBe('https://www.aimonday.cz/events/ai-monday-zdar-n-s-1')
         ->and($e['date'])->toBe('2026-10-12')
         ->and($e['capacity'])->toBe(30)
-        ->and($e['venue'])->toBe('upřesní pořadatel');
+        ->and($e['venue'])->toBe('IT NeŠkola, 1. patro, Dolní 1, 591 01 Žďár nad Sázavou');
 });
 
 it('pozvánka na AI Monday se vyrenderuje se vším podstatným', function () {
@@ -42,7 +42,10 @@ it('pozvánka na AI Monday se vyrenderuje se vším podstatným', function () {
         ->toContain('https://www.zdarai.cz/newsletter/odhlasit/test-token')
         ->toContain('Odhlásit odběr')
         ->toContain('program od 18:00')
-        ->toContain('Klára z ŽďárAI · AI agent');
+        ->toContain('Klára z ŽďárAI · AI agent')
+        ->toContain('IT NeŠkola, 1. patro, Dolní 1, 591 01 Žďár nad Sázavou')
+        ->not->toContain('piva')
+        ->not->toContain('jídla');
 
     $mail->assertHasReplyTo('klara@zdarai.cz');
     expect($mail->envelope()->subject)->toContain('AI Monday Žďár n. S. #1');
