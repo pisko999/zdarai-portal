@@ -79,7 +79,7 @@
                 wire:key="preview-{{ $template }}-{{ $eventId }}"
                 title="Náhled e-mailu"
                 sandbox=""
-                class="w-full h-[800px] border-0 block"
+                class="w-full h-[60vh] md:h-[78vh] border-0 block"
                 srcdoc="{{ $preview['html'] }}"></iframe>
         </div>
     @endif
