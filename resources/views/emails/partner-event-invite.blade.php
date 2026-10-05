@@ -131,10 +131,14 @@
 
     {{-- FOOTER --}}
     <div class="footer">
-        Tuto zprávu jste obdrželi jako odběratel novinek ŽďárAI.<br>
+        @if(($audience ?? 'subscriber') === 'registrant')
+            Tuto zprávu jste obdrželi jako účastník některé z akcí ŽďárAI.<br>
+        @else
+            Tuto zprávu jste obdrželi jako odběratel novinek ŽďárAI.<br>
+        @endif
         Akci pořádá {{ $e['organizer'] }}; ŽďárAI ji pouze doporučuje.<br>
         @if($unsubscribeUrl)
-            <a href="{{ $unsubscribeUrl }}">Odhlásit odběr</a> &middot;
+            <a href="{{ $unsubscribeUrl }}">{{ ($audience ?? 'subscriber') === 'registrant' ? 'Nechci dostávat další e-maily' : 'Odhlásit odběr' }}</a> &middot;
         @endif
         <a href="{{ url('/') }}">zdarai.cz</a> &middot; klara@zdarai.cz<br>
         IT NeŠkola &middot; Dolní 1, Žďár nad Sázavou

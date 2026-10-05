@@ -20,10 +20,12 @@ class PartnerEventInvite extends Mailable
 
     /**
      * @param  array<string, mixed>  $partnerEvent
+     * @param  string  $audience  'subscriber' (odběratel newsletteru) | 'registrant' (účastník akce)
      */
     public function __construct(
         public readonly array $partnerEvent,
         public readonly string $unsubscribeUrl = '',
+        public readonly string $audience = 'subscriber',
     ) {}
 
     public function envelope(): Envelope

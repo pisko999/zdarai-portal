@@ -78,3 +78,29 @@ it('admin náhled zobrazí pozvánku na AI Monday i bez akce v DB a nic neodešl
     Mail::assertNothingSent();
     Mail::assertNothingQueued();
 });
+
+it('patička pro účastníky (registrant) má vlastní text a odkaz (TF #3331)', function () {
+    Mail::fake();
+
+    $html = (new PartnerEventInvite(
+        partnerEvent: (array) config('partner_events.ai-monday-zdar-1'),
+        unsubscribeUrl: 'https://www.zdarai.cz/opt-out/reg-token',
+        audience: 'registrant',
+    ))->render();
+
+    expect($html)
+        ->toContain('Tuto zprávu jste obdrželi jako účastník některé z akcí ŽďárAI.')
+        ->toContain('Nechci dostávat další e-maily')
+        ->toContain('https://www.zdarai.cz/opt-out/reg-token')
+        ->not->toContain('odběratel novinek')
+        ->not->toContain('Odhlásit odběr');
+});
+
+it('výchozí patička zůstává pro odběratele (TF #3331)', function () {
+    Mail::fake();
+
+    expect(aiMondayInvite()->render())
+        ->toContain('Tuto zprávu jste obdrželi jako odběratel novinek ŽďárAI.')
+        ->toContain('Odhlásit odběr')
+        ->not->toContain('Nechci dostávat další e-maily');
+});

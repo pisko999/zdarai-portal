@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Mail\PartnerEventInvite;
 use App\Models\NewsletterSubscriber;
+use App\Models\Registration;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -14,15 +15,20 @@ use Throwable;
 
 /**
  * Rozešle pozvánku na akci spřátelené komunity (config/partner_events.php)
- * aktivním odběratelům newsletteru se souhlasem.
+ * aktivním odběratelům newsletteru se souhlasem (--segment=subscribers),
+ * nebo účastníkům akcí ŽďárAI, kteří nejsou v newsletteru (--segment=registrants).
  *
  * Ochrana proti dvojímu odeslání: atomický claim v cache (redis) per
- * klíč akce + sha1(e-mail), platný 90 dní.
+ * klíč akce + sha1(e-mail), platný 90 dní. Klíč je společný pro oba segmenty,
+ * takže nikdo nedostane pozvánku dvakrát.
  */
 class SendPartnerInvite extends Command
 {
+    private const SEGMENTS = ['subscribers', 'registrants'];
+
     protected $signature = 'partner-invite:send
         {key : Klíč akce v config/partner_events.php}
+        {--segment=subscribers : Segment příjemců: subscribers | registrants}
         {--test= : Poslat jen jeden testovací e-mail na zadanou adresu}
         {--dry-run : Jen vypsat příjemce, nic neodesílat ani neclaimovat}
         {--exclude= : Čárkou oddělené e-maily, které vynechat}
@@ -41,19 +47,32 @@ class SendPartnerInvite extends Command
             return self::FAILURE;
         }
 
+        $segment = (string) $this->option('segment');
+
+        if (! in_array($segment, self::SEGMENTS, true)) {
+            $this->error("Neplatný segment „{$segment}“ (povoleno: " . implode(', ', self::SEGMENTS) . ').');
+
+            return self::FAILURE;
+        }
+
+        $audience = $segment === 'registrants' ? 'registrant' : 'subscriber';
+
         $this->info("Akce: {$partnerEvent['title']} ({$partnerEvent['date_label']})");
+        $this->info("Segment: {$segment}");
 
         if ($testAddress = $this->option('test')) {
-            Mail::to((string) $testAddress)->queue(new PartnerEventInvite($partnerEvent, url('/')));
+            Mail::to((string) $testAddress)->queue(new PartnerEventInvite($partnerEvent, url('/'), $audience));
             $this->info("Testovací e-mail zařazen na: {$testAddress}");
 
             return self::SUCCESS;
         }
 
-        $recipients = $this->recipients();
+        $recipients = $this->excludeOption(
+            $segment === 'registrants' ? $this->registrants() : $this->subscribers()
+        );
 
         $this->newLine();
-        $this->comment(sprintf('Příjemci — %d', $recipients->count()));
+        $this->comment(sprintf('Příjemci (segment %s) — %d', $segment, $recipients->count()));
         foreach ($recipients as $email => $recipient) {
             $name = $recipient['name'] !== '' ? " ({$recipient['name']})" : '';
             $this->line("  → {$email}{$name}");
@@ -61,7 +80,7 @@ class SendPartnerInvite extends Command
         $this->newLine();
 
         if ($this->option('dry-run')) {
-            $this->warn("DRY RUN — nic neodesláno. Příjemců by bylo: {$recipients->count()}.");
+            $this->warn("DRY RUN — nic neodesláno. Příjemců by bylo: {$recipients->count()} (segment {$segment}).");
 
             return self::SUCCESS;
         }
@@ -79,7 +98,7 @@ class SendPartnerInvite extends Command
         }
 
         if (! $this->option('force')
-            && ! $this->confirm("Opravdu rozeslat pozvánku {$recipients->count()} příjemcům?", false)
+            && ! $this->confirm("Opravdu rozeslat pozvánku {$recipients->count()} příjemcům (segment {$segment})?", false)
         ) {
             $this->warn('Zrušeno — nic neodesláno.');
 
@@ -102,7 +121,7 @@ class SendPartnerInvite extends Command
             }
 
             try {
-                Mail::to($email)->queue(new PartnerEventInvite($partnerEvent, $recipient['unsubscribe']));
+                Mail::to($email)->queue(new PartnerEventInvite($partnerEvent, $recipient['unsubscribe'], $audience));
                 $queued++;
             } catch (Throwable $e) {
                 // Zařazení selhalo → uvolni claim, ať to příští běh zkusí znovu.
@@ -122,11 +141,11 @@ class SendPartnerInvite extends Command
 
     /**
      * Aktivní odběratelé se souhlasem, e-mail normalizovaný a unikátní
-     * (první záznam podle id vyhrává), mínus --exclude.
+     * (první záznam podle id vyhrává).
      *
      * @return Collection<string, array{name: string, unsubscribe: string}>
      */
-    private function recipients(): Collection
+    private function subscribers(): Collection
     {
         $out = collect();
 
@@ -148,6 +167,65 @@ class SendPartnerInvite extends Command
             ]);
         }
 
+        return $out;
+    }
+
+    /**
+     * Účastníci akcí (registrace mimo cancelled/waitlist), kteří nejsou
+     * v newsletter_subscribers (ani jako odhlášení) a nemají email_opt_out
+     * na žádné své registraci. Jméno a token z nejnovější registrace.
+     *
+     * @return Collection<string, array{name: string, unsubscribe: string}>
+     */
+    private function registrants(): Collection
+    {
+        $normalize = static fn (?string $email): string => mb_strtolower(trim((string) $email));
+
+        $subscriberEmails = NewsletterSubscriber::query()
+            ->pluck('email')
+            ->map($normalize)
+            ->flip();
+
+        $optedOut = Registration::query()
+            ->where('email_opt_out', true)
+            ->pluck('email')
+            ->map($normalize)
+            ->flip();
+
+        $out = collect();
+
+        // Sestupně podle id → první výskyt e-mailu = nejnovější registrace.
+        $registrations = Registration::query()
+            ->whereNotIn('payment_status', ['cancelled', 'waitlist'])
+            ->orderByDesc('id')
+            ->get(['id', 'name', 'email', 'token']);
+
+        foreach ($registrations as $registration) {
+            $email = $normalize($registration->email);
+
+            if ($email === ''
+                || $out->has($email)
+                || $subscriberEmails->has($email)
+                || $optedOut->has($email)
+            ) {
+                continue;
+            }
+
+            $out->put($email, [
+                'name' => (string) $registration->name,
+                'unsubscribe' => route('opt-out', $registration->token),
+            ]);
+        }
+
+        return $out->sortKeys();
+    }
+
+    /**
+     * @param  Collection<string, array{name: string, unsubscribe: string}>  $out
+     * @return Collection<string, array{name: string, unsubscribe: string}>
+     */
+    private function excludeOption(Collection $out): Collection
+    {
         if ($raw = $this->option('exclude')) {
             $excluded = collect(explode(',', (string) $raw))
                 ->map(static fn (string $e): string => mb_strtolower(trim($e)))
