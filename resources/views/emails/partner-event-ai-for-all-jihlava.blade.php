@@ -134,7 +134,10 @@
     @foreach($e['guests'] ?? [] as $guest)
     <div class="guest">
         <div class="guest-name">{{ $guest['name'] }}</div>
-        <p class="guest-role">{{ $guest['role'] }}</p>
+        {{-- Doména v roli je odkaz jen s 'link' v configu; jinak ZWNJ před tečkou, ať ji Gmail sám neprolinkuje. --}}
+        @php($noAutolink = static fn (string $s): string => preg_replace('/\.(?=\p{L})/u', '&zwnj;.', e($s)))
+        @php($link = $guest['link'] ?? null)
+        <p class="guest-role">@if($link && str_contains($guest['role'], $link['text'])){!! $noAutolink(Str::before($guest['role'], $link['text'])) !!}<a href="{{ $link['url'] }}" style="color: #4ade80; text-decoration: none;">{{ $link['text'] }}</a>{!! $noAutolink(Str::after($guest['role'], $link['text'])) !!}@else{!! $noAutolink($guest['role']) !!}@endif</p>
     </div>
     @endforeach
 

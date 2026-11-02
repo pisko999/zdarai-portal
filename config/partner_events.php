@@ -74,10 +74,11 @@ return [
         'price_label' => 'zdarma, registrace není nutná',
         'guests' => [
             ['name' => 'Milan Lempera', 'role' => 'CTO Commity.cz'],
-            ['name' => 'Honza Zbirovský', 'role' => 'spoluzakladatel inqubo.cz'],
+            ['name' => 'Honza Zbirovský', 'role' => 'spoluzakladatel inqubo.cz', 'link' => ['text' => 'inqubo.cz', 'url' => 'https://inqubo.cz']],
             ['name' => 'Jaroslav Krotký', 'role' => 'IT Kraje Vysočina'],
             ['name' => 'Pavel Vitešník', 'role' => 'všestranný vývojář, grafik a video producent'],
-            ['name' => 'Petr Mandík', 'role' => 'spoluzakladatel Uměláinteligence.cz'],
+            // Název webu s diakritikou, doména bez (Petr, 2. 11.)
+            ['name' => 'Petr Mandík', 'role' => 'spoluzakladatel Uměláinteligence.cz', 'link' => ['text' => 'Uměláinteligence.cz', 'url' => 'https://www.umelainteligence.cz']],
         ],
         // Vlastní šablona a předmět (PartnerEventInvite je bere z configu, jinak výchozí).
         'view' => 'emails.partner-event-ai-for-all-jihlava',

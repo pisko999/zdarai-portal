@@ -120,7 +120,7 @@ it('společné tělo obsahuje hero, hosty, průběh a CTA', function () {
         ->toContain('5 hostů, 5 pohledů')
         ->toContain('Milan Lempera')
         ->toContain('Petr Mandík')
-        ->toContain('spoluzakladatel Uměláinteligence.cz')
+        ->toContain('Petr Mandík')
         ->toContain('Jak to bude probíhat')
         ->toContain('Žádná přednáška z pódia')
         ->toContain('href="https://dny.ai/program/ai-for-all"')
@@ -419,4 +419,15 @@ it('admin náhled list ukazuje opt-in tlačítko s ukázkovou adresou', function
         ->and($html)->toContain('ukazka%40example.com');
 
     expect(NewsletterSubscriber::count())->toBe(0);
+});
+
+it('hosté: doména je odkaz jen s link v configu, jinak se brání autolinku', function () {
+    $html = afaInvite()->render();
+
+    expect($html)
+        ->toContain('CTO Commity&zwnj;.cz')
+        ->not->toContain('href="https://commity.cz')
+        ->toContain('<a href="https://www.umelainteligence.cz"')
+        ->toContain('>Uměláinteligence.cz</a>')
+        ->toContain('<a href="https://inqubo.cz"');
 });
