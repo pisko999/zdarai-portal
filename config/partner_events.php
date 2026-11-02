@@ -84,6 +84,11 @@ return [
         'subject' => '🎂 AI Monday Jihlava slaví rok — čt 5. 11. na AI for All (Dny AI)',
         // Naše akce zmíněná v boxu na konci (jen pokud je published).
         'promo_event_slug' => 'zdarai-4',
+        // Stránka ŽďárAI #4 v programu festivalu (odkaz v boxu „A týden nato ve Žďáru“).
+        'promo_event_dnyai_url' => 'https://dny.ai/program/zdarai-4-lokalni-ai-asistent-observabilita-ragu',
+        // Zdroj pro dobrovolné přihlášení k newsletteru z mailu pro segment list
+        // (NewsletterSubscriber.source; route newsletter.optin).
+        'optin_source' => 'ai-monday-1',
     ],
 
 ];

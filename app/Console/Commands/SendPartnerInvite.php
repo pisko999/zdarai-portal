@@ -21,9 +21,10 @@ use Throwable;
  *
  * Segment list: CSV s hlavičkou Name,Email,Company,Role,Status,Registration Date.
  * Company může obsahovat neuvozovkovanou čárku → e-mail = sloupec 1, jméno =
- * sloupec 0, status = předposlední sloupec. Vynechá status cancelled a neplatné
- * e-maily (varování). Mail jde s audience 'list' bez odhlašovacího odkazu;
- * obsah CSV se nikam neukládá.
+ * sloupec 0, status = předposlední sloupec. Vynechá status cancelled (pokud
+ * není --include-cancelled) a neplatné e-maily (varování). Mail jde s audience
+ * 'list' bez odhlašovacího odkazu, s podepsaným opt-in odkazem do newsletteru
+ * (per příjemce); obsah CSV se nikam neukládá.
  *
  * Doporučené pořadí rozesílky: list → subscribers → registrants.
  *
@@ -42,6 +43,7 @@ class SendPartnerInvite extends Command
         {--test= : Poslat jen jeden testovací e-mail na zadanou adresu}
         {--dry-run : Jen vypsat příjemce, nic neodesílat ani neclaimovat}
         {--exclude= : Čárkou oddělené e-maily, které vynechat}
+        {--include-cancelled : Segment list: zahrnout i řádky se statusem cancelled}
         {--force : Neptat se na potvrzení (neinteraktivní běh)}';
 
     protected $description = 'Rozešle pozvánku na akci spřátelené komunity (segmenty list | subscribers | registrants; doporučené pořadí list → subscribers → registrants).';
@@ -76,11 +78,22 @@ class SendPartnerInvite extends Command
 
         if ($testAddress = $this->option('test')) {
             Mail::to((string) $testAddress)->queue(
-                new PartnerEventInvite($partnerEvent, $audience === 'list' ? '' : url('/'), $audience)
+                new PartnerEventInvite(
+                    $partnerEvent,
+                    $audience === 'list' ? '' : url('/'),
+                    $audience,
+                    mb_strtolower(trim((string) $testAddress)),
+                )
             );
             $this->info("Testovací e-mail zařazen na: {$testAddress}");
 
             return self::SUCCESS;
+        }
+
+        if ($this->option('include-cancelled') && $segment !== 'list') {
+            $this->error('--include-cancelled platí jen pro --segment=list.');
+
+            return self::FAILURE;
         }
 
         if ($segment === 'list') {
@@ -147,7 +160,7 @@ class SendPartnerInvite extends Command
             }
 
             try {
-                Mail::to($email)->queue(new PartnerEventInvite($partnerEvent, $recipient['unsubscribe'], $audience));
+                Mail::to($email)->queue(new PartnerEventInvite($partnerEvent, $recipient['unsubscribe'], $audience, $email));
                 $queued++;
             } catch (Throwable $e) {
                 // Zařazení selhalo → uvolni claim, ať to příští běh zkusí znovu.
@@ -274,6 +287,7 @@ class SendPartnerInvite extends Command
             return null;
         }
 
+        $includeCancelled = (bool) $this->option('include-cancelled');
         $out = collect();
         $warnings = 0;
         $cancelled = 0;
@@ -295,7 +309,9 @@ class SendPartnerInvite extends Command
                 if ($status === 'cancelled') {
                     $cancelled++;
 
-                    continue;
+                    if (! $includeCancelled) {
+                        continue;
+                    }
                 }
 
                 if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
@@ -315,7 +331,9 @@ class SendPartnerInvite extends Command
             fclose($handle);
         }
 
-        $this->line("Seznam: {$out->count()} platných, vynecháno cancelled: {$cancelled}, varování: {$warnings}.");
+        $this->line($includeCancelled
+            ? "Seznam: {$out->count()} platných, včetně cancelled ({$cancelled} řádků), varování: {$warnings}."
+            : "Seznam: {$out->count()} platných, vynecháno cancelled: {$cancelled}, varování: {$warnings}.");
 
         return $out->sortKeys();
     }

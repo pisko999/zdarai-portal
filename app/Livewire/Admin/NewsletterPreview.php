@@ -61,7 +61,7 @@ final class NewsletterPreview extends Component
         'partner-event-ai-for-all-jihlava-list' => [
             'label' => 'Pozvánka AI for All Jihlava — účastníci AI Monday Žďár #1 (list)',
             'group' => 'Newsletter',
-            'note' => 'Akci pořádá AI Monday Jihlava, ne ŽďárAI. Nezávisí na vybrané akci — data jsou v config/partner_events.php, box ŽďárAI se bere z akce promo_event_slug (jen published). Jednorázově, bez odhlašovacího odkazu.',
+            'note' => 'Akci pořádá AI Monday Jihlava, ne ŽďárAI. Nezávisí na vybrané akci — data jsou v config/partner_events.php, box ŽďárAI se bere z akce promo_event_slug (jen published). Jednorázově, bez odhlašovacího odkazu; tlačítko „Chci dostávat novinky ŽďárAI“ v náhledu míří na ukázkovou adresu.',
         ],
         'partner-event-ai-for-all-jihlava-subscriber' => [
             'label' => 'Pozvánka AI for All Jihlava — odběratelé newsletteru',
@@ -261,6 +261,7 @@ final class NewsletterPreview extends Component
                     default => route('newsletter.unsubscribe', self::SAMPLE_TOKEN),
                 },
                 audience: $audience,
+                recipientEmail: $audience === 'list' ? self::SAMPLE_EMAIL : '',
             );
         }
 

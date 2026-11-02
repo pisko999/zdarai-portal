@@ -23,12 +23,13 @@ beforeEach(function () {
     Cache::flush();
 });
 
-function afaInvite(string $audience = 'subscriber', string $unsubscribeUrl = 'https://www.zdarai.cz/newsletter/odhlasit/test-token'): PartnerEventInvite
+function afaInvite(string $audience = 'subscriber', string $unsubscribeUrl = 'https://www.zdarai.cz/newsletter/odhlasit/test-token', string $recipientEmail = ''): PartnerEventInvite
 {
     return new PartnerEventInvite(
         partnerEvent: (array) config('partner_events.' . AFA_KEY),
         unsubscribeUrl: $unsubscribeUrl,
         audience: $audience,
+        recipientEmail: $recipientEmail,
     );
 }
 
@@ -137,7 +138,7 @@ it('audience list: vlastní úvod a patička bez odhlašovacího odkazu', functi
 
     expect($html)
         ->toContain('protože ses přihlásil/a na první AI Monday ve Žďáru nad Sázavou')
-        ->toContain('Do newsletteru ŽďárAI tě nepřidáváme')
+        ->toContain('Do newsletteru ŽďárAI tě bez tvého souhlasu nepřidáváme')
         ->toContain('Stačí odpovědět.')
         ->not->toContain('Odhlásit odběr')
         ->not->toContain('Nechci dostávat další e-maily')
@@ -153,7 +154,7 @@ it('audience subscriber: úvod a odhlášení z newsletteru', function () {
         ->toContain('Tuto zprávu jste obdrželi jako odběratel novinek ŽďárAI.')
         ->toContain('Odhlásit odběr')
         ->toContain('https://www.zdarai.cz/newsletter/odhlasit/test-token')
-        ->not->toContain('Do newsletteru ŽďárAI tě nepřidáváme');
+        ->not->toContain('Do newsletteru ŽďárAI tě bez tvého souhlasu nepřidáváme');
 });
 
 it('audience registrant: úvod a opt-out odkaz', function () {
@@ -194,7 +195,7 @@ it('admin náhled zobrazí všechny tři varianty a nic neodešle', function () 
     $admin = User::factory()->create(['is_admin' => true]);
 
     foreach ([
-        'list' => 'Do newsletteru ŽďárAI tě nepřidáváme',
+        'list' => 'Chci dostávat novinky ŽďárAI',
         'subscriber' => 'Odhlásit odběr',
         'registrant' => 'Nechci dostávat další e-maily',
     ] as $audience => $needle) {
@@ -306,4 +307,116 @@ it('claim je sdílený: kdo dostal mail ze segmentu list, v subscribers a regist
     Mail::assertQueuedCount(3);
 
     @unlink($path);
+});
+
+
+// ── Rozšíření: --include-cancelled, odkaz na Dny AI, opt-in odkaz ───────────
+
+it('segment list: --include-cancelled zahrne i zrušené registrace', function () {
+    $path = afaSampleCsv();
+
+    $this->artisan('partner-invite:send', [
+        'key' => AFA_KEY, '--segment' => 'list', '--list' => $path, '--include-cancelled' => true, '--dry-run' => true,
+    ])
+        ->expectsOutputToContain('cyril@example.com (Cyril Zrušený)')
+        ->expectsOutputToContain('včetně cancelled (1 řádků)')
+        ->expectsOutputToContain('Příjemců by bylo: 3 (segment list)')
+        ->assertSuccessful();
+
+    $this->artisan('partner-invite:send', [
+        'key' => AFA_KEY, '--segment' => 'list', '--list' => $path, '--include-cancelled' => true, '--force' => true,
+    ])->expectsOutputToContain('Zařazeno do fronty: 3')->assertSuccessful();
+
+    Mail::assertQueued(PartnerEventInvite::class, fn (PartnerEventInvite $m) => $m->hasTo('cyril@example.com')
+        && $m->audience === 'list' && $m->recipientEmail === 'cyril@example.com');
+
+    @unlink($path);
+});
+
+it('--include-cancelled mimo segment list selže', function () {
+    $this->artisan('partner-invite:send', [
+        'key' => AFA_KEY, '--segment' => 'subscribers', '--include-cancelled' => true, '--force' => true,
+    ])->expectsOutputToContain('jen pro --segment=list')->assertFailed();
+
+    Mail::assertNothingQueued();
+});
+
+it('segment list: ostrý běh i --test předávají mailable e-mail příjemce', function () {
+    $path = afaSampleCsv();
+
+    $this->artisan('partner-invite:send', [
+        'key' => AFA_KEY, '--segment' => 'list', '--list' => $path, '--force' => true,
+    ])->assertSuccessful();
+
+    Mail::assertQueued(PartnerEventInvite::class, fn (PartnerEventInvite $m) => $m->hasTo('bob@example.com')
+        && $m->recipientEmail === 'bob@example.com');
+
+    $this->artisan('partner-invite:send', [
+        'key' => AFA_KEY, '--segment' => 'list', '--list' => $path, '--test' => 'Petr@Example.com',
+    ])->assertSuccessful();
+
+    Mail::assertQueued(PartnerEventInvite::class, fn (PartnerEventInvite $m) => $m->hasTo('Petr@Example.com')
+        && $m->recipientEmail === 'petr@example.com');
+
+    @unlink($path);
+});
+
+it('mail pro list obsahuje podepsaný opt-in odkaz pro daného příjemce', function () {
+    $html = afaInvite('list', '', 'anna@example.com')->render();
+
+    expect($html)
+        ->toContain('Chci dostávat novinky ŽďárAI')
+        ->toContain('zhruba jednou měsíčně')
+        ->toContain('Nechceš podobné tipy? Stačí odpovědět.');
+
+    preg_match('~href="([^"]*/newsletter/prihlasit\?[^"]+)"~', $html, $m);
+    expect($m)->toHaveKey(1);
+
+    $url = html_entity_decode($m[1]);
+    parse_str((string) parse_url($url, PHP_URL_QUERY), $query);
+
+    expect($query['email'])->toBe('anna@example.com')
+        ->and($query['source'])->toBe('ai-monday-1')
+        ->and($query)->toHaveKeys(['expires', 'signature'])
+        ->and((int) $query['expires'])->toBeGreaterThan(now()->addDays(59)->timestamp)
+        ->and((int) $query['expires'])->toBeLessThanOrEqual(now()->addDays(60)->timestamp);
+
+    $this->get($url)->assertOk()->assertSee('anna@example.com');
+});
+
+it('mail pro list bez e-mailu příjemce a mail pro subscriber/registrant opt-in odkaz nemají', function () {
+    expect(afaInvite('list')->render())->not->toContain('/newsletter/prihlasit')
+        ->and(afaInvite('subscriber', 'https://www.zdarai.cz/newsletter/odhlasit/t', 'anna@example.com')->render())
+        ->not->toContain('/newsletter/prihlasit')->not->toContain('Chci dostávat novinky ŽďárAI')
+        ->and(afaInvite('registrant', 'https://www.zdarai.cz/opt-out/t', 'anna@example.com')->render())
+        ->not->toContain('/newsletter/prihlasit')->not->toContain('Chci dostávat novinky ŽďárAI');
+});
+
+it('box ŽďárAI odkazuje na stránku akce v programu Dny AI', function () {
+    afaPromoEvent('published');
+
+    expect(afaInvite()->render())
+        ->toContain('href="https://dny.ai/program/zdarai-4-lokalni-ai-asistent-observabilita-ragu"')
+        ->toContain('součástí festivalu Dny AI</a>');
+
+    $config = (array) config('partner_events.' . AFA_KEY);
+    unset($config['promo_event_dnyai_url']);
+    $html = (new PartnerEventInvite($config))->render();
+
+    expect($html)->toContain('součástí festivalu Dny AI.')
+        ->not->toContain('zdarai-4-lokalni-ai-asistent');
+});
+
+it('admin náhled list ukazuje opt-in tlačítko s ukázkovou adresou', function () {
+    $admin = User::factory()->create(['is_admin' => true]);
+
+    $html = Livewire::actingAs($admin)
+        ->test(NewsletterPreview::class)
+        ->set('template', 'partner-event-ai-for-all-jihlava-list')
+        ->html();
+
+    expect($html)->toContain('Chci dostávat novinky ŽďárAI')
+        ->and($html)->toContain('ukazka%40example.com');
+
+    expect(NewsletterSubscriber::count())->toBe(0);
 });

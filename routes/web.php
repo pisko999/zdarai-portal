@@ -32,6 +32,13 @@ Route::get('/newsletter/odhlasit/{token}', function (string $token) {
     return view('newsletter.unsubscribed');
 })->middleware('throttle:20,1')->name('newsletter.unsubscribe');
 
+// Newsletter — dobrovolné přihlášení z podepsaného odkazu v e-mailu (TF #4151).
+// GET jen potvrzovací stránka (linkové skenery GET proklikávají samy), zápis až POST.
+Route::get('/newsletter/prihlasit', [\App\Http\Controllers\NewsletterOptInController::class, 'show'])
+    ->middleware(['throttle:20,1', 'signed'])->name('newsletter.optin');
+Route::post('/newsletter/prihlasit', [\App\Http\Controllers\NewsletterOptInController::class, 'store'])
+    ->middleware(['throttle:10,1', 'signed'])->name('newsletter.optin.store');
+
 // Tracking pixel — sledování otevření informačního e-mailu
 Route::get('/e/o/{token}.png', function (string $token, \Illuminate\Http\Request $request) {
     $registration = \App\Models\Registration::where('token', $token)->first();

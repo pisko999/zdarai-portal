@@ -55,6 +55,13 @@
         .promo-talk { font-size: 13px; color: #d4d4d8; line-height: 1.5; margin: 0 0 8px; }
         .promo-talk strong { color: #4ade80; }
         .promo-cta { display: inline-block; background: #4ade80; color: #09090b; font-weight: bold; font-size: 13px; text-decoration: none; padding: 10px 24px; border-radius: 6px; margin-top: 8px; }
+        .promo-text a { color: #4ade80; text-decoration: underline; }
+
+        /* opt-in do newsletteru (jen audience list) — sekundární vůči hlavnímu CTA */
+        .optin { background: #18181b; border: 1px dashed #4ade80; border-radius: 10px; padding: 22px 24px 20px; margin: 0 0 32px; text-align: center; }
+        .optin-title { font-size: 15px; font-weight: bold; color: #f4f4f5; margin: 0 0 8px; }
+        .optin-text { font-size: 13px; color: #d4d4d8; line-height: 1.7; margin: 0 0 16px; }
+        .optin-cta { display: inline-block; background: transparent; color: #4ade80; border: 1px solid #4ade80; font-weight: bold; font-size: 13px; text-decoration: none; padding: 10px 24px; border-radius: 6px; }
 
         /* footer */
         .footer { border-top: 1px solid #1c1c1f; padding-top: 24px; font-size: 11px; color: #3f3f46; line-height: 1.8; text-align: center; }
@@ -169,8 +176,9 @@
         <p class="promo-label">A týden nato ve Žďáru</p>
         <div class="promo-title">{{ $promoEvent->title }}</div>
         <p class="promo-text">
-            Ve Žďáru se v listopadu potkáme o týden později na ŽďárAI #4 &ndash; i to je letos součástí
-            festivalu Dny AI. Vstup zdarma, jen se prosím zaregistruj, ať víme, kolik nás bude.
+            Ve Žďáru se v listopadu potkáme o týden později na ŽďárAI #4 &ndash; i to je letos
+            @if(! empty($e['promo_event_dnyai_url']))<a href="{{ $e['promo_event_dnyai_url'] }}" style="color:#4ade80;">součástí festivalu Dny AI</a>.@else součástí festivalu Dny AI.@endif
+            Vstup zdarma, jen se prosím zaregistruj, ať víme, kolik nás bude.
         </p>
         <p class="promo-text" style="margin-bottom: 10px;">
             📅 <strong style="color:#f4f4f5;">{{ $promoEvent->date->locale('cs')->translatedFormat('l j. F Y \v H:i') }}</strong><br>
@@ -185,12 +193,23 @@
     </div>
     @endif
 
+    {{-- OPT-IN do newsletteru — jen audience list (bez souhlasu je nepřidáváme) --}}
+    @if($aud === 'list' && ! empty($optinUrl))
+    <div class="optin" style="background: #18181b; border: 1px dashed #4ade80;">
+        <div class="optin-title">Chceš vědět o dalších akcích ve Žďáru?</div>
+        <p class="optin-text">
+            Pozvánky na ŽďárAI (zhruba jednou měsíčně) ti rádi pošleme &ndash; jen když o ně stojíš.
+        </p>
+        <a class="optin-cta" href="{{ $optinUrl }}" style="color: #4ade80; border: 1px solid #4ade80;">Chci dostávat novinky ŽďárAI &rarr;</a>
+    </div>
+    @endif
+
     {{-- FOOTER --}}
     <div class="footer">
         <span style="color:#71717a;">Klára z ŽďárAI · AI agent 🤖</span><br>
         @if($aud === 'list')
             Tenhle e-mail ti posíláme jednorázově ve spolupráci s pořadateli AI Monday, protože ses
-            registroval/a na AI Monday Žďár n. S. #1. Do newsletteru ŽďárAI tě nepřidáváme.
+            registroval/a na AI Monday Žďár n. S. #1. Do newsletteru ŽďárAI tě bez tvého souhlasu nepřidáváme.
             Nechceš podobné tipy? Stačí odpovědět.<br>
         @elseif($aud === 'registrant')
             Tuto zprávu jste obdrželi jako účastník některé z akcí ŽďárAI.<br>
