@@ -73,7 +73,7 @@ return [
         'venue' => 'Historická aula Vysoké školy polytechnické Jihlava, Tolstého 1556',
         'price_label' => 'zdarma, registrace není nutná',
         'guests' => [
-            ['name' => 'Milan Lempera', 'role' => 'CTO Commity.cz'],
+            ['name' => 'Milan Lempera', 'role' => 'CTO Commity.cz', 'link' => ['text' => 'Commity.cz', 'url' => 'https://commity.cz']],
             ['name' => 'Honza Zbirovský', 'role' => 'spoluzakladatel inqubo.cz', 'link' => ['text' => 'inqubo.cz', 'url' => 'https://inqubo.cz']],
             ['name' => 'Jaroslav Krotký', 'role' => 'IT Kraje Vysočina'],
             ['name' => 'Pavel Vitešník', 'role' => 'všestranný vývojář, grafik a video producent'],

@@ -425,8 +425,8 @@ it('hosté: doména je odkaz jen s link v configu, jinak se brání autolinku', 
     $html = afaInvite()->render();
 
     expect($html)
-        ->toContain('CTO Commity&zwnj;.cz')
-        ->not->toContain('href="https://commity.cz')
+        ->toContain('CTO <a href="https://commity.cz"')
+        ->toContain('>Commity.cz</a>')
         ->toContain('<a href="https://www.umelainteligence.cz"')
         ->toContain('>Uměláinteligence.cz</a>')
         ->toContain('<a href="https://inqubo.cz"');
