@@ -58,6 +58,21 @@ final class NewsletterPreview extends Component
             'group' => 'Newsletter',
             'note' => 'Akci pořádá AI Monday, ne ŽďárAI. Nezávisí na vybrané akci — data jsou v config/partner_events.php.',
         ],
+        'partner-event-ai-for-all-jihlava-list' => [
+            'label' => 'Pozvánka AI for All Jihlava — účastníci AI Monday Žďár #1 (list)',
+            'group' => 'Newsletter',
+            'note' => 'Akci pořádá AI Monday Jihlava, ne ŽďárAI. Nezávisí na vybrané akci — data jsou v config/partner_events.php, box ŽďárAI se bere z akce promo_event_slug (jen published). Jednorázově, bez odhlašovacího odkazu.',
+        ],
+        'partner-event-ai-for-all-jihlava-subscriber' => [
+            'label' => 'Pozvánka AI for All Jihlava — odběratelé newsletteru',
+            'group' => 'Newsletter',
+            'note' => 'Akci pořádá AI Monday Jihlava, ne ŽďárAI. Nezávisí na vybrané akci — data jsou v config/partner_events.php, box ŽďárAI se bere z akce promo_event_slug (jen published).',
+        ],
+        'partner-event-ai-for-all-jihlava-registrant' => [
+            'label' => 'Pozvánka AI for All Jihlava — účastníci akcí ŽďárAI mimo newsletter',
+            'group' => 'Newsletter',
+            'note' => 'Akci pořádá AI Monday Jihlava, ne ŽďárAI. Nezávisí na vybrané akci — data jsou v config/partner_events.php, box ŽďárAI se bere z akce promo_event_slug (jen published).',
+        ],
         'event-follow-up-attended' => [
             'label' => 'Follow-up — účastníkům (attended)',
             'group' => 'Newsletter',
@@ -232,6 +247,20 @@ final class NewsletterPreview extends Component
             return new PartnerEventInvite(
                 partnerEvent: (array) config('partner_events.ai-monday-zdar-1'),
                 unsubscribeUrl: route('newsletter.unsubscribe', self::SAMPLE_TOKEN),
+            );
+        }
+
+        if (str_starts_with($template, 'partner-event-ai-for-all-jihlava-')) {
+            $audience = substr($template, strlen('partner-event-ai-for-all-jihlava-'));
+
+            return new PartnerEventInvite(
+                partnerEvent: (array) config('partner_events.ai-for-all-jihlava-2026'),
+                unsubscribeUrl: match ($audience) {
+                    'list' => '',
+                    'registrant' => route('opt-out', self::SAMPLE_TOKEN),
+                    default => route('newsletter.unsubscribe', self::SAMPLE_TOKEN),
+                },
+                audience: $audience,
             );
         }
 

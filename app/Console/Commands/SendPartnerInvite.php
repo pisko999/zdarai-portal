@@ -16,25 +16,35 @@ use Throwable;
 /**
  * Rozešle pozvánku na akci spřátelené komunity (config/partner_events.php)
  * aktivním odběratelům newsletteru se souhlasem (--segment=subscribers),
- * nebo účastníkům akcí ŽďárAI, kteří nejsou v newsletteru (--segment=registrants).
+ * účastníkům akcí ŽďárAI, kteří nejsou v newsletteru (--segment=registrants),
+ * nebo jednorázovému seznamu z CSV od pořadatele (--segment=list --list=<cesta>).
+ *
+ * Segment list: CSV s hlavičkou Name,Email,Company,Role,Status,Registration Date.
+ * Company může obsahovat neuvozovkovanou čárku → e-mail = sloupec 1, jméno =
+ * sloupec 0, status = předposlední sloupec. Vynechá status cancelled a neplatné
+ * e-maily (varování). Mail jde s audience 'list' bez odhlašovacího odkazu;
+ * obsah CSV se nikam neukládá.
+ *
+ * Doporučené pořadí rozesílky: list → subscribers → registrants.
  *
  * Ochrana proti dvojímu odeslání: atomický claim v cache (redis) per
- * klíč akce + sha1(e-mail), platný 90 dní. Klíč je společný pro oba segmenty,
+ * klíč akce + sha1(e-mail), platný 90 dní. Klíč je společný pro všechny segmenty,
  * takže nikdo nedostane pozvánku dvakrát.
  */
 class SendPartnerInvite extends Command
 {
-    private const SEGMENTS = ['subscribers', 'registrants'];
+    private const SEGMENTS = ['list', 'subscribers', 'registrants'];
 
     protected $signature = 'partner-invite:send
         {key : Klíč akce v config/partner_events.php}
-        {--segment=subscribers : Segment příjemců: subscribers | registrants}
+        {--segment=subscribers : Segment příjemců: list | subscribers | registrants (doporučené pořadí: list → subscribers → registrants)}
+        {--list= : Cesta k CSV (povinné pro --segment=list), relativně k base_path nebo absolutní}
         {--test= : Poslat jen jeden testovací e-mail na zadanou adresu}
         {--dry-run : Jen vypsat příjemce, nic neodesílat ani neclaimovat}
         {--exclude= : Čárkou oddělené e-maily, které vynechat}
         {--force : Neptat se na potvrzení (neinteraktivní běh)}';
 
-    protected $description = 'Rozešle pozvánku na akci spřátelené komunity odběratelům newsletteru se souhlasem.';
+    protected $description = 'Rozešle pozvánku na akci spřátelené komunity (segmenty list | subscribers | registrants; doporučené pořadí list → subscribers → registrants).';
 
     public function handle(): int
     {
@@ -55,21 +65,37 @@ class SendPartnerInvite extends Command
             return self::FAILURE;
         }
 
-        $audience = $segment === 'registrants' ? 'registrant' : 'subscriber';
+        $audience = match ($segment) {
+            'registrants' => 'registrant',
+            'list' => 'list',
+            default => 'subscriber',
+        };
 
         $this->info("Akce: {$partnerEvent['title']} ({$partnerEvent['date_label']})");
         $this->info("Segment: {$segment}");
 
         if ($testAddress = $this->option('test')) {
-            Mail::to((string) $testAddress)->queue(new PartnerEventInvite($partnerEvent, url('/'), $audience));
+            Mail::to((string) $testAddress)->queue(
+                new PartnerEventInvite($partnerEvent, $audience === 'list' ? '' : url('/'), $audience)
+            );
             $this->info("Testovací e-mail zařazen na: {$testAddress}");
 
             return self::SUCCESS;
         }
 
-        $recipients = $this->excludeOption(
-            $segment === 'registrants' ? $this->registrants() : $this->subscribers()
-        );
+        if ($segment === 'list') {
+            $listRecipients = $this->listRecipients();
+
+            if ($listRecipients === null) {
+                return self::FAILURE;
+            }
+        }
+
+        $recipients = $this->excludeOption(match ($segment) {
+            'registrants' => $this->registrants(),
+            'list' => $listRecipients,
+            default => $this->subscribers(),
+        });
 
         $this->newLine();
         $this->comment(sprintf('Příjemci (segment %s) — %d', $segment, $recipients->count()));
@@ -216,6 +242,80 @@ class SendPartnerInvite extends Command
                 'unsubscribe' => route('opt-out', $registration->token),
             ]);
         }
+
+        return $out->sortKeys();
+    }
+
+    /**
+     * Příjemci z CSV (--list). Vrací null při chybějícím / nečitelném souboru
+     * (chyba už vypsaná). Bez odhlašovacího odkazu — mail je jednorázový.
+     *
+     * @return Collection<string, array{name: string, unsubscribe: string}>|null
+     */
+    private function listRecipients(): ?Collection
+    {
+        $path = trim((string) $this->option('list'));
+
+        if ($path === '') {
+            $this->error('Segment list vyžaduje --list=<cesta k CSV>.');
+
+            return null;
+        }
+
+        if (! str_starts_with($path, '/')) {
+            $path = base_path($path);
+        }
+
+        $handle = is_file($path) && is_readable($path) ? @fopen($path, 'rb') : false;
+
+        if ($handle === false) {
+            $this->error("Soubor seznamu nelze přečíst: {$path}");
+
+            return null;
+        }
+
+        $out = collect();
+        $warnings = 0;
+        $cancelled = 0;
+        $line = 0;
+
+        try {
+            while (($row = fgetcsv($handle, null, ',', '"', '')) !== false) {
+                $line++;
+
+                // Hlavička a prázdné řádky
+                if ($line === 1 || $row === [null] || count($row) < 3) {
+                    continue;
+                }
+
+                $email = mb_strtolower(trim((string) $row[1]));
+                $name = trim((string) preg_replace('/\s+/u', ' ', (string) $row[0]));
+                $status = mb_strtolower(trim((string) $row[count($row) - 2]));
+
+                if ($status === 'cancelled') {
+                    $cancelled++;
+
+                    continue;
+                }
+
+                if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+                    $this->warn("  ! řádek {$line}: neplatný e-mail — vynecháno");
+                    $warnings++;
+
+                    continue;
+                }
+
+                if ($out->has($email)) {
+                    continue;
+                }
+
+                $out->put($email, ['name' => $name, 'unsubscribe' => '']);
+            }
+        } finally {
+            fclose($handle);
+        }
+
+        $this->line("Seznam: {$out->count()} platných, vynecháno cancelled: {$cancelled}, varování: {$warnings}.");
 
         return $out->sortKeys();
     }

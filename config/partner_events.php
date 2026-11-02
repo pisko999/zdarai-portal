@@ -56,4 +56,34 @@ return [
         ],
     ],
 
+    // Zdroj: https://dny.ai/program/ai-for-all (ověřeno 2. 11. 2026, TF #4151).
+    // Jednorázová pozvánka pro segmenty list (CSV účastníků AI Monday Žďár #1),
+    // subscribers a registrants — doporučené pořadí rozesílky: list → subscribers → registrants.
+    'ai-for-all-jihlava-2026' => [
+        'title' => 'AI for All 2026 | Jihlava',
+        'organizer' => 'AI Monday Jihlava',
+        'organizer_url' => 'https://www.aimonday.cz',
+        'url' => 'https://dny.ai/program/ai-for-all',
+        'festival' => 'Dny AI',
+        'festival_url' => 'https://dny.ai',
+        'date' => '2026-11-05',
+        'date_label' => 'čtvrtek 5. listopadu 2026',
+        'date_short' => 'čt 5. 11.',
+        'time_label' => 'AI Monday od 18:00 (do 19:30), festivalový program od 16:30',
+        'venue' => 'Historická aula Vysoké školy polytechnické Jihlava, Tolstého 1556',
+        'price_label' => 'zdarma, registrace není nutná',
+        'guests' => [
+            ['name' => 'Milan Lempera', 'role' => 'CTO Commity.cz'],
+            ['name' => 'Honza Zbirovský', 'role' => 'spoluzakladatel inqubo.cz'],
+            ['name' => 'Jaroslav Krotký', 'role' => 'IT Kraje Vysočina'],
+            ['name' => 'Pavel Vitešník', 'role' => 'všestranný vývojář, grafik a video producent'],
+            ['name' => 'Petr Mandík', 'role' => 'spoluzakladatel Uměláinteligence.cz'],
+        ],
+        // Vlastní šablona a předmět (PartnerEventInvite je bere z configu, jinak výchozí).
+        'view' => 'emails.partner-event-ai-for-all-jihlava',
+        'subject' => '🎂 AI Monday Jihlava slaví rok — čt 5. 11. na AI for All (Dny AI)',
+        // Naše akce zmíněná v boxu na konci (jen pokud je published).
+        'promo_event_slug' => 'zdarai-4',
+    ],
+
 ];
